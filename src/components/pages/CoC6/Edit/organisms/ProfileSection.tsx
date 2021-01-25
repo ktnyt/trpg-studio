@@ -85,6 +85,7 @@ export const ProfileSection = Object.assign(
               autoComplete="off"
               className={styles.name}
               disabled={locked}
+              debounce={1000}
               onChange={({ target: { value: name } }) => onUpdate({ name })}
             />
 
@@ -101,6 +102,7 @@ export const ProfileSection = Object.assign(
                     defaultValue={items[key]}
                     style={{ width: 90, marginBottom: 5 }}
                     disabled={locked}
+                    debounce={1000}
                     onChange={({ target: { value } }) =>
                       onUpdate(({ items }) => ({
                         items: {
