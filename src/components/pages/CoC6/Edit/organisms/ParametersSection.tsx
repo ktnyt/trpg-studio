@@ -2,14 +2,14 @@ import { CSSProperties, Fragment, memo } from 'react'
 
 import deepEqual from 'deep-equal'
 
-import Flex from '@/components/atoms/Flex'
-import Grid from '@/components/atoms/Grid'
+import { Flex } from '@/components/atoms/Flex'
+import { Grid } from '@/components/atoms/Grid'
 import { createThemeUseStyles } from '@/context/ThemeContext'
 import { Parameter, Parameters } from '@/models/Character'
-import math from '@/utils/math'
+import * as math from '@/utils/math'
 import { Merger } from '@/utils/merge'
 
-import NumberInput from './NumberInput'
+import { NumberInput } from './NumberInput'
 
 import { Context, contextEqual } from '../Context'
 
@@ -55,7 +55,7 @@ const compare = (prev: ParametersSectionProps, next: ParametersSectionProps) =>
 const asDefault = (n: number) => (n > 0 ? `${n}` : '')
 const asNumber = (s: string) => (/^\d+$/.test(s) ? parseInt(s, 10) : 0)
 
-const ParametersSection = Object.assign(
+export const ParametersSection = Object.assign(
   memo(({ parameters, width, context, onUpdate }: ParametersSectionProps) => {
     const { theme, lang, translator, rule, locked } = context
 
@@ -170,5 +170,3 @@ const ParametersSection = Object.assign(
   }, compare),
   { displayName: 'ParametersSection' }
 )
-
-export default ParametersSection

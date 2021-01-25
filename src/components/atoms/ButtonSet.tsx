@@ -1,14 +1,14 @@
 import { Children } from 'react'
 
-import Flex, { FlexContainerProps } from './Flex'
+import { Flex, FlexProps } from './Flex'
 
-const ButtonSet = ({
+export const ButtonSet = ({
   vertical = false,
   children,
   ...props
 }: {
   vertical?: boolean
-} & FlexContainerProps) => (
+} & FlexProps) => (
   <Flex direction={vertical ? 'column' : 'row'} alignItems="center" {...props}>
     {Children.map(children, (child, index) => (
       <div
@@ -25,5 +25,3 @@ const ButtonSet = ({
     ))}
   </Flex>
 )
-
-export default ButtonSet

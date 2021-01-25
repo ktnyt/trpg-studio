@@ -1,9 +1,9 @@
 import deepEqual from 'deep-equal'
 
 import { Theme } from '@/context/ThemeContext'
-import Translator, { Language } from '@/utils/translator'
+import { Translator, Language } from '@/utils/translator'
 
-import Rule from '../rule'
+import { Rule } from '../rule'
 
 export type Context = {
   theme: Theme

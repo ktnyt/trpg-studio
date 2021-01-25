@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import deepEqual from 'deep-equal'
 
-const useDifferent = <T extends unknown>(
+export const useDifferent = <T extends unknown>(
   curr: T,
   cmp: (a: T, b: T) => boolean = deepEqual
 ) => {
@@ -15,5 +15,3 @@ const useDifferent = <T extends unknown>(
   }, [curr, different])
   return different
 }
-
-export default useDifferent

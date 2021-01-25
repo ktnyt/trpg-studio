@@ -1,8 +1,8 @@
 import { Children } from 'react'
 
-import Grid from './Grid'
+import { Grid } from './Grid'
 
-const Swap = ({
+export const Swap = ({
   visible = 0,
   children,
 }: {
@@ -21,5 +21,3 @@ const Swap = ({
     ))}
   </Grid>
 )
-
-export default Swap

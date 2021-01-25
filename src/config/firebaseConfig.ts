@@ -1,4 +1,4 @@
-const firebaseConfig = {
+export const firebaseConfig = {
   projectId: 'cthulhu-300703',
   appId: '1:91453061001:web:adc28b2d341c7bb215d358',
   storageBucket: 'cthulhu-300703.appspot.com',
@@ -8,5 +8,3 @@ const firebaseConfig = {
   messagingSenderId: '91453061001',
   measurementId: 'G-4TQK20KXCQ',
 }
-
-export default firebaseConfig

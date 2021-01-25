@@ -18,5 +18,3 @@ export type Character = {
   parameters: Parameters
   skillset: Skillset
 }
-
-export default Character

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import Grid from '@/components/atoms/Grid'
-import Input, { InputProps } from '@/components/atoms/Input'
+import { Grid } from '@/components/atoms/Grid'
+import { Input, InputProps } from '@/components/atoms/Input'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
 const useInputStyles = createThemeUseStyles(({ palette, isDark }) => ({
@@ -56,7 +56,7 @@ const withValue = (
   return ''
 }
 
-const NumberInput = ({
+export const NumberInput = ({
   placeholder,
   value: propValue,
   defaultValue,
@@ -116,5 +116,3 @@ const NumberInput = ({
     </Grid>
   )
 }
-
-export default NumberInput

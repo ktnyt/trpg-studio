@@ -1,5 +1,5 @@
 import { mix, Color, asColor } from '@/utils/color'
-import Dict from '@/utils/dict'
+import { Dict } from '@/utils/dict'
 
 const computeShade = (color: Color) => mix('#000000', color, 12)
 const computeTint = (color: Color) => mix('#ffffff', color, 10)

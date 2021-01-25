@@ -1,10 +1,10 @@
-import Dict from '@/utils/dict'
+import { Dict } from '@/utils/dict'
 
 const Languages = ['en', 'ja'] as const
 export type Language = typeof Languages[number]
 export type Term = Partial<{ [lang in Language]: string }>
 
-class Translator {
+export class Translator {
   terms: Dict<string, Dict<Language, string>>
 
   constructor() {
@@ -36,5 +36,3 @@ class Translator {
     }, s)
   }
 }
-
-export default Translator

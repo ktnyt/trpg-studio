@@ -2,11 +2,11 @@ import { CSSProperties, forwardRef, memo } from 'react'
 
 import deepEqual from 'deep-equal'
 
-import Flex from '@/components/atoms/Flex'
-import Grid from '@/components/atoms/Grid'
-import Input from '@/components/atoms/Input'
-import LabeledInput from '@/components/atoms/LabeledInput'
-import TextArea from '@/components/atoms/TextArea'
+import { Flex } from '@/components/atoms/Flex'
+import { Grid } from '@/components/atoms/Grid'
+import { Input } from '@/components/atoms/Input'
+import { LabeledInput } from '@/components/atoms/LabeledInput'
+import { TextArea } from '@/components/atoms/TextArea'
 import { createThemeUseStyles } from '@/context/ThemeContext'
 import { Profile } from '@/models/Character'
 import { Merger } from '@/utils/merge'
@@ -68,7 +68,7 @@ const compare = (prev: ProfileSectionProps, next: ProfileSectionProps) =>
   prev.width === next.width &&
   contextEqual(prev.context, next.context)
 
-const ProfileSection = Object.assign(
+export const ProfileSection = Object.assign(
   memo(
     forwardRef<HTMLDivElement, ProfileSectionProps>(
       ({ profile, width, context, onUpdate }, ref) => {
@@ -131,5 +131,3 @@ const ProfileSection = Object.assign(
   ),
   { displayName: 'ProfileSection' }
 )
-
-export default ProfileSection

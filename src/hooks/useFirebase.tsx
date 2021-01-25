@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/functions'
 
-import firebaseConfig from '@/config/firebaseConfig'
+import { firebaseConfig } from '@/config/firebaseConfig'
 
 declare global {
   interface Window {
@@ -45,11 +45,9 @@ if (window.location.hostname === 'localhost') {
   functions.useEmulator('localhost', 5001)
 }
 
-const useFirebase = () => {
+export const useFirebase = () => {
   return {
     firestore,
     functions,
   }
 }
-
-export default useFirebase

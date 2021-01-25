@@ -1,7 +1,7 @@
 import { Children } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import Flex from './Flex'
+import { Flex } from './Flex'
 
 const useStyles = createUseStyles({
   horizontal: {
@@ -42,7 +42,7 @@ export type InputGroupProps = {
   children?: React.ReactNode
 }
 
-const InputGroup = ({
+export const InputGroup = ({
   vertical,
   style: propStyle = {},
   children,
@@ -61,5 +61,3 @@ const InputGroup = ({
     </Flex>
   )
 }
-
-export default InputGroup

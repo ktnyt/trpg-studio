@@ -12,15 +12,15 @@ import {
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons'
 
-import ButtonSet from '@/components/atoms/ButtonSet'
-import Die from '@/components/atoms/Die'
-import Flex from '@/components/atoms/Flex'
-import Grid from '@/components/atoms/Grid'
-import IconButton from '@/components/atoms/IconButton'
-import InputGroup from '@/components/atoms/InputGroup'
+import { ButtonSet } from '@/components/atoms/ButtonSet'
+import { Die } from '@/components/atoms/Die'
+import { Flex } from '@/components/atoms/Flex'
+import { Grid } from '@/components/atoms/Grid'
+import { IconButton } from '@/components/atoms/IconButton'
+import { InputGroup } from '@/components/atoms/InputGroup'
 import { AppContext } from '@/context/AppContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
-import useFirebase from '@/hooks/useFirebase'
+import { useFirebase } from '@/hooks/useFirebase'
 import { useTranslator } from '@/hooks/useTranslator'
 import { useWindowSize } from '@/hooks/useWindowSize'
 
@@ -92,7 +92,7 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   },
 }))
 
-const Create = () => {
+export const Create = () => {
   useEffect(() => {
     document.title = 'TRPG Studio | CoC 6'
   }, [])
@@ -431,5 +431,3 @@ const Create = () => {
     </Flex>
   )
 }
-
-export default Create

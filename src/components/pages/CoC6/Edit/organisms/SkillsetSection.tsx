@@ -4,14 +4,14 @@ import deepEqual from 'deep-equal'
 
 import { createThemeUseStyles } from '@/context/ThemeContext'
 import { Skill, Skillset } from '@/models/Character'
-import Dict from '@/utils/dict'
+import { Dict } from '@/utils/dict'
 import { Merger } from '@/utils/merge'
 
-import CategoryTable from './CategoryTable'
+import { CategoryTable } from './CategoryTable'
 
 import { Context, contextEqual } from '../Context'
 
-const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
+export const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   divider: {
     boxSizing: 'border-box',
     height: '22px',
@@ -46,7 +46,7 @@ const compare = (prev: SkillsetSectionProps, next: SkillsetSectionProps) =>
   prev.width === next.width &&
   contextEqual(prev.context, next.context)
 
-const SkillsetSection = Object.assign(
+export const SkillsetSection = Object.assign(
   memo(
     ({
       skillset,
@@ -84,5 +84,3 @@ const SkillsetSection = Object.assign(
   ),
   { displayName: 'SkillsetSection' }
 )
-
-export default SkillsetSection

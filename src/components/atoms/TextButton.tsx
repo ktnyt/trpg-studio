@@ -89,24 +89,25 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
 
 type TextButtonProps = ComponentPropsWithRef<'button'> & { color: string }
 
-const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
-  ({ color, style, className: classNameProp, ...props }, ref) => {
-    const theme = useTheme()
-    const { root, ...styles } = useStyles(theme)
-    const className = clsx(
-      root,
-      styles.hasOwnProperty(color) && styles[color],
-      classNameProp
-    )
-    return (
-      <button
-        ref={ref}
-        style={sanitize({ ...style })}
-        className={className}
-        {...props}
-      />
-    )
-  }
+export const TextButton = Object.assign(
+  forwardRef<HTMLButtonElement, TextButtonProps>(
+    ({ color, style, className: classNameProp, ...props }, ref) => {
+      const theme = useTheme()
+      const { root, ...styles } = useStyles(theme)
+      const className = clsx(
+        root,
+        styles.hasOwnProperty(color) && styles[color],
+        classNameProp
+      )
+      return (
+        <button
+          ref={ref}
+          style={sanitize({ ...style })}
+          className={className}
+          {...props}
+        />
+      )
+    }
+  ),
+  { displayName: 'TextButton' }
 )
-
-export default TextButton

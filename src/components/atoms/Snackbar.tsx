@@ -30,10 +30,8 @@ export type SnackbarProps = {
   children?: ReactNode
 }
 
-const Snackbar = ({ visible = false, children }: SnackbarProps) => {
+export const Snackbar = ({ visible = false, children }: SnackbarProps) => {
   const theme = useTheme()
   const { root, hidden } = useStyles(theme)
   return <div className={clsx(root, !visible && hidden)}>{children}</div>
 }
-
-export default Snackbar

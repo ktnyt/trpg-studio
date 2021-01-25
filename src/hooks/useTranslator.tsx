@@ -1,4 +1,4 @@
-import Translator from '@/utils/translator'
+import { Translator } from '@/utils/translator'
 
 const translator = new Translator()
 

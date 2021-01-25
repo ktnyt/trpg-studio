@@ -3,7 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize'
 
 export type TextAreaProps = ComponentPropsWithRef<typeof TextareaAutosize>
 
-const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ onKeyDown, ...props }, ref) => {
     const localRef = useRef<HTMLTextAreaElement>(null!)
     return (
@@ -31,5 +31,3 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     )
   }
 )
-
-export default TextArea

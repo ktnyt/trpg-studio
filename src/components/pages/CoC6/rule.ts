@@ -1,7 +1,7 @@
 import { constant, sum } from '@/utils/accumulator'
-import Dict from '@/utils/dict'
+import { Dict } from '@/utils/dict'
 import { add, div, floor, mul, partition } from '@/utils/transformer'
-import Translator from '@/utils/translator'
+import { Translator } from '@/utils/translator'
 
 const db = (arg: number[]) => {
   const value = sum(arg)
@@ -283,6 +283,4 @@ export const useRule = (translator: Translator) => {
   return { profile, parameters, attributes, properties, skillset }
 }
 
-type Rule = ReturnType<typeof useRule>
-
-export default Rule
+export type Rule = ReturnType<typeof useRule>

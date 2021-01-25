@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom'
 
 import { faSadTear } from '@fortawesome/free-solid-svg-icons'
 
-import Icon from '@/components/atoms/Icon'
+import { Icon } from '@/components/atoms/Icon'
 import { useTheme } from '@/context/ThemeContext'
 import { useWindowSize } from '@/hooks/useWindowSize'
 
-const NotFound = () => {
+export const NotFound = () => {
   const { palette } = useTheme()
   const { width, height } = useWindowSize()
   return (
@@ -36,5 +36,3 @@ const NotFound = () => {
     </div>
   )
 }
-
-export default NotFound

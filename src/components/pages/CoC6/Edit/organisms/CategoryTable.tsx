@@ -1,12 +1,12 @@
 import { CSSProperties, Fragment } from 'react'
 
-import Flex from '@/components/atoms/Flex'
+import { Flex } from '@/components/atoms/Flex'
 import { createThemeUseStyles } from '@/context/ThemeContext'
 import { Category, Skill } from '@/models/Character'
-import Dict from '@/utils/dict'
+import { Dict } from '@/utils/dict'
 import { Merger } from '@/utils/merge'
 
-import SkillRow from './SkillRow'
+import { SkillRow } from './SkillRow'
 
 import { Context } from '../Context'
 
@@ -31,7 +31,7 @@ export type CategoryTableProps = {
   onUpdate: (category: string, key: string, diff: Merger<Skill>) => void
 }
 
-const CategoryTable = ({
+export const CategoryTable = ({
   category,
   skills,
   totals,
@@ -86,5 +86,3 @@ const CategoryTable = ({
     </Fragment>
   ) : null
 }
-
-export default CategoryTable

@@ -22,11 +22,6 @@ const makeTransformer = (
   })
 }
 
-export const nop = makeTransformer(
-  (arg) => arg,
-  (arg) => arg
-)
-
 export const partition = makeTransformer(
   (arg) => arg,
   (arg) => `${arg}\u{200B}`

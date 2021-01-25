@@ -8,7 +8,7 @@ const getSize = <Element extends HTMLElement>(element: Element | null) => ({
   height: element === null ? 0 : element.offsetHeight,
 })
 
-const useElementSize = <E extends HTMLElement>(ref: RefObject<E>) => {
+export const useElementSize = <E extends HTMLElement>(ref: RefObject<E>) => {
   const init = getSize(ref.current)
   const [size, setSize] = useState(init)
   useLayoutEffect(() => {
@@ -26,5 +26,3 @@ const useElementSize = <E extends HTMLElement>(ref: RefObject<E>) => {
   })
   return size
 }
-
-export default useElementSize

@@ -1,4 +1,4 @@
-class Dict<K, V> {
+export class Dict<K, V> {
   data: Map<K, V>
 
   constructor(entries?: [K, V][]) {
@@ -99,5 +99,3 @@ class Dict<K, V> {
 
 export type KeyType<T> = T extends Dict<infer K, unknown> ? K : never
 export type ValueType<T> = T extends Dict<unknown, infer V> ? V : never
-
-export default Dict

@@ -56,7 +56,7 @@ export const GridItem = forwardRef(
   )
 )
 
-export type GridContainerProps = {
+export type GridProps = {
   inline?: boolean
   templateColumns?: CSSProperties['gridTemplateColumns']
   templateRows?: CSSProperties['gridTemplateRows']
@@ -77,8 +77,8 @@ export type GridContainerProps = {
   grid?: CSSProperties['grid']
 } & ComponentPropsWithRef<'div'>
 
-export const GridContainer = forwardRef(
-  Object.assign(
+export const Grid = Object.assign(
+  forwardRef<HTMLDivElement, GridProps>(
     (
       {
         inline = false,
@@ -101,8 +101,8 @@ export const GridContainer = forwardRef(
         grid,
         style,
         ...props
-      }: GridContainerProps,
-      ref: Ref<HTMLDivElement>
+      },
+      ref
     ) => (
       <div
         ref={ref}
@@ -129,11 +129,7 @@ export const GridContainer = forwardRef(
         })}
         {...props}
       />
-    ),
-    { displayName: 'GridContainer' }
-  )
+    )
+  ),
+  { displayName: 'GridContainer', Item: GridItem }
 )
-
-const Grid = Object.assign(GridContainer, { Item: GridItem })
-
-export default Grid

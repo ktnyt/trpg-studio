@@ -1,12 +1,12 @@
 import { CSSProperties, memo } from 'react'
 
-import Grid from '@/components/atoms/Grid'
-import Input from '@/components/atoms/Input'
+import { Grid } from '@/components/atoms/Grid'
+import { Input } from '@/components/atoms/Input'
 import { createThemeUseStyles } from '@/context/ThemeContext'
 import { Skill } from '@/models/Character'
 import { Merger } from '@/utils/merge'
 
-import NumberInput from './NumberInput'
+import { NumberInput } from './NumberInput'
 
 import { Context, contextEqual } from '../Context'
 
@@ -97,7 +97,7 @@ const compare = (prev: SkillRowProps, next: SkillRowProps) =>
   prev.width === next.width &&
   contextEqual(prev.context, next.context)
 
-const SkillRow = Object.assign(
+export const SkillRow = Object.assign(
   memo(
     ({
       category,
@@ -208,5 +208,3 @@ const SkillRow = Object.assign(
   ),
   { displayName: 'SkillRow' }
 )
-
-export default SkillRow

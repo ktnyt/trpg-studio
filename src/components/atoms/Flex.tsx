@@ -50,7 +50,7 @@ export const FlexItem = forwardRef(
   )
 )
 
-export type FlexContainerProps = {
+export type FlexProps = {
   inline?: boolean
   flow?: CSSProperties['flexFlow']
   direction?: CSSProperties['flexDirection']
@@ -67,8 +67,8 @@ export type FlexContainerProps = {
   children?: ReactNode
 } & ComponentPropsWithRef<'div'>
 
-export const FlexContainer = forwardRef(
-  Object.assign(
+export const Flex = Object.assign(
+  forwardRef<HTMLDivElement, FlexProps>(
     (
       {
         inline,
@@ -85,8 +85,8 @@ export const FlexContainer = forwardRef(
         columnGap,
         style,
         ...rest
-      }: FlexContainerProps,
-      ref: Ref<HTMLDivElement>
+      },
+      ref
     ) => (
       <div
         ref={ref}
@@ -107,11 +107,7 @@ export const FlexContainer = forwardRef(
         })}
         {...rest}
       />
-    ),
-    { displayName: 'FlexContainer' }
-  )
+    )
+  ),
+  { displayName: 'Flex', Item: FlexItem }
 )
-
-const Flex = Object.assign(FlexContainer, { Item: FlexItem })
-
-export default Flex

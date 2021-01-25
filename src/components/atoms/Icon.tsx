@@ -5,8 +5,6 @@ import {
 
 export type IconProps = FontAwesomeIconProps
 
-const Icon = (props: IconProps) => {
+export const Icon = (props: IconProps) => {
   return <FontAwesomeIcon {...props} />
 }
-
-export default Icon

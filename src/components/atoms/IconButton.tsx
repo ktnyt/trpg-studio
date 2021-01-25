@@ -2,7 +2,7 @@ import { ComponentPropsWithRef, forwardRef } from 'react'
 
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
-import Icon, { IconProps } from './Icon'
+import { Icon, IconProps } from './Icon'
 
 const useStyles = createThemeUseStyles(({ palette }) => ({
   button: {
@@ -45,7 +45,7 @@ export type IconButtonProps = {
   pulse?: IconProps['pulse']
 } & ComponentPropsWithRef<'button'>
 
-const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ icon, spin, pulse, ...props }, ref) => {
     const theme = useTheme()
     const { button } = useStyles({ theme })
@@ -56,5 +56,3 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     )
   }
 )
-
-export default IconButton

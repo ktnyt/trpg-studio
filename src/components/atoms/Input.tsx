@@ -8,13 +8,13 @@ import {
   useState,
 } from 'react'
 
-import useDebounce from '@/hooks/useDebounce'
+import { useDebounce } from '@/hooks/useDebounce'
 
 export type InputProps = ComponentPropsWithRef<'input'>
 
 type EventState = ChangeEvent<HTMLInputElement> | null
 
-const Input = Object.assign(
+export const Input = Object.assign(
   memo(
     forwardRef<HTMLInputElement, InputProps>(
       ({ defaultValue, onKeyDown, onChange, ...props }, ref) => {
@@ -63,5 +63,3 @@ const Input = Object.assign(
   ),
   { displayName: 'Input' }
 )
-
-export default Input

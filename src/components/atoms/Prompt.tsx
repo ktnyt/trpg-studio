@@ -2,9 +2,9 @@ import { forwardRef, useState } from 'react'
 
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
-import Grid from './Grid'
-import LabeledInput, { LabeledInputProps } from './LabeledInput'
-import TextButton from './TextButton'
+import { Grid } from './Grid'
+import { LabeledInput, LabeledInputProps } from './LabeledInput'
+import { TextButton } from './TextButton'
 
 const useStyles = createThemeUseStyles(({ palette }) => ({
   root: {
@@ -41,7 +41,7 @@ type PromptProps = {
   onCancel?: () => void
 } & LabeledInputProps
 
-const Prompt = forwardRef<HTMLInputElement, PromptProps>(
+export const Prompt = forwardRef<HTMLInputElement, PromptProps>(
   (
     {
       message,
@@ -128,5 +128,3 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
     )
   }
 )
-
-export default Prompt

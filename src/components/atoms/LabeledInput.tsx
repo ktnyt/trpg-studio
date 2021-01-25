@@ -4,7 +4,7 @@ import clsx from 'clsx'
 
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
-import Input, { InputProps } from './Input'
+import { Input, InputProps } from './Input'
 
 const useStyles = createThemeUseStyles(({ palette }) => ({
   root: {
@@ -62,7 +62,7 @@ export type LabeledInputProps = InputProps & {
   inputClassName?: string
 }
 
-const LabeledInput = forwardRef<HTMLInputElement, LabeledInputProps>(
+export const LabeledInput = forwardRef<HTMLInputElement, LabeledInputProps>(
   (
     {
       id,
@@ -125,5 +125,3 @@ const LabeledInput = forwardRef<HTMLInputElement, LabeledInputProps>(
     )
   }
 )
-
-export default LabeledInput

@@ -1,4 +1,4 @@
-import math from './math'
+import * as math from './math'
 
 const mixer = (p: number, a1: number, a2: number) => {
   const w = 2.0 * p - 1.0

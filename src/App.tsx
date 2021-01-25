@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 import { AppContext } from '@/context/AppContext'
 import { nord } from '@/palette/nord'
 
-import CoC6 from './components/pages/CoC6'
-import NotFound from './components/pages/generic/NotFound'
+import { CoC6 } from './components/pages/CoC6'
+import { NotFound } from './components/pages/generic/NotFound'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
 
 const Provider = ({ children }: { children?: ReactNode }) => (
@@ -46,10 +46,8 @@ const Root = () => {
   )
 }
 
-const App = () => (
+export const App = () => (
   <Provider>
     <Root />
   </Provider>
 )
-
-export default App

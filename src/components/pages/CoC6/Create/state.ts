@@ -1,18 +1,7 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
 import { randomFace } from '@/components/atoms/Die'
-import Dict from '@/utils/dict'
-
-export type State = {
-  pages: {
-    [key: string]: {
-      face: number
-      flip: number
-      sides: number
-    }[]
-  }[]
-  index: number
-}
+import { Dict } from '@/utils/dict'
 
 export const createState = (
   config: Dict<string, number[]>,
