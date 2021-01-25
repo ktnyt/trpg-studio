@@ -17,5 +17,5 @@ export const CoC6 = Object.assign(
       </Switch>
     )
   },
-  { path: 'coc6' }
+  { displayName: 'CoC6', path: 'coc6' }
 )

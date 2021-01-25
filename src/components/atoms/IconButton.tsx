@@ -45,14 +45,17 @@ export type IconButtonProps = {
   pulse?: IconProps['pulse']
 } & ComponentPropsWithRef<'button'>
 
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ icon, spin, pulse, ...props }, ref) => {
-    const theme = useTheme()
-    const { button } = useStyles({ theme })
-    return (
-      <button ref={ref} className={button} {...props}>
-        <Icon icon={icon} spin={spin} pulse={pulse} fixedWidth />
-      </button>
-    )
-  }
+export const IconButton = Object.assign(
+  forwardRef<HTMLButtonElement, IconButtonProps>(
+    ({ icon, spin, pulse, ...props }, ref) => {
+      const theme = useTheme()
+      const { button } = useStyles({ theme })
+      return (
+        <button ref={ref} className={button} {...props}>
+          <Icon icon={icon} spin={spin} pulse={pulse} fixedWidth />
+        </button>
+      )
+    }
+  ),
+  { displayName: 'IconButton' }
 )
