@@ -10,7 +10,7 @@ const db = admin.firestore();
 const computeHash = (...args: string[]) =>
   crypto.createHash("sha256").update(args.join("")).digest("hex");
 
-export const setPassword = functions.https.onCall(
+export const setPassword = functions.region("asia-northeast2").https.onCall(
   async ({ id, referrer, token: current, password }) => {
     const ref = db.collection("passwords").doc(id);
     const doc = await ref.get();
@@ -36,7 +36,7 @@ export const setPassword = functions.https.onCall(
   }
 );
 
-export const hasPassword = functions.https.onCall(
+export const hasPassword = functions.region("asia-northeast2").https.onCall(
   async ({ id }) => {
     const ref = db.collection("passwords").doc(id);
     const doc = await ref.get();
@@ -44,7 +44,7 @@ export const hasPassword = functions.https.onCall(
   }
 );
 
-export const verifyPassword = functions.https.onCall(
+export const verifyPassword = functions.region("asia-northeast2").https.onCall(
   async ({ id, referrer, password }) => {
     const ref = db.collection("passwords").doc(id);
     const doc = await ref.get();
@@ -84,7 +84,7 @@ const getId = async (): Promise<string> => {
   return id;
 };
 
-export const addCharacter = functions.https.onCall(
+export const addCharacter = functions.region("asia-northeast2").https.onCall(
   async ({ character }) => {
     const id = await getId();
     await db.collection("characters").doc(id).set(character);
@@ -92,7 +92,7 @@ export const addCharacter = functions.https.onCall(
   }
 );
 
-export const getCharacter = functions.https.onCall(
+export const getCharacter = functions.region("asia-northeast2").https.onCall(
   async ({ id }) => {
     const ref = db.collection("characters").doc(id);
     const doc = await ref.get();
@@ -108,7 +108,7 @@ export const getCharacter = functions.https.onCall(
   }
 );
 
-export const setCharacter = functions.https.onCall(
+export const setCharacter = functions.region("asia-northeast2").https.onCall(
   async ({ id, referrer, token, character }) => {
     const ref = db.collection("characters").doc(id);
     const doc = await ref.get();
@@ -138,7 +138,7 @@ export const setCharacter = functions.https.onCall(
   }
 );
 
-export const updateCharacter = functions.https.onCall(
+export const updateCharacter = functions.region("asia-northeast2").https.onCall(
   async ({ id, referrer, token, patch }) => {
     const ref = db.collection("characters").doc(id);
     const doc = await ref.get();
