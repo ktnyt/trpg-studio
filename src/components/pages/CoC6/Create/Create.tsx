@@ -174,9 +174,11 @@ const Create = () => {
       skillset,
     }
 
+    console.log(url)
+
     functions
       .invoke('addCharacter', { character })
-      .then((id) => history.push(`${url}/${id}`))
+      .then((id) => history.push(`${url}${id}`))
 
     setCreating(true)
   }
