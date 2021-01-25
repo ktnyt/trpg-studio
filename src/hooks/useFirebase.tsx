@@ -2,6 +2,8 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/functions'
 
+import firebaseConfig from '@/config/firebaseConfig'
+
 declare global {
   interface Window {
     firebaseConfig: {
@@ -23,10 +25,10 @@ declare global {
   }
 }
 
-firebase.initializeApp(window.firebaseConfig)
+firebase.initializeApp(firebaseConfig)
 
 const firestore = firebase.firestore()
-const functions = Object.assign(firebase.functions(), {
+const functions = Object.assign(firebase.app().functions('asia-northeast2'), {
   invoke: async (
     name: string,
     data: any,
@@ -38,13 +40,9 @@ const functions = Object.assign(firebase.functions(), {
   },
 })
 
-if (window.location.hostname === 'localhost' && window.firebaseEmulators) {
-  const {
-    firestore: firestoreConfig,
-    functions: functionsConfig,
-  } = window.firebaseEmulators
-  firestore.useEmulator(firestoreConfig.host, firestoreConfig.port)
-  functions.useEmulator(functionsConfig.host, functionsConfig.port)
+if (window.location.hostname === 'localhost') {
+  firestore.useEmulator('localhost', 8080)
+  functions.useEmulator('localhost', 5001)
 }
 
 const useFirebase = () => {
