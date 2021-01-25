@@ -6,7 +6,7 @@ import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
 import Input, { InputProps } from './Input'
 
-const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
+const useStyles = createThemeUseStyles(({ palette }) => ({
   root: {
     position: 'relative',
   },
@@ -33,6 +33,7 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
     padding: '0px',
     border: 'none',
     borderBottom: `1px solid ${palette.step400}`,
+    borderRadius: '0px',
     backgroundColor: 'transparent',
     color: palette.step1000,
     fontSize: '14px',
