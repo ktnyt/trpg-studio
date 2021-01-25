@@ -1,0 +1,26 @@
+.body-appear {
+  opacity: 0;
+}
+
+.body-appear-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+
+.body-enter {
+  opacity: 0;
+}
+
+.body-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+
+.body-exit {
+  opacity: 1;
+}
+
+.body-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}

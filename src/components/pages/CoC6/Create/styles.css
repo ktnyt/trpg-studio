@@ -1,0 +1,32 @@
+.toolbar-appear {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.toolbar-appear-active {
+  opacity: 1;
+  transform: translateY(0px);
+  transition: opacity 200ms, transform 200ms;
+}
+
+.toolbar-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.toolbar-enter-active {
+  opacity: 1;
+  transform: translateY(0px);
+  transition: opacity 200ms, transform 200ms;
+}
+
+.toolbar-exit {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.toolbar-exit-active {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 200ms, transform 200ms;
+}

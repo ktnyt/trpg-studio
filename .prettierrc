@@ -1,0 +1,23 @@
+{
+  "singleQuote": true,
+  "semi": false,
+  "importOrder": [
+    "^react",
+    "^firebase",
+    "^[A-Za-z]",
+    "^@[^/]",
+    "^@/",
+    "^\\./(.*)",
+    "\\.css$",
+    "^\\.\\./"
+  ],
+  "importOrderSeparation": true,
+  "overrides": [
+    {
+      "files": ["src/components/pages/CoC6/rule.ts"],
+      "options": {
+        "printWidth": 160
+      }
+    }
+  ]
+}
