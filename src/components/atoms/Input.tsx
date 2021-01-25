@@ -10,26 +10,28 @@ import {
 
 import { useDebounce } from '@/hooks/useDebounce'
 
-export type InputProps = ComponentPropsWithRef<'input'>
+export type InputProps = ComponentPropsWithRef<'input'> & {
+  debounce?: number
+}
 
 type EventState = ChangeEvent<HTMLInputElement> | null
 
 export const Input = Object.assign(
   memo(
     forwardRef<HTMLInputElement, InputProps>(
-      ({ onKeyDown, onChange, ...props }, ref) => {
+      ({ onKeyDown, onChange, debounce = 0, ...props }, ref) => {
         const localRef = useRef<HTMLInputElement>(null!)
 
         const [composing, setComposing] = useState(false)
         const [event, setEvent] = useState<EventState>(null)
 
-        const debounced = useDebounce(event)
+        const debounced = useDebounce(event, debounce)
 
         useEffect(() => {
           if (!composing && onChange !== undefined && debounced !== null) {
             onChange(debounced)
           }
-        })
+        }, [composing, onChange, debounced])
 
         return (
           <input
