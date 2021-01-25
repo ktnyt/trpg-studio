@@ -17,7 +17,7 @@ type EventState = ChangeEvent<HTMLInputElement> | null
 export const Input = Object.assign(
   memo(
     forwardRef<HTMLInputElement, InputProps>(
-      ({ defaultValue, onKeyDown, onChange, ...props }, ref) => {
+      ({ onKeyDown, onChange, ...props }, ref) => {
         const localRef = useRef<HTMLInputElement>(null!)
 
         const [composing, setComposing] = useState(false)
@@ -43,7 +43,6 @@ export const Input = Object.assign(
                 localRef.current = current
               }
             }}
-            defaultValue={defaultValue}
             onKeyDown={(event) => {
               if (onKeyDown !== undefined) {
                 onKeyDown(event)
