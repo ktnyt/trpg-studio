@@ -34,7 +34,7 @@ import { useFirebase } from '@/hooks/useFirebase'
 import { useReferrer } from '@/hooks/useReferrer'
 import { useTranslator } from '@/hooks/useTranslator'
 import { useWindowSize } from '@/hooks/useWindowSize'
-import { Character, Parameter, Profile, Skill } from '@/models/Character'
+import { Character, Parameter, Profile, Skill } from '@/models/CoC6/Character'
 import * as math from '@/utils/math'
 import { merge, Merger, merger } from '@/utils/merge'
 

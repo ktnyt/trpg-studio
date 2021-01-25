@@ -8,7 +8,7 @@ import { Input } from '@/components/atoms/Input'
 import { LabeledInput } from '@/components/atoms/LabeledInput'
 import { TextArea } from '@/components/atoms/TextArea'
 import { createThemeUseStyles } from '@/context/ThemeContext'
-import { Profile } from '@/models/Character'
+import { Profile } from '@/models/CoC6/Character'
 import { Merger } from '@/utils/merge'
 
 import { Context, contextEqual } from '../Context'

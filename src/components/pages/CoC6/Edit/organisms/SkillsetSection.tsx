@@ -3,7 +3,7 @@ import React, { CSSProperties, Fragment, memo } from 'react'
 import deepEqual from 'deep-equal'
 
 import { createThemeUseStyles } from '@/context/ThemeContext'
-import { Skill, Skillset } from '@/models/Character'
+import { Skill, Skillset } from '@/models/CoC6/Character'
 import { Dict } from '@/utils/dict'
 import { Merger } from '@/utils/merge'
 

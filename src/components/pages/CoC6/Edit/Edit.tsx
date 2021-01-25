@@ -7,7 +7,7 @@ import { Icon } from '@/components/atoms/Icon'
 import { useTheme } from '@/context/ThemeContext'
 import { useFirebase } from '@/hooks/useFirebase'
 import { useWindowSize } from '@/hooks/useWindowSize'
-import { Character } from '@/models/Character'
+import { Character } from '@/models/CoC6/Character'
 
 import { Editor } from './organisms/Editor'
 import './styles.css'

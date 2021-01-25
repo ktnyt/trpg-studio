@@ -2,7 +2,7 @@ import { CSSProperties, Fragment } from 'react'
 
 import { Flex } from '@/components/atoms/Flex'
 import { createThemeUseStyles } from '@/context/ThemeContext'
-import { Category, Skill } from '@/models/Character'
+import { Category, Skill } from '@/models/CoC6/Character'
 import { Dict } from '@/utils/dict'
 import { Merger } from '@/utils/merge'
 

@@ -3,7 +3,7 @@ import { CSSProperties, memo } from 'react'
 import { Grid } from '@/components/atoms/Grid'
 import { Input } from '@/components/atoms/Input'
 import { createThemeUseStyles } from '@/context/ThemeContext'
-import { Skill } from '@/models/Character'
+import { Skill } from '@/models/CoC6/Character'
 import { Merger } from '@/utils/merge'
 
 import { NumberInput } from './NumberInput'

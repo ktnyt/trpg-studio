@@ -5,7 +5,7 @@ import deepEqual from 'deep-equal'
 import { Flex } from '@/components/atoms/Flex'
 import { Grid } from '@/components/atoms/Grid'
 import { createThemeUseStyles } from '@/context/ThemeContext'
-import { Parameter, Parameters } from '@/models/Character'
+import { Parameter, Parameters } from '@/models/CoC6/Character'
 import * as math from '@/utils/math'
 import { Merger } from '@/utils/merge'
 
