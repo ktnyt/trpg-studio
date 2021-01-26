@@ -5,8 +5,8 @@ import { Dict } from '@/utils/dict'
 
 export const createState = (
   config: Dict<string, number[]>,
-  min = 5,
-  max = 15
+  min: number,
+  max: number
 ) => {
   const reroll = createAction<string | undefined>('reroll')
   const animate = createAction('animate')

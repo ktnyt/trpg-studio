@@ -27,7 +27,7 @@ import { useWindowSize } from '@/hooks/useWindowSize'
 import { createState } from './state'
 import './styles.css'
 
-import { useRule } from '../rule'
+import { system, useRule } from '../rule'
 
 const shift = (s: string, separator: string): [string, string] => {
   const [head, ...tail] = s.split(separator)
@@ -105,7 +105,7 @@ export const Create = () => {
   const rule = useRule(translator)
   const config = rule.parameters.map(({ dice }) => dice)
 
-  const { reducer, initialState, actions } = createState(config)
+  const { reducer, initialState, actions } = createState(config, 5, 15)
   const [{ pages, index }, dispatch] = useReducer(reducer, initialState)
 
   const current = pages[index]
@@ -120,7 +120,7 @@ export const Create = () => {
 
   useEffect(() => {
     if (rolling()) {
-      const timeout = setTimeout(() => dispatch(actions.animate()), 50)
+      const timeout = setTimeout(() => dispatch(actions.animate()), 100)
       return () => clearTimeout(timeout)
     }
   })
@@ -177,7 +177,7 @@ export const Create = () => {
     console.log(url)
 
     functions
-      .invoke('addCharacter', { character })
+      .invoke('addCharacter', { system, character })
       .then((id) => history.push(`${url}${id}`))
 
     setCreating(true)

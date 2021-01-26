@@ -11,8 +11,8 @@ const computeHash = (...args: string[]) =>
   crypto.createHash("sha256").update(args.join("")).digest("hex");
 
 export const setPassword = functions.region("asia-northeast2").https.onCall(
-  async ({ id, referrer, token: current, password }) => {
-    const ref = db.collection("passwords").doc(id);
+  async ({ system, id, referrer, token: current, password }) => {
+    const ref = db.collection(`credentials_${system}`).doc(id);
     const doc = await ref.get();
     if (doc.exists) {
       const data = doc.data();
@@ -37,16 +37,16 @@ export const setPassword = functions.region("asia-northeast2").https.onCall(
 );
 
 export const hasPassword = functions.region("asia-northeast2").https.onCall(
-  async ({ id }) => {
-    const ref = db.collection("passwords").doc(id);
+  async ({ system, id }) => {
+    const ref = db.collection(`credentials_${system}`).doc(id);
     const doc = await ref.get();
     return doc.exists && doc.data() !== undefined;
   }
 );
 
 export const verifyPassword = functions.region("asia-northeast2").https.onCall(
-  async ({ id, referrer, password }) => {
-    const ref = db.collection("passwords").doc(id);
+  async ({ system, id, referrer, password }) => {
+    const ref = db.collection(`credentials_${system}`).doc(id);
     const doc = await ref.get();
     if (!doc.exists) {
       return "";
@@ -72,29 +72,29 @@ export const verifyPassword = functions.region("asia-northeast2").https.onCall(
   }
 );
 
-const getId = async (): Promise<string> => {
+const getId = async (system: string): Promise<string> => {
   let id = nanoid();
-  let ref = db.collection("characters").doc(id);
+  let ref = db.collection(`characters_${system}`).doc(id);
   let doc = await ref.get();
   while (doc.exists) {
     id = nanoid();
-    ref = db.collection("characters").doc(id);
+    ref = db.collection(`characters_${system}`).doc(id);
     doc = await ref.get();
   }
   return id;
 };
 
 export const addCharacter = functions.region("asia-northeast2").https.onCall(
-  async ({ character }) => {
-    const id = await getId();
-    await db.collection("characters").doc(id).set(character);
+  async ({ system, character }) => {
+    const id = await getId(system);
+    await db.collection(`characters_${system}`).doc(id).set(character);
     return id;
   }
 );
 
 export const getCharacter = functions.region("asia-northeast2").https.onCall(
-  async ({ id }) => {
-    const ref = db.collection("characters").doc(id);
+  async ({ system, id }) => {
+    const ref = db.collection(`characters_${system}`).doc(id);
     const doc = await ref.get();
 
     if (!doc.exists) {
@@ -109,8 +109,8 @@ export const getCharacter = functions.region("asia-northeast2").https.onCall(
 );
 
 export const setCharacter = functions.region("asia-northeast2").https.onCall(
-  async ({ id, referrer, token, character }) => {
-    const ref = db.collection("characters").doc(id);
+  async ({ system, id, referrer, token, character }) => {
+    const ref = db.collection(`characters_${system}`).doc(id);
     const doc = await ref.get();
 
     if (!doc.exists) {
@@ -139,8 +139,8 @@ export const setCharacter = functions.region("asia-northeast2").https.onCall(
 );
 
 export const updateCharacter = functions.region("asia-northeast2").https.onCall(
-  async ({ id, referrer, token, patch }) => {
-    const ref = db.collection("characters").doc(id);
+  async ({ system, id, referrer, token, patch }) => {
+    const ref = db.collection(`characters_${system}`).doc(id);
     const doc = await ref.get();
 
     if (!doc.exists) {

@@ -44,7 +44,7 @@ import { SkillsetSection } from './SkillsetSection'
 
 import '../styles.css'
 
-import { useRule } from '../../rule'
+import { system, useRule } from '../../rule'
 
 ReactModal.setAppElement('#root')
 
@@ -120,7 +120,13 @@ export const Editor = ({
   useEffect(() => {
     if (differentProfile) {
       const patch = { profile: debouncedProfile }
-      functions.invoke('updateCharacter', { id, referrer, token, patch })
+      functions.invoke('updateCharacter', {
+        system,
+        id,
+        referrer,
+        token,
+        patch,
+      })
     }
   })
 
@@ -136,7 +142,13 @@ export const Editor = ({
   useEffect(() => {
     if (differentParameters) {
       const patch = { parameters: debouncedParameters }
-      functions.invoke('updateCharacter', { id, referrer, token, patch })
+      functions.invoke('updateCharacter', {
+        system,
+        id,
+        referrer,
+        token,
+        patch,
+      })
     }
   })
 
@@ -160,7 +172,13 @@ export const Editor = ({
   useEffect(() => {
     if (differentSkillset) {
       const patch = { skillset: debouncedSkillset }
-      functions.invoke('updateCharacter', { id, referrer, token, patch })
+      functions.invoke('updateCharacter', {
+        system,
+        id,
+        referrer,
+        token,
+        patch,
+      })
     }
   })
 
@@ -168,13 +186,13 @@ export const Editor = ({
 
   const unlock = async (password: string) =>
     functions
-      .invoke('verifyPassword', { id, referrer, password })
+      .invoke('verifyPassword', { system, id, referrer, password })
       .then((token) => patchState({ access: 'unlocked', modal: 'none', token }))
       .catch(() => window.alert('パスワードが間違っています。'))
 
   const secure = (password: string) =>
     functions
-      .invoke('setPassword', { id, referrer, token, password })
+      .invoke('setPassword', { system, id, referrer, token, password })
       .then((token) =>
         patchState(({ access }) => ({
           access: access === 'public' ? 'unlocked' : 'locked',
@@ -337,7 +355,13 @@ export const Editor = ({
               onUpdate={updateProfile}
             />
 
-            <div style={{ width: tmpColumnWidth, height: paddingHeight }} />
+            <div
+              style={{
+                width: columnWidth,
+                height: paddingHeight,
+                backgroundColor: palette.step50,
+              }}
+            />
 
             <ParametersSection
               parameters={parameters}

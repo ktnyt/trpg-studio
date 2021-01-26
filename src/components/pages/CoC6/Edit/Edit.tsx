@@ -12,6 +12,8 @@ import { Character } from '@/models/CoC6/Character'
 import { Editor } from './organisms/Editor'
 import './styles.css'
 
+import { system } from '../rule'
+
 type Status = Character | 'loading' | 'notfound'
 
 export const Edit = () => {
@@ -25,12 +27,12 @@ export const Edit = () => {
   useEffect(() => {
     if (status === 'loading') {
       functions
-        .invoke('hasPassword', { id })
+        .invoke('hasPassword', { system, id })
         .then((secured) => setSecured(secured))
         .catch(() => setStatus('notfound'))
 
       functions
-        .invoke('getCharacter', { id })
+        .invoke('getCharacter', { system, id })
         .then(setStatus)
         .catch(() => setStatus('notfound'))
     }

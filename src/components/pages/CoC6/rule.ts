@@ -284,3 +284,5 @@ export const useRule = (translator: Translator) => {
 }
 
 export type Rule = ReturnType<typeof useRule>
+
+export const system = 'coc6'
