@@ -19,6 +19,7 @@ const useInputStyles = createThemeUseStyles(({ palette, isDark }) => ({
       padding: '0px',
       border: 'none',
       borderBottom: `1px solid transparent`,
+      borderRadius: '0px',
       backgroundColor: 'transparent',
       color: palette.text,
       fontSize: '14px',
