@@ -9,6 +9,7 @@ import {
 } from 'react'
 
 import { useDebounce } from '@/hooks/useDebounce'
+import { useDifferent } from '@/hooks/useDifferent'
 
 export type InputProps = ComponentPropsWithRef<'input'> & {
   debounce?: number
@@ -26,12 +27,18 @@ export const Input = Object.assign(
         const [event, setEvent] = useState<EventState>(null)
 
         const debounced = useDebounce(event, debounce)
+        const different = useDifferent(debounced)
 
         useEffect(() => {
-          if (!composing && onChange !== undefined && debounced !== null) {
+          if (
+            !composing &&
+            onChange !== undefined &&
+            debounced !== null &&
+            different
+          ) {
             onChange(debounced)
           }
-        }, [composing, onChange, debounced])
+        }, [composing, onChange, debounced, different])
 
         return (
           <input
