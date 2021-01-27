@@ -1,21 +1,12 @@
-import { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
-import { faSadTear } from '@fortawesome/free-regular-svg-icons'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { Icon } from '@/components/atoms/Icon'
 import { useTheme } from '@/context/ThemeContext'
 import { useWindowSize } from '@/hooks/useWindowSize'
 
-export type NotFoundProps = {
-  message?: string
-  children?: ReactNode
-}
-
-export const NotFound = ({
-  message = '404: Page Not Found',
-  children,
-}: NotFoundProps) => {
+export const Loading = () => {
   const { palette } = useTheme()
   const { width, height } = useWindowSize()
   return (
@@ -36,15 +27,13 @@ export const NotFound = ({
         }}
       >
         <Icon
-          icon={faSadTear}
-          style={{ fontSize: `${Math.min(320, height) / 4}px` }}
+          icon={faSpinner}
+          style={{
+            color: palette.step500,
+            fontSize: `${Math.min(320, height) / 4}px`,
+          }}
+          pulse
         />
-        <h3>{message}</h3>
-        {children || (
-          <Link to="/" style={{ color: palette.text }}>
-            トップに戻る
-          </Link>
-        )}
       </div>
     </div>
   )

@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams, useRouteMatch } from 'react-router-dom'
 
-import { faSadTear } from '@fortawesome/free-regular-svg-icons'
-
-import { Icon } from '@/components/atoms/Icon'
+import { Loading } from '@/components/pages/generic/Loading'
+import { NotFound } from '@/components/pages/generic/NotFound'
 import { useTheme } from '@/context/ThemeContext'
 import { useFirebase } from '@/hooks/useFirebase'
-import { useWindowSize } from '@/hooks/useWindowSize'
 import { Character } from '@/models/CoC6/Character'
 
 import { Editor } from './organisms/Editor'
@@ -38,29 +36,16 @@ export const Edit = () => {
     }
   }, [status, functions, id])
 
-  const { width, height } = useWindowSize()
   const { palette } = useTheme()
 
   return status === 'loading' || secured === null ? (
-    <div style={{ width, height, backgroundColor: palette.background }}></div>
+    <Loading />
   ) : status === 'notfound' ? (
-    <div
-      style={{
-        width,
-        height,
-        color: palette.text,
-        backgroundColor: palette.step50,
-      }}
-    >
-      <div
-        className="center"
-        style={{ width, backgroundColor: palette.step50, textAlign: 'center' }}
-      >
-        <Icon icon={faSadTear} style={{ fontSize: '128px' }} />
-        <h3>キャラクターが見つかりませんでした</h3>
-        <Link to={`${url}`}>新しく作る</Link>
-      </div>
-    </div>
+    <NotFound message="キャラクターが見つかりませんでした">
+      <Link to={url} style={{ color: palette.text }}>
+        新しく作る
+      </Link>
+    </NotFound>
   ) : (
     <Editor init={status} secured={secured} />
   )
