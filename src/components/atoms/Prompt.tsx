@@ -25,7 +25,7 @@ const useStyles = createThemeUseStyles(({ palette }) => ({
     margin: '10px 20px',
   },
   grid: {
-    margin: '10px',
+    margin: '10px 0px',
   },
   button: {},
 }))
