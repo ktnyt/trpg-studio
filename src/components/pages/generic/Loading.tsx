@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom'
-
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { Icon } from '@/components/atoms/Icon'
