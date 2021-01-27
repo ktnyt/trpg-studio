@@ -34,12 +34,12 @@ const useStyles = createThemeUseStyles(({ palette }) => ({
     },
   },
   md: {
-    padding: '11px 9px',
+    padding: '10px 8px',
     borderRadius: '6px',
     width: '36px',
     height: '36px',
-    fontSize: '14px',
-    lineHeight: '14px',
+    fontSize: '16px',
+    lineHeight: '16px',
   },
   sm: {
     padding: '5px 4px',
