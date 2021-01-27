@@ -223,6 +223,7 @@ export const useRule = (translator: Translator) => {
   translator.extend('action', { en: 'Action Skills', ja: '行動技能' })
   translator.extend('negotiation', { en: 'Negotiation Skills', ja: '交渉技能' })
   translator.extend('knowledge', { en: 'Knowledge Skills', ja: '知識技能' })
+  translator.extend('custom', { en: 'Custom Skills', ja: '独自技能' })
 
   translator.extend('dodge', { en: 'Dodge', ja: '回避' })
   translator.extend('fist', { en: 'Fist', ja: 'こぶし' })
