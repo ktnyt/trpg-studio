@@ -1,4 +1,4 @@
-import { CSSProperties, forwardRef, memo } from 'react'
+import { CSSProperties, forwardRef, memo, MutableRefObject } from 'react'
 
 import deepEqual from 'deep-equal'
 
@@ -57,6 +57,7 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
 export type ProfileSectionProps = {
   profile: Profile
   width: CSSProperties['width']
+  notesRef: MutableRefObject<HTMLTextAreaElement>
   context: Context
   onUpdate: (diff: Merger<Profile>) => void
 }
@@ -71,7 +72,7 @@ const compare = (prev: ProfileSectionProps, next: ProfileSectionProps) =>
 export const ProfileSection = Object.assign(
   memo(
     forwardRef<HTMLDivElement, ProfileSectionProps>(
-      ({ profile, width, context, onUpdate }, ref) => {
+      ({ profile, width, notesRef, context, onUpdate }, ref) => {
         const { theme, lang, translator, rule, locked } = context
         const { name, items, notes } = profile
 
@@ -117,12 +118,14 @@ export const ProfileSection = Object.assign(
             </Grid>
 
             <TextArea
+              ref={notesRef}
               minRows={3}
               defaultValue={notes}
               placeholder={`${translator.t('notes', lang)}...`}
               style={{ width }}
               className={styles.notes}
               disabled={locked}
+              debounce={1000}
               onChange={({ target: { value: notes } }) => onUpdate({ notes })}
             />
           </Flex>

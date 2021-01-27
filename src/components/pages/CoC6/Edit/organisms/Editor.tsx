@@ -6,8 +6,8 @@ import { CSSTransition } from 'react-transition-group'
 
 import clsx from 'clsx'
 
-import { faCopy } from '@fortawesome/free-regular-svg-icons'
 import {
+  faCopy,
   faEye,
   faEyeSlash,
   faGlobe,
@@ -48,7 +48,7 @@ import { system, useRule } from '../../rule'
 
 ReactModal.setAppElement('#root')
 
-const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
+const useStyles = createThemeUseStyles(({ palette }) => ({
   overlay: {
     position: 'fixed',
     top: '0px',
@@ -209,6 +209,7 @@ export const Editor = ({
   const linkRef = useRef<HTMLButtonElement>(null!)
   const paletteRef = useRef<HTMLButtonElement>(null!)
   const profileRef = useRef<HTMLDivElement>(null!)
+  const notesRef = useRef<HTMLTextAreaElement>(null!)
 
   const skillVisibility = rule.skillset.map((skills, category) =>
     skills.map((_, key) => {
@@ -351,6 +352,7 @@ export const Editor = ({
               ref={profileRef}
               profile={profile}
               width={tmpColumnWidth}
+              notesRef={notesRef}
               context={context}
               onUpdate={updateProfile}
             />
@@ -360,7 +362,9 @@ export const Editor = ({
                 width: columnWidth,
                 height: paddingHeight,
                 backgroundColor: palette.step50,
+                cursor: 'text',
               }}
+              onClick={() => notesRef.current.focus()}
             />
 
             <ParametersSection
