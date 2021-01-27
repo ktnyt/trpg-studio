@@ -23,6 +23,7 @@ import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { useFirebase } from '@/hooks/useFirebase'
 import { useTranslator } from '@/hooks/useTranslator'
 import { useWindowSize } from '@/hooks/useWindowSize'
+import { Custom } from '@/models/CoC6/Character'
 import { Dict } from '@/utils/dict'
 
 import { createState } from './state'
@@ -177,11 +178,14 @@ export const Create = () => {
       notes: '',
     }
 
+    const custom = [] as Custom[]
+
     const character = {
       profile,
       parameters,
       variables,
       skillset,
+      custom,
     }
 
     const path = url.replace(/\/$/, '')

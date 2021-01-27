@@ -13,10 +13,18 @@ export type Skill = {
 }
 export type Category = { [k: string]: Skill }
 export type Skillset = { [k: string]: Category }
+export type Custom = {
+  name: string
+  job: number
+  hobby: number
+  growth: number
+  other: number
+}
 
 export type Character = {
   profile: Profile
   parameters: Parameters
   variables: Variables
   skillset: Skillset
+  custom: Custom[]
 }
