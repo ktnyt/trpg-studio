@@ -78,15 +78,12 @@ export type SkillRowProps = {
   onUpdate: (category: string, key: string, diff: Merger<Skill>) => void
 }
 
-const skillsEqual = (prev: Skill, next: Skill) => {
-  return (
-    prev.job === next.job &&
-    prev.hobby === next.hobby &&
-    prev.growth === next.growth &&
-    prev.other === next.other &&
-    prev.fixed === next.fixed
-  )
-}
+const skillsEqual = (prev: Skill, next: Skill) =>
+  prev.job === next.job &&
+  prev.hobby === next.hobby &&
+  prev.growth === next.growth &&
+  prev.other === next.other &&
+  prev.fixed === next.fixed
 
 const compare = (prev: SkillRowProps, next: SkillRowProps) =>
   prev.category === next.category &&
