@@ -1,14 +1,16 @@
-import { CSSProperties, Fragment } from 'react'
+import { CSSProperties, Fragment, useContext } from 'react'
 
 import { Flex } from '@/components/atoms/Flex'
-import { createThemeUseStyles } from '@/context/ThemeContext'
+import { AppContext } from '@/context/AppContext'
+import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
+import { useTranslator } from '@/hooks/useTranslator'
 import { Category, Skill } from '@/models/CoC6/Character'
 import { Dict } from '@/utils/dict'
 import { Merger } from '@/utils/merge'
 
 import { SkillRow } from './SkillRow'
 
-import { Context } from '../Context'
+import { useRule } from '../../rule'
 
 const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   divider: {
@@ -26,8 +28,8 @@ export type CategoryTableProps = {
   skills: Category
   totals: Dict<string, number>
   showall: boolean
+  locked: boolean
   width: CSSProperties['width']
-  context: Context
   onUpdate: (category: string, key: string, diff: Merger<Skill>) => void
 }
 
@@ -36,11 +38,15 @@ export const CategoryTable = ({
   skills,
   totals,
   showall,
+  locked,
   width,
-  context,
   onUpdate,
 }: CategoryTableProps) => {
-  const { theme, lang, translator, rule } = context
+  const { lang } = useContext(AppContext)
+  const translator = useTranslator()
+  const rule = useRule(translator)
+
+  const theme = useTheme()
   const styles = useStyles(theme)
 
   const skillVisibility = rule.skillset.get(category).map((_, key) => {
@@ -78,7 +84,8 @@ export const CategoryTable = ({
               init={init}
               visible={visible}
               width={width}
-              context={context}
+              theme={theme}
+              lang={lang}
               onUpdate={onUpdate}
             />
           )

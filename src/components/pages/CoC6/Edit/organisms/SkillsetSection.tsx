@@ -1,15 +1,15 @@
-import React, { CSSProperties, Fragment, memo } from 'react'
+import React, { CSSProperties, Fragment, useContext } from 'react'
 
-import deepEqual from 'deep-equal'
-
-import { createThemeUseStyles } from '@/context/ThemeContext'
+import { AppContext } from '@/context/AppContext'
+import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
+import { useTranslator } from '@/hooks/useTranslator'
 import { Skill, Skillset } from '@/models/CoC6/Character'
 import { Dict } from '@/utils/dict'
 import { Merger } from '@/utils/merge'
 
 import { CategoryTable } from './CategoryTable'
 
-import { Context, contextEqual } from '../Context'
+import { useRule } from '../../rule'
 
 export const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   divider: {
@@ -34,53 +34,48 @@ export type SkillsetSectionProps = {
   skillset: Skillset
   totals: Dict<string, number>
   showall: boolean
+  locked: boolean
   width: CSSProperties['width']
-  context: Context
   onUpdate: (category: string, key: string, diff: Merger<Skill>) => void
 }
 
-const compare = (prev: SkillsetSectionProps, next: SkillsetSectionProps) =>
-  deepEqual(prev.skillset, next.skillset) &&
-  deepEqual(prev.totals.entries(), next.totals.entries()) &&
-  prev.showall === next.showall &&
-  prev.width === next.width &&
-  contextEqual(prev.context, next.context)
-
 export const SkillsetSection = Object.assign(
-  memo(
-    ({
-      skillset,
-      totals,
-      showall,
-      width,
-      context,
-      onUpdate,
-    }: SkillsetSectionProps) => {
-      const { theme, lang, translator, rule } = context
-      const styles = useStyles(theme)
+  ({
+    skillset,
+    totals,
+    showall,
+    locked,
+    width,
+    onUpdate,
+  }: SkillsetSectionProps) => {
+    const { lang } = useContext(AppContext)
+    const translator = useTranslator()
+    const rule = useRule(translator)
 
-      return (
-        <Fragment>
-          <div className={styles.divider} style={{ width }}>
-            {translator.t('skills', lang)}
-          </div>
+    const theme = useTheme()
+    const styles = useStyles(theme)
 
-          {rule.skillset.keys().map((category) => (
-            <CategoryTable
-              key={category}
-              category={category}
-              skills={skillset[category]}
-              totals={totals}
-              showall={showall}
-              width={width}
-              context={context}
-              onUpdate={onUpdate}
-            />
-          ))}
-        </Fragment>
-      )
-    },
-    compare
-  ),
+    return (
+      <Fragment>
+        <div className={styles.divider} style={{ width }}>
+          {translator.t('skills', lang)}
+        </div>
+
+        {rule.skillset.keys().map((category) => (
+          <CategoryTable
+            key={category}
+            category={category}
+            skills={skillset[category]}
+            totals={totals}
+            showall={showall}
+            locked={locked}
+            width={width}
+            onUpdate={onUpdate}
+          />
+        ))}
+      </Fragment>
+    )
+  },
+
   { displayName: 'SkillsetSection' }
 )

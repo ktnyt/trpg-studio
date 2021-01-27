@@ -1,14 +1,18 @@
 import { CSSProperties, memo } from 'react'
 
+import deepEqual from 'deep-equal'
+
 import { Grid } from '@/components/atoms/Grid'
 import { Input } from '@/components/atoms/Input'
-import { createThemeUseStyles } from '@/context/ThemeContext'
+import { createThemeUseStyles, Theme } from '@/context/ThemeContext'
+import { useTranslator } from '@/hooks/useTranslator'
 import { Skill } from '@/models/CoC6/Character'
 import { Merger } from '@/utils/merge'
+import { Language } from '@/utils/translator'
 
 import { NumberInput } from './NumberInput'
 
-import { Context, contextEqual } from '../Context'
+import { useRule } from '../../rule'
 
 const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   cell: ({ color }) => ({
@@ -74,7 +78,8 @@ export type SkillRowProps = {
   init: number
   visible: boolean
   width: CSSProperties['width']
-  context: Context
+  theme: Theme
+  lang: Language
   onUpdate: (category: string, key: string, diff: Merger<Skill>) => void
 }
 
@@ -92,7 +97,8 @@ const compare = (prev: SkillRowProps, next: SkillRowProps) =>
   prev.init === next.init &&
   prev.visible === next.visible &&
   prev.width === next.width &&
-  contextEqual(prev.context, next.context)
+  deepEqual(prev.theme, next.theme) &&
+  prev.lang === next.lang
 
 export const SkillRow = Object.assign(
   memo(
@@ -103,15 +109,13 @@ export const SkillRow = Object.assign(
       skill,
       visible,
       width,
-      context,
+      theme,
+      lang,
       onUpdate,
     }: SkillRowProps) => {
-      const {
-        theme: { palette, isDark },
-        lang,
-        translator,
-        rule,
-      } = context
+      const translator = useTranslator()
+      const rule = useRule(translator)
+      const { palette, isDark } = theme
 
       const { custom } = rule.skillset.get(category).get(name)
 

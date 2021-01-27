@@ -354,8 +354,6 @@ export const Editor = ({
   const panelHeight =
     panelRowCount * 22 + (!addToolbarPadding ? 0 : toolbarPaddingHeight)
 
-  const context = { theme, lang, translator, rule, locked }
-
   return (
     <Flex
       justifyContent="center"
@@ -426,7 +424,7 @@ export const Editor = ({
               totals={totals}
               showall={showall}
               width={columnWidth}
-              context={context}
+              locked={locked}
               onUpdate={updateSkill}
             />
           </Flex>
