@@ -90,6 +90,7 @@ export const useRule = (translator: Translator) => {
 
   const attributes = new Dict([
     ['san', { deps: ['pow'], apply: sum.then(partition, true).then(mul(5)), palette: 'SAN' }],
+    ['indef', { deps: ['pow'], apply: sum.then(partition, true).then(mul(4)), palette: false }],
     ['luk', { deps: ['pow'], apply: sum.then(partition, true).then(mul(5)), palette: true }],
     ['ida', { deps: ['int'], apply: sum.then(partition, true).then(mul(5)), palette: true }],
     ['knw', { deps: ['edu'], apply: sum.then(partition, true).then(mul(5)), palette: true }],
@@ -101,7 +102,8 @@ export const useRule = (translator: Translator) => {
 
   const properties = new Dict([['db', { deps: ['str', 'siz'], convert: db, palette: true }]])
 
-  translator.extend('san', { en: 'SAN', ja: '正気度' })
+  translator.extend('san', { en: 'Sanity', ja: '正気度' })
+  translator.extend('indef', { en: 'Indef. Line', ja: '不定領域' })
   translator.extend('luk', { en: 'Luck', ja: '幸運' })
   translator.extend('ida', { en: 'Idea', ja: 'アイデア' })
   translator.extend('knw', { en: 'Knowledge', ja: '知識' })
@@ -112,6 +114,7 @@ export const useRule = (translator: Translator) => {
   translator.extend('db', { en: 'Damage Bonus', ja: 'ダメージボーナス' })
 
   translator.extend('san-abbrev', { en: 'SAN', ja: 'SAN' })
+  translator.extend('indef-abbrev', { en: 'Indef.', ja: '不定' })
   translator.extend('luk-abbrev', { en: 'LUK', ja: '幸運' })
   translator.extend('ida-abbrev', { en: 'IDA', ja: 'ｱｲﾃﾞｱ' })
   translator.extend('knw-abbrev', { en: 'KNW', ja: '知識' })
@@ -120,6 +123,12 @@ export const useRule = (translator: Translator) => {
   translator.extend('jobpts-abbrev', { en: 'Job', ja: '職業P' })
   translator.extend('hbypts-abbrev', { en: 'Hby', ja: '趣味P' })
   translator.extend('db-abbrev', { en: 'DB', ja: 'DB' })
+
+  const variables = new Dict<string, number | null>([
+    ['san', 99],
+    ['hp', null],
+    ['mp', null],
+  ])
 
   const skillset = new Dict([
     [
@@ -280,7 +289,7 @@ export const useRule = (translator: Translator) => {
   translator.extend('pharmacy', { en: 'Pharmacy', ja: '薬学' })
   translator.extend('history', { en: 'History', ja: '歴史' })
 
-  return { profile, parameters, attributes, properties, skillset }
+  return { profile, parameters, attributes, properties, variables, skillset }
 }
 
 export type Rule = ReturnType<typeof useRule>

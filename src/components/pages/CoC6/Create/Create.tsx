@@ -23,6 +23,7 @@ import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { useFirebase } from '@/hooks/useFirebase'
 import { useTranslator } from '@/hooks/useTranslator'
 import { useWindowSize } from '@/hooks/useWindowSize'
+import { Dict } from '@/utils/dict'
 
 import { createState } from './state'
 import './styles.css'
@@ -144,6 +145,14 @@ export const Create = () => {
       }))
       .asObject()
 
+    const variables = new Dict(
+      rule.variables.keys().map((key) => {
+        const { deps, apply } = rule.attributes.get(key)
+        const value = apply(deps.map((dep) => parameterValues.get(dep)))
+        return [key, value]
+      })
+    ).asObject()
+
     const skillset = rule.skillset
       .map((skills) =>
         skills
@@ -171,6 +180,7 @@ export const Create = () => {
     const character = {
       profile,
       parameters,
+      variables,
       skillset,
     }
 

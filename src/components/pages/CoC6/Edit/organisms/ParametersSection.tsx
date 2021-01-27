@@ -1,17 +1,19 @@
-import { CSSProperties, Fragment, memo } from 'react'
+import { CSSProperties, Fragment, useContext } from 'react'
 
-import deepEqual from 'deep-equal'
+import clsx from 'clsx'
 
 import { Flex } from '@/components/atoms/Flex'
 import { Grid } from '@/components/atoms/Grid'
-import { createThemeUseStyles } from '@/context/ThemeContext'
+import { AppContext } from '@/context/AppContext'
+import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
+import { useTranslator } from '@/hooks/useTranslator'
 import { Parameter, Parameters } from '@/models/CoC6/Character'
 import * as math from '@/utils/math'
 import { Merger } from '@/utils/merge'
 
 import { NumberInput } from './NumberInput'
 
-import { Context, contextEqual } from '../Context'
+import { useRule } from '../../rule'
 
 const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   divider: {
@@ -38,32 +40,47 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
     fontWeight: 'bold',
     textAlign: 'right',
   },
+  danger: {
+    color: palette.danger.tone(!isDark),
+  },
 }))
 
 export type ParametersSectionProps = {
   parameters: Parameters
+  modifiers?: { [k in keyof Parameters]: number }
   width: CSSProperties['width']
-  context: Context
+  locked: boolean
   onUpdate: (key: string, parameter: Merger<Parameter>) => void
 }
-
-const compare = (prev: ParametersSectionProps, next: ParametersSectionProps) =>
-  deepEqual(prev.parameters, next.parameters) &&
-  prev.width === next.width &&
-  contextEqual(prev.context, next.context)
 
 const asDefault = (n: number) => (n > 0 ? `${n}` : '')
 const asNumber = (s: string) => (/^\d+$/.test(s) ? parseInt(s, 10) : 0)
 
 export const ParametersSection = Object.assign(
-  memo(({ parameters, width, context, onUpdate }: ParametersSectionProps) => {
-    const { theme, lang, translator, rule, locked } = context
+  ({
+    parameters,
+    modifiers = {},
+    width,
+    locked,
+    onUpdate,
+  }: ParametersSectionProps) => {
+    const { lang } = useContext(AppContext)
+    const translator = useTranslator()
+    const rule = useRule(translator)
 
     const totals = rule.parameters.map((_, key) => {
       const { value, tmp, other } = parameters[key]
       return value + tmp + other
     })
 
+    const attributeTemplateRows = [
+      ...rule.attributes.keys(),
+      ...rule.properties.keys(),
+    ]
+      .map((key) => `[${key}] 22px`)
+      .join(' ')
+
+    const theme = useTheme()
     const styles = useStyles(theme)
 
     return (
@@ -121,42 +138,43 @@ export const ParametersSection = Object.assign(
           </Grid>
 
           <Grid
-            templateColumns="1fr [key] 40px 1fr [value] 40px"
-            templateRows={`repeat(${
-              rule.attributes.size + rule.properties.size
-            }, 22px)`}
+            templateColumns="[start] 1fr [key] 40px 1fr [value] 40px [end]"
+            templateRows={attributeTemplateRows}
             alignItems="center"
           >
             {rule.attributes
-              .map(({ deps, apply }, key) => (
-                <Fragment key={key}>
-                  <Grid.Item column="key">
-                    <span>{translator.t(`${key}-abbrev`, lang)}</span>
-                  </Grid.Item>
-                  <Grid.Item
-                    column="value"
-                    style={{
-                      fontWeight: 'bold',
-                      textAlign: 'right',
-                    }}
-                  >
-                    {apply(deps.map((dep) => totals.get(dep)))}
-                  </Grid.Item>
-                </Fragment>
-              ))
+              .map(({ deps, apply }, key) => {
+                const value =
+                  apply(deps.map((dep) => totals.get(dep))) +
+                  (key in modifiers ? modifiers[key] : 0)
+                const className = clsx(value < 0 && styles.danger)
+                return (
+                  <Fragment key={key}>
+                    <Grid.Item column="key" row={key} className={className}>
+                      <span>{translator.t(`${key}-abbrev`, lang)}</span>
+                    </Grid.Item>
+                    <Grid.Item
+                      column="value"
+                      row={key}
+                      className={className}
+                      style={{ fontWeight: 'bold', textAlign: 'right' }}
+                    >
+                      {value}
+                    </Grid.Item>
+                  </Fragment>
+                )
+              })
               .values()}
             {rule.properties
               .map(({ deps, convert }, key) => (
                 <Fragment key={key}>
-                  <Grid.Item column="key">
+                  <Grid.Item column="key" row={key}>
                     {translator.t(`${key}-abbrev`, lang)}
                   </Grid.Item>
                   <Grid.Item
                     column="value"
-                    style={{
-                      fontWeight: 'bold',
-                      textAlign: 'right',
-                    }}
+                    row={key}
+                    style={{ fontWeight: 'bold', textAlign: 'right' }}
                   >
                     {convert(deps.map((dep) => totals.get(dep)))}
                   </Grid.Item>
@@ -167,6 +185,6 @@ export const ParametersSection = Object.assign(
         </Grid>
       </Flex>
     )
-  }, compare),
+  },
   { displayName: 'ParametersSection' }
 )

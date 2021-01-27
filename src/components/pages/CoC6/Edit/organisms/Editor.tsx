@@ -34,13 +34,20 @@ import { useFirebase } from '@/hooks/useFirebase'
 import { useReferrer } from '@/hooks/useReferrer'
 import { useTranslator } from '@/hooks/useTranslator'
 import { useWindowSize } from '@/hooks/useWindowSize'
-import { Character, Parameter, Profile, Skill } from '@/models/CoC6/Character'
+import {
+  Character,
+  Parameter,
+  Profile,
+  Skill,
+  Variables,
+} from '@/models/CoC6/Character'
 import * as math from '@/utils/math'
 import { merge, Merger, merger } from '@/utils/merge'
 
 import { ParametersSection } from './ParametersSection'
 import { ProfileSection } from './ProfileSection'
 import { SkillsetSection } from './SkillsetSection'
+import { VariableSection } from './VariableSection'
 
 import '../styles.css'
 
@@ -157,6 +164,24 @@ export const Editor = ({
     return value + tmp + other
   })
 
+  const [variables, setVariables] = useState(init.variables)
+  const updateVariable = (diff: Merger<Variables>) => setVariables(merger(diff))
+  const debouncedVariables = useDebounce(variables)
+  const differentVariables = useDifferent(debouncedVariables)
+
+  useEffect(() => {
+    if (differentVariables) {
+      const patch = { variables: debouncedVariables }
+      functions.invoke('updateCharacter', {
+        system,
+        id,
+        referrer,
+        token,
+        patch,
+      })
+    }
+  })
+
   const [skillset, setSkillset] = useState(init.skillset)
   const updateSkill = (category: string, key: string, diff: Merger<Skill>) =>
     setSkillset(({ [category]: { [key]: skill, ...skills }, ...skillset }) => ({
@@ -181,6 +206,28 @@ export const Editor = ({
       })
     }
   })
+
+  const jobpts = -math.sum(
+    Object.values(skillset)
+      .map((category) => Object.values(category))
+      .flat()
+      .map(({ job }) => job)
+  )
+
+  const hbypts = -math.sum(
+    Object.values(skillset)
+      .map((category) => Object.values(category))
+      .flat()
+      .map(({ hobby }) => hobby)
+  )
+
+  const parameterModifiers = { jobpts, hbypts }
+  const cthulhu = math.sum(
+    Object.values(skillset['knowledge']['cthulhu']).map((value) =>
+      typeof value === 'number' ? value : 0
+    )
+  )
+  const variableModifiers = { san: -cthulhu }
 
   const [showall, setShowall] = useState(true)
 
@@ -290,32 +337,43 @@ export const Editor = ({
   const { height: profileHeight } = useElementSize(profileRef)
   const paddingHeight = 22 - (profileHeight % 22)
   const profileRows = Math.ceil(profileHeight / 22)
-  const parameterRows = rule.parameters.size + 1
+  const attributeRows = rule.attributes.size + rule.properties.size
+  const parameterRows = Math.max(rule.parameters.size, attributeRows) + 1
+  const variableRows = rule.variables.size + 1
   const categoryRows = categoryVisibility.filter((v) => v).size + 1
   const skillsetRows = math.sum(
     skillVisibility.values().map((d) => d.filter((v) => v).size)
   )
-  const rowCount = profileRows + parameterRows + categoryRows + skillsetRows
+  const rowCount = math.sum(
+    profileRows,
+    parameterRows,
+    variableRows,
+    categoryRows,
+    skillsetRows
+  )
+
   const fitsVertically = rowCount * 22 <= height
 
-  const minPanelRowCount = profileRows + parameterRows
+  const minPanelRowCount = profileRows + parameterRows + variableRows
 
   const tmpColumnCount = fitsVertically || width < 640 ? 1 : width < 960 ? 2 : 3
-  const tmpColumnWidth =
-    fitsVertically || tmpColumnCount === 3 ? 320 : width / tmpColumnCount
 
   const tmpPanelRowCount = Math.ceil(rowCount / tmpColumnCount)
-  const maxRowCount = minPanelRowCount <= tmpPanelRowCount ? 3 : 2
-  const columnCount = Math.min(tmpColumnCount, maxRowCount)
+  const maxColumnCount = minPanelRowCount <= tmpPanelRowCount ? 3 : 2
+  const columnCount = Math.min(tmpColumnCount, maxColumnCount)
   const columnWidth =
-    fitsVertically || columnCount === maxRowCount ? 320 : width / columnCount
+    fitsVertically || columnCount === maxColumnCount ? 320 : width / columnCount
   const panelRowCount = Math.max(minPanelRowCount, tmpPanelRowCount)
 
-  const panelWidth = fitsVertically ? 320 : columnWidth * columnCount
-  const panelHeight = panelRowCount * 22
-
   const fixBottom = width < 1006 && !fitsVertically
-  const addToolbarPadding = panelRowCount - (rowCount % panelRowCount) < 3
+  const lastColumnRowCount = rowCount - panelRowCount * (columnCount - 1)
+  const emptyRowCount = panelRowCount - lastColumnRowCount
+  const addToolbarPadding = fixBottom && emptyRowCount < 3
+  const toolbarPaddingHeight = columnCount === 1 ? 46 : 22
+
+  const panelWidth = fitsVertically ? 320 : columnWidth * columnCount
+  const panelHeight =
+    panelRowCount * 22 + (!addToolbarPadding ? 0 : toolbarPaddingHeight)
 
   const context = { theme, lang, translator, rule, locked }
 
@@ -342,7 +400,7 @@ export const Editor = ({
             wrap="wrap"
             style={{
               width: panelWidth,
-              height: panelHeight + (addToolbarPadding ? 46 : 0),
+              height: panelHeight,
               backgroundColor: palette.background,
               color: palette.text,
               boxShadow: `0px 0px 10px 0px ${palette.step1000}44`,
@@ -351,9 +409,9 @@ export const Editor = ({
             <ProfileSection
               ref={profileRef}
               profile={profile}
-              width={tmpColumnWidth}
+              width={columnWidth}
               notesRef={notesRef}
-              context={context}
+              locked={locked}
               onUpdate={updateProfile}
             />
 
@@ -369,23 +427,29 @@ export const Editor = ({
 
             <ParametersSection
               parameters={parameters}
-              width={tmpColumnWidth}
-              context={context}
+              modifiers={parameterModifiers}
+              width={columnWidth}
+              locked={locked}
               onUpdate={updateParameter}
+            />
+
+            <VariableSection
+              variables={variables}
+              modifiers={variableModifiers}
+              totals={totals}
+              width={columnWidth}
+              locked={locked}
+              onUpdate={updateVariable}
             />
 
             <SkillsetSection
               skillset={skillset}
               totals={totals}
               showall={showall}
-              width={tmpColumnWidth}
+              width={columnWidth}
               context={context}
               onUpdate={updateSkill}
             />
-
-            {addToolbarPadding && (
-              <div style={{ width: panelWidth, height: '46px' }}></div>
-            )}
           </Flex>
 
           <Snackbar visible={copied !== 'none'}>

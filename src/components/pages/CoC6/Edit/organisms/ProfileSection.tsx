@@ -1,17 +1,17 @@
-import { CSSProperties, forwardRef, memo, MutableRefObject } from 'react'
-
-import deepEqual from 'deep-equal'
+import { CSSProperties, forwardRef, MutableRefObject, useContext } from 'react'
 
 import { Flex } from '@/components/atoms/Flex'
 import { Grid } from '@/components/atoms/Grid'
 import { Input } from '@/components/atoms/Input'
 import { LabeledInput } from '@/components/atoms/LabeledInput'
 import { TextArea } from '@/components/atoms/TextArea'
-import { createThemeUseStyles } from '@/context/ThemeContext'
+import { AppContext } from '@/context/AppContext'
+import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
+import { useTranslator } from '@/hooks/useTranslator'
 import { Profile } from '@/models/CoC6/Character'
 import { Merger } from '@/utils/merge'
 
-import { Context, contextEqual } from '../Context'
+import { useRule } from '../../rule'
 
 const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   divider: {
@@ -58,81 +58,74 @@ export type ProfileSectionProps = {
   profile: Profile
   width: CSSProperties['width']
   notesRef: MutableRefObject<HTMLTextAreaElement>
-  context: Context
+  locked: boolean
   onUpdate: (diff: Merger<Profile>) => void
 }
 
-const compare = (prev: ProfileSectionProps, next: ProfileSectionProps) =>
-  prev.profile.name === next.profile.name &&
-  deepEqual(prev.profile.items, next.profile.items) &&
-  prev.profile.notes === next.profile.notes &&
-  prev.width === next.width &&
-  contextEqual(prev.context, next.context)
-
 export const ProfileSection = Object.assign(
-  memo(
-    forwardRef<HTMLDivElement, ProfileSectionProps>(
-      ({ profile, width, notesRef, context, onUpdate }, ref) => {
-        const { theme, lang, translator, rule, locked } = context
-        const { name, items, notes } = profile
+  forwardRef<HTMLDivElement, ProfileSectionProps>(
+    ({ profile, width, notesRef, locked, onUpdate }, ref) => {
+      const { lang } = useContext(AppContext)
+      const translator = useTranslator()
+      const rule = useRule(translator)
 
-        const styles = useStyles(theme)
+      const { name, items, notes } = profile
 
-        return (
-          <Flex ref={ref} direction="column" style={{ width }}>
-            <Input
-              placeholder={translator.t('addname', lang)}
-              defaultValue={name}
-              autoComplete="off"
-              className={styles.name}
-              disabled={locked}
-              debounce={1000}
-              onChange={({ target: { value: name } }) => onUpdate({ name })}
-            />
+      const theme = useTheme()
+      const styles = useStyles(theme)
 
-            <div className={styles.divider}>
-              {translator.t('profile', lang)}
-            </div>
+      return (
+        <Flex ref={ref} direction="column" style={{ width }}>
+          <Input
+            placeholder={translator.t('addname', lang)}
+            defaultValue={name}
+            autoComplete="off"
+            className={styles.name}
+            disabled={locked}
+            debounce={1000}
+            onChange={({ target: { value: name } }) => onUpdate({ name })}
+          />
 
-            <Grid templateColumns={'1fr 1fr 1fr'} justifyItems="center">
-              {rule.profile.keys().map((key) => (
-                <Grid.Item key={key}>
-                  <LabeledInput
-                    id={key}
-                    label={translator.t(key, lang)}
-                    defaultValue={items[key]}
-                    style={{ width: 90, marginBottom: 5 }}
-                    disabled={locked}
-                    debounce={1000}
-                    onChange={({ target: { value } }) =>
-                      onUpdate(({ items }) => ({
-                        items: {
-                          ...items,
-                          [key]: value,
-                        },
-                      }))
-                    }
-                  />
-                </Grid.Item>
-              ))}
-            </Grid>
+          <div className={styles.divider}>{translator.t('profile', lang)}</div>
 
-            <TextArea
-              ref={notesRef}
-              minRows={3}
-              defaultValue={notes}
-              placeholder={`${translator.t('notes', lang)}...`}
-              style={{ width }}
-              className={styles.notes}
-              disabled={locked}
-              debounce={1000}
-              onChange={({ target: { value: notes } }) => onUpdate({ notes })}
-            />
-          </Flex>
-        )
-      }
-    ),
-    compare
+          <Grid templateColumns={'1fr 1fr 1fr'} justifyItems="center">
+            {rule.profile.keys().map((key) => (
+              <Grid.Item key={key}>
+                <LabeledInput
+                  id={key}
+                  label={translator.t(key, lang)}
+                  defaultValue={items[key]}
+                  style={{ width: 90, marginBottom: 5 }}
+                  disabled={locked}
+                  debounce={1000}
+                  onChange={({ target: { value } }) =>
+                    onUpdate(({ items }) => ({
+                      items: {
+                        ...items,
+                        [key]: value,
+                      },
+                    }))
+                  }
+                />
+              </Grid.Item>
+            ))}
+          </Grid>
+
+          <TextArea
+            ref={notesRef}
+            minRows={3}
+            defaultValue={notes}
+            placeholder={`${translator.t('notes', lang)}...`}
+            style={{ width }}
+            className={styles.notes}
+            disabled={locked}
+            debounce={1000}
+            onChange={({ target: { value: notes } }) => onUpdate({ notes })}
+          />
+        </Flex>
+      )
+    }
   ),
+
   { displayName: 'ProfileSection' }
 )

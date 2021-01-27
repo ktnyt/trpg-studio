@@ -110,7 +110,7 @@ export const SkillRow = Object.assign(
       onUpdate,
     }: SkillRowProps) => {
       const {
-        theme: { palette },
+        theme: { palette, isDark },
         lang,
         translator,
         rule,
@@ -123,7 +123,13 @@ export const SkillRow = Object.assign(
       const flag = total > init || fixed
 
       const backgroundColor = flag ? palette.background : palette.step50
-      const color = flag ? palette.text : palette.step500
+      const color = !flag
+        ? palette.step500
+        : total <= 95
+        ? palette.text
+        : total <= 100
+        ? palette.warning.tone(!isDark)
+        : palette.danger.tone(!isDark)
       const visibility = visible ? 'visible' : 'hidden'
 
       const styles = useStyles({ visibility, backgroundColor, color })
