@@ -141,7 +141,7 @@ export const SkillRow = Object.assign(
           templateColumns="[start check] 22px 1fr [key] 100px 1fr [init] 30px 1fr [job] 30px 1fr [hobby] 30px 1fr [growth] 30px 1fr [other] 30px 1fr [total] 30px 1fr [end]"
           templateRows={`[${name}] 22px`}
           alignItems="center"
-          style={{ width: width, visibility }}
+          style={{ width, visibility }}
         >
           <Grid.Item column="check" row={name}>
             <input type="checkbox" style={{ margin: '4px 5px 5px 4px' }} />
