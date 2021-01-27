@@ -1,12 +1,44 @@
-import { ComponentPropsWithRef, forwardRef, useRef } from 'react'
+import {
+  ChangeEvent,
+  ComponentPropsWithRef,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 
-export type TextAreaProps = ComponentPropsWithRef<typeof TextareaAutosize>
+import { useDebounce } from '@/hooks/useDebounce'
+import { useDifferent } from '@/hooks/useDifferent'
+
+export type TextAreaProps = ComponentPropsWithRef<typeof TextareaAutosize> & {
+  debounce?: number
+}
+
+type EventState = ChangeEvent<HTMLTextAreaElement> | null
 
 export const TextArea = Object.assign(
   forwardRef<HTMLTextAreaElement, TextAreaProps>(
-    ({ onKeyDown, ...props }, ref) => {
+    ({ onKeyDown, onChange, debounce = 0, ...props }, ref) => {
       const localRef = useRef<HTMLTextAreaElement>(null!)
+
+      const [composing, setComposing] = useState(false)
+      const [event, setEvent] = useState<EventState>(null)
+
+      const debounced = useDebounce(event, debounce)
+      const different = useDifferent(debounced)
+
+      useEffect(() => {
+        if (
+          !composing &&
+          onChange !== undefined &&
+          debounced !== null &&
+          different
+        ) {
+          onChange(debounced)
+        }
+      }, [composing, onChange, debounced, different])
+
       return (
         <TextareaAutosize
           ref={(current) => {
@@ -27,6 +59,9 @@ export const TextArea = Object.assign(
               localRef.current.blur()
             }
           }}
+          onCompositionStart={() => setComposing(true)}
+          onCompositionEnd={() => setComposing(false)}
+          onChange={setEvent}
           {...props}
         />
       )
