@@ -1,63 +1,69 @@
-import { Children } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { Flex } from './Flex'
 
 const useStyles = createUseStyles({
-  horizontal: {
-    borderRadius: '6px',
-    '& > *:first-child > *': {
+  horizontal: ({ borderRadius }) => ({
+    borderRadius,
+    '& > *:first-child': {
       borderTopRightRadius: '0px',
       borderBottomRightRadius: '0px',
-      borderTopLeftRadius: '6px',
-      borderBottomLeftRadius: '6px',
+      borderTopLeftRadius: borderRadius,
+      borderBottomLeftRadius: borderRadius,
     },
-    '& > *:last-child > *': {
-      borderTopRightRadius: '6px',
-      borderBottomRightRadius: '6px',
+    '& > *:last-child': {
+      borderTopRightRadius: borderRadius,
+      borderBottomRightRadius: borderRadius,
       borderTopLeftRadius: '0px',
       borderBottomLeftRadius: '0px',
     },
-  },
-  vertical: {
-    borderRadius: '6px',
-    '& > *:first-child > *': {
-      borderTopRightRadius: '6px',
+  }),
+  vertical: ({ borderRadius }) => ({
+    borderRadius,
+    '& > *:first-child': {
+      borderTopRightRadius: borderRadius,
       borderBottomRightRadius: '0px',
-      borderTopLeftRadius: '6px',
+      borderTopLeftRadius: borderRadius,
       borderBottomLeftRadius: '0px',
     },
-    '& > *:last-child > *': {
+    '& > *:last-child': {
       borderTopRightRadius: '0px',
-      borderBottomRightRadius: '6px',
+      borderBottomRightRadius: borderRadius,
       borderTopLeftRadius: '0px',
-      borderBottomLeftRadius: '6px',
+      borderBottomLeftRadius: borderRadius,
     },
-  },
+  }),
 })
 
 export type InputGroupProps = {
   vertical?: boolean
   style?: React.CSSProperties
+  size?: 'sm' | 'md'
   children?: React.ReactNode
 }
 
 export const InputGroup = ({
   vertical,
   style: propStyle = {},
+  size = 'md',
   children,
 }: InputGroupProps) => {
-  const styles = useStyles()
+  const groupSize = size === 'sm' ? 18 : 36
+  const borderRadius = size === 'sm' ? '3px' : '6px'
+  const styles = useStyles({ borderRadius })
   const direction = vertical ? 'column' : 'row'
   const className = vertical ? styles.vertical : styles.horizontal
-  const width = vertical ? 36 : Children.count(children) * 36
-  const height = vertical ? Children.count(children) * 36 : 36
+  const width = vertical ? groupSize : 'auto'
+  const height = vertical ? 'auto' : groupSize
   const style = { width, height, ...propStyle }
   return (
-    <Flex direction={direction} className={className} style={style}>
-      {Children.map(children, (child) => (
-        <Flex.Item>{child}</Flex.Item>
-      ))}
+    <Flex
+      direction={direction}
+      alignContent="center"
+      className={className}
+      style={style}
+    >
+      {children}
     </Flex>
   )
 }
