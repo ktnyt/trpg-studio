@@ -116,6 +116,8 @@ export const Editor = ({
     }
   })
 
+  const [showall, setShowall] = useState(true)
+
   const { functions } = useFirebase()
   const { id } = useParams<{ id: string }>()
   const referrer = useReferrer()
@@ -207,8 +209,6 @@ export const Editor = ({
     )
   )
   const variableModifiers = { san: -cthulhu }
-
-  const [showall, setShowall] = useState(true)
 
   const unlock = async (password: string) =>
     functions
