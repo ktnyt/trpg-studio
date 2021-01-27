@@ -43,6 +43,7 @@ import {
 } from '@/models/CoC6/Character'
 import * as math from '@/utils/math'
 import { merge, Merger, merger } from '@/utils/merge'
+import { POD } from '@/utils/types'
 
 import { ParametersSection } from './ParametersSection'
 import { ProfileSection } from './ProfileSection'
@@ -119,6 +120,8 @@ export const Editor = ({
   const { id } = useParams<{ id: string }>()
   const referrer = useReferrer()
 
+  const data = (patch: POD) => ({ system, id, referrer, token, patch })
+
   const [profile, setProfile] = useState(init.profile)
   const updateProfile = (diff: Merger<Profile>) => setProfile(merger(diff))
   const debouncedProfile = useDebounce(profile)
@@ -127,13 +130,7 @@ export const Editor = ({
   useEffect(() => {
     if (differentProfile) {
       const patch = { profile: debouncedProfile }
-      functions.invoke('updateCharacter', {
-        system,
-        id,
-        referrer,
-        token,
-        patch,
-      })
+      functions.invoke('updateCharacter', data(patch))
     }
   })
 
@@ -149,13 +146,7 @@ export const Editor = ({
   useEffect(() => {
     if (differentParameters) {
       const patch = { parameters: debouncedParameters }
-      functions.invoke('updateCharacter', {
-        system,
-        id,
-        referrer,
-        token,
-        patch,
-      })
+      functions.invoke('updateCharacter', data(patch))
     }
   })
 
@@ -172,13 +163,7 @@ export const Editor = ({
   useEffect(() => {
     if (differentVariables) {
       const patch = { variables: debouncedVariables }
-      functions.invoke('updateCharacter', {
-        system,
-        id,
-        referrer,
-        token,
-        patch,
-      })
+      functions.invoke('updateCharacter', data(patch))
     }
   })
 
@@ -197,13 +182,7 @@ export const Editor = ({
   useEffect(() => {
     if (differentSkillset) {
       const patch = { skillset: debouncedSkillset }
-      functions.invoke('updateCharacter', {
-        system,
-        id,
-        referrer,
-        token,
-        patch,
-      })
+      functions.invoke('updateCharacter', data(patch))
     }
   })
 
