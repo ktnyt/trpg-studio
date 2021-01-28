@@ -42,7 +42,7 @@ export const Edit = () => {
     <Loading />
   ) : status === 'notfound' ? (
     <NotFound message="キャラクターが見つかりませんでした">
-      <Link to={url} style={{ color: palette.text }}>
+      <Link to={url.replace(`/${id}`, '')} style={{ color: palette.text }}>
         新しく作る
       </Link>
     </NotFound>
