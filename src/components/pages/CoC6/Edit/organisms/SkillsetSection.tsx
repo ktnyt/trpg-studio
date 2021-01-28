@@ -1,4 +1,4 @@
-import React, { CSSProperties, Fragment, useContext } from 'react'
+import { CSSProperties, Fragment, useContext } from 'react'
 
 import { AppContext } from '@/context/AppContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'

@@ -83,6 +83,7 @@ export const CategoryTable = ({
               skill={skill}
               init={init}
               visible={visible}
+              locked={locked}
               width={width}
               theme={theme}
               lang={lang}

@@ -36,6 +36,7 @@ import { useTranslator } from '@/hooks/useTranslator'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
   Character,
+  Custom,
   Parameter,
   Profile,
   Skill,
@@ -45,6 +46,7 @@ import * as math from '@/utils/math'
 import { merge, Merger, merger } from '@/utils/merge'
 import { POD } from '@/utils/types'
 
+import { CustomSection } from './CustomSection'
 import { ParametersSection } from './ParametersSection'
 import { ProfileSection } from './ProfileSection'
 import { SkillsetSection } from './SkillsetSection'
@@ -188,18 +190,49 @@ export const Editor = ({
     }
   })
 
-  const jobpts = -math.sum(
-    Object.values(skillset)
-      .map((category) => Object.values(category))
-      .flat()
-      .map(({ job }) => job)
+  const [custom, setCustom] = useState(init.custom)
+  const createCustom = (name: string) =>
+    setCustom((custom) => [
+      ...custom,
+      { name, job: 0, hobby: 0, growth: 0, other: 0 },
+    ])
+  const updateCustom = (index: number, diff: Merger<Custom>) =>
+    setCustom((custom) => [
+      ...custom.slice(0, index),
+      merge(custom[index], diff),
+      ...custom.slice(index + 1),
+    ])
+  const deleteCustom = (index: number) =>
+    setCustom((custom) => [
+      ...custom.slice(0, index),
+      ...custom.slice(index + 1),
+    ])
+  const debouncedCustom = useDebounce(custom)
+  const differentCustom = useDifferent(debouncedCustom)
+
+  useEffect(() => {
+    if (differentCustom) {
+      const patch = { custom: debouncedCustom }
+      functions.invoke('updateCharacter', data(patch))
+    }
+  })
+
+  const jobpts = -(
+    math.sum(
+      Object.values(skillset)
+        .map((category) => Object.values(category))
+        .flat()
+        .map(({ job }) => job)
+    ) + math.sum(custom.map(({ job }) => job))
   )
 
-  const hbypts = -math.sum(
-    Object.values(skillset)
-      .map((category) => Object.values(category))
-      .flat()
-      .map(({ hobby }) => hobby)
+  const hbypts = -(
+    math.sum(
+      Object.values(skillset)
+        .map((category) => Object.values(category))
+        .flat()
+        .map(({ hobby }) => hobby)
+    ) + math.sum(custom.map(({ hobby }) => hobby))
   )
 
   const parameterModifiers = { jobpts, hbypts }
@@ -323,12 +356,14 @@ export const Editor = ({
   const skillsetRows = math.sum(
     skillVisibility.values().map((d) => d.filter((v) => v).size)
   )
+  const customRows = custom.length + 2
   const rowCount = math.sum(
     profileRows,
     parameterRows,
     variableRows,
     categoryRows,
-    skillsetRows
+    skillsetRows,
+    customRows
   )
 
   const fitsVertically = rowCount * 22 <= height
@@ -426,6 +461,15 @@ export const Editor = ({
               width={columnWidth}
               locked={locked}
               onUpdate={updateSkill}
+            />
+
+            <CustomSection
+              custom={custom}
+              width={columnWidth}
+              locked={locked}
+              onCreate={createCustom}
+              onUpdate={updateCustom}
+              onDelete={deleteCustom}
             />
           </Flex>
 

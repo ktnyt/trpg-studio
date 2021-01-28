@@ -1,4 +1,4 @@
-import { CSSProperties, memo } from 'react'
+import { CSSProperties, memo, useRef, useState } from 'react'
 
 import deepEqual from 'deep-equal'
 
@@ -6,7 +6,7 @@ import { Grid } from '@/components/atoms/Grid'
 import { Input } from '@/components/atoms/Input'
 import { createThemeUseStyles, Theme } from '@/context/ThemeContext'
 import { useTranslator } from '@/hooks/useTranslator'
-import { Skill } from '@/models/CoC6/Character'
+import { Custom } from '@/models/CoC6/Character'
 import { Merger } from '@/utils/merge'
 import { Language } from '@/utils/translator'
 
@@ -20,30 +20,18 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
     fontVariantNumeric: 'tabular-nums',
     textAlign: 'right',
   }),
-  toggle: ({ backgroundColor, color }) => ({
-    padding: '1px 2px',
-    borderRadius: '2px',
-    backgroundColor,
-    color,
-    fontSize: '13px',
-    lineHeight: '13px',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    cursor: 'pointer',
-  }),
-  detail: {
-    boxSizing: 'border-box',
-    width: '40px',
-    margin: '0px 5px',
+  name: {
+    width: '100%',
+    marginBottom: '1px',
     padding: '0px',
     border: 'none',
     borderBottom: `1px solid transparent`,
+    borderRadius: '0px',
     backgroundColor: 'transparent',
     color: palette.text,
-    fontSize: '12px',
+    fontSize: '13px',
     fontVariantNumeric: 'tabular-nums',
-    lineHeight: '12px',
-    textAlign: 'left',
+    lineHeight: '13px',
     transition: 'border 200ms',
     '&::placeholder': {
       color: palette.step300,
@@ -71,80 +59,68 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
 
 const asNumber = (s: string) => (/^\d+$/.test(s) ? parseInt(s, 10) : 0)
 
-export type SkillRowProps = {
-  category: string
-  name: string
-  skill: Skill
-  init: number
-  visible: boolean
-  locked: boolean
+export type CustomRowProps = {
+  index: number
+  skill: Custom
   width: CSSProperties['width']
+  locked: boolean
   theme: Theme
   lang: Language
-  onUpdate: (category: string, key: string, diff: Merger<Skill>) => void
+  onUpdate: (index: number, diff: Merger<Custom>) => void
+  onDelete: (index: number) => void
 }
 
-const skillsEqual = (prev: Skill, next: Skill) =>
+const customsEqual = (prev: Custom, next: Custom) =>
+  prev.name === next.name &&
   prev.job === next.job &&
   prev.hobby === next.hobby &&
   prev.growth === next.growth &&
-  prev.other === next.other &&
-  prev.fixed === next.fixed
+  prev.other === next.other
 
-const compare = (prev: SkillRowProps, next: SkillRowProps) =>
-  prev.category === next.category &&
-  prev.name === next.name &&
-  skillsEqual(prev.skill, next.skill) &&
-  prev.init === next.init &&
-  prev.visible === next.visible &&
+const compare = (prev: CustomRowProps, next: CustomRowProps) =>
+  prev.index === next.index &&
+  customsEqual(prev.skill, next.skill) &&
   prev.width === next.width &&
+  prev.locked === next.locked &&
   deepEqual(prev.theme, next.theme) &&
   prev.lang === next.lang
 
-export const SkillRow = Object.assign(
+export const CustomRow = Object.assign(
   memo(
     ({
-      category,
-      name,
-      init,
+      index,
       skill,
-      visible,
-      locked,
       width,
+      locked,
       theme,
-      lang,
       onUpdate,
-    }: SkillRowProps) => {
+      onDelete,
+    }: CustomRowProps) => {
       const translator = useTranslator()
-      const rule = useRule(translator)
+      useRule(translator)
       const { palette, isDark } = theme
 
-      const { custom } = rule.skillset.get(category).get(name)
+      const { name, job, hobby, growth, other } = skill
+      const total = 1 + job + hobby + growth + other
 
-      const { job, hobby, growth, other, fixed, detail } = skill
-      const total = init + job + hobby + growth + other
-      const flag = total > init || fixed
+      const [value, setValue] = useState(name)
+      const ref = useRef<HTMLInputElement>(null!)
 
-      const backgroundColor = flag ? palette.background : palette.step50
-      const color = !flag
-        ? palette.step500
-        : total <= 95
-        ? palette.text
-        : total <= 100
-        ? palette.warning.tone(!isDark)
-        : palette.danger.tone(!isDark)
-      const visibility = visible ? 'visible' : 'hidden'
+      const color =
+        total <= 95
+          ? palette.text
+          : total <= 100
+          ? palette.warning.tone(!isDark)
+          : palette.danger.tone(!isDark)
 
-      const styles = useStyles({ visibility, backgroundColor, color })
-      const toggleFixed = () =>
-        onUpdate(category, name, ({ fixed }) => ({ fixed: !fixed }))
+      const styles = useStyles({ color })
 
-      return visible ? (
+      return (
         <Grid
           templateColumns="[start check] 22px 1fr [key] 100px 1fr [init] 30px 1fr [job] 30px 1fr [hobby] 30px 1fr [growth] 30px 1fr [other] 30px 1fr [total] 30px 1fr [end]"
           templateRows={`[${name}] 22px`}
           alignItems="center"
-          style={{ width, visibility }}
+          style={{ width }}
         >
           <Grid.Item column="check" row={name}>
             <input
@@ -153,26 +129,30 @@ export const SkillRow = Object.assign(
               style={{ margin: '4px 5px 5px 4px' }}
             />
           </Grid.Item>
-          <Grid.Item column="key" row={name} style={{ visibility }}>
-            <span className={styles.toggle} onClick={toggleFixed}>
-              {translator.t(name, lang)}
-            </span>
-            {custom && (
-              <span>
-                <Input
-                  defaultValue={detail}
-                  placeholder="詳細"
-                  disabled={locked}
-                  className={styles.detail}
-                  onChange={({ target: { value: detail } }) =>
-                    onUpdate(category, name, { detail })
-                  }
-                />
-              </span>
-            )}
+          <Grid.Item column="key" row={name}>
+            <Input
+              ref={ref}
+              defaultValue={name}
+              placeholder="技能を削除"
+              disabled={locked}
+              className={styles.name}
+              onKeyDown={({ key }) => {
+                if (key === 'Enter' && value === '') {
+                  ref.current.blur()
+                }
+              }}
+              onBlur={({ target: { value: name } }) => {
+                if (name === '') {
+                  onDelete(index)
+                } else {
+                  onUpdate(index, { name })
+                  setValue(name)
+                }
+              }}
+            />
           </Grid.Item>
           <Grid.Item column="init" row={name} className={styles.init}>
-            {init}
+            1
           </Grid.Item>
           <Grid.Item column="job" row={name} className={styles.cell}>
             <NumberInput
@@ -180,8 +160,9 @@ export const SkillRow = Object.assign(
               defaultValue={job > 0 ? job : ''}
               disabled={locked}
               onChange={({ target: { value: job } }) =>
-                onUpdate(category, name, { job: asNumber(job) })
+                onUpdate(index, { job: asNumber(job) })
               }
+              onBlur={() => onDelete(index)}
             />
           </Grid.Item>
           <Grid.Item column="hobby" row={name} className={styles.cell}>
@@ -190,7 +171,7 @@ export const SkillRow = Object.assign(
               defaultValue={hobby > 0 ? hobby : ''}
               disabled={locked}
               onChange={({ target: { value: hobby } }) =>
-                onUpdate(category, name, { hobby: asNumber(hobby) })
+                onUpdate(index, { hobby: asNumber(hobby) })
               }
             />
           </Grid.Item>
@@ -200,7 +181,7 @@ export const SkillRow = Object.assign(
               defaultValue={growth > 0 ? growth : ''}
               disabled={locked}
               onChange={({ target: { value: growth } }) =>
-                onUpdate(category, name, { growth: asNumber(growth) })
+                onUpdate(index, { growth: asNumber(growth) })
               }
             />
           </Grid.Item>
@@ -210,7 +191,7 @@ export const SkillRow = Object.assign(
               defaultValue={other > 0 ? other : ''}
               disabled={locked}
               onChange={({ target: { value: other } }) =>
-                onUpdate(category, name, { other: asNumber(other) })
+                onUpdate(index, { other: asNumber(other) })
               }
             />
           </Grid.Item>
@@ -218,11 +199,9 @@ export const SkillRow = Object.assign(
             {total}
           </Grid.Item>
         </Grid>
-      ) : (
-        <div></div>
       )
     },
     compare
   ),
-  { displayName: 'SkillRow' }
+  { displayName: 'CustomRow' }
 )
