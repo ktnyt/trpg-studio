@@ -21,6 +21,7 @@ import {
 
 import { ButtonSet } from '@/components/atoms/ButtonSet'
 import { Flex } from '@/components/atoms/Flex'
+import { Grid } from '@/components/atoms/Grid'
 import { IconButton } from '@/components/atoms/IconButton'
 import { InputGroup } from '@/components/atoms/InputGroup'
 import { Prompt } from '@/components/atoms/Prompt'
@@ -119,6 +120,7 @@ export const Editor = ({
   })
 
   const [showall, setShowall] = useState(true)
+  const [focus, setFocus] = useState(false)
 
   const { functions } = useFirebase()
   const { id } = useParams<{ id: string }>()
@@ -217,25 +219,36 @@ export const Editor = ({
     }
   })
 
-  const jobpts = -(
+  const jobpts = (({ deps, apply }) =>
+    apply(deps.map((dep) => totals.get(dep))))(rule.attributes.get('jobpts'))
+
+  const hbypts = (({ deps, apply }) =>
+    apply(deps.map((dep) => totals.get(dep))))(rule.attributes.get('hbypts'))
+
+  const jobSpent =
     math.sum(
       Object.values(skillset)
         .map((category) => Object.values(category))
         .flat()
         .map(({ job }) => job)
     ) + math.sum(custom.map(({ job }) => job))
-  )
 
-  const hbypts = -(
+  const hbySpent =
     math.sum(
       Object.values(skillset)
         .map((category) => Object.values(category))
         .flat()
         .map(({ hobby }) => hobby)
     ) + math.sum(custom.map(({ hobby }) => hobby))
-  )
 
-  const parameterModifiers = { jobpts, hbypts }
+  const jobRemain = jobpts - jobSpent
+  const hbyRemain = hbypts - hbySpent
+
+  const parameterModifiers = {
+    jobpts: -jobSpent,
+    hbypts: -hbySpent,
+  }
+
   const cthulhu = math.sum(
     Object.values(skillset['knowledge']['cthulhu']).map((value) =>
       typeof value === 'number' ? value : 0
@@ -388,6 +401,7 @@ export const Editor = ({
   const panelWidth = fitsVertically ? 320 : columnWidth * columnCount
   const panelHeight =
     panelRowCount * 22 + (!addToolbarPadding ? 0 : toolbarPaddingHeight)
+  const showPoints = fixBottom && focus
 
   return (
     <Flex
@@ -461,6 +475,8 @@ export const Editor = ({
               width={columnWidth}
               locked={locked}
               onUpdate={updateSkill}
+              onFocus={() => setFocus(true)}
+              onBlur={() => setFocus(false)}
             />
 
             <CustomSection
@@ -470,6 +486,8 @@ export const Editor = ({
               onCreate={createCustom}
               onUpdate={updateCustom}
               onDelete={deleteCustom}
+              onFocus={() => setFocus(true)}
+              onBlur={() => setFocus(false)}
             />
           </Flex>
 
@@ -480,36 +498,76 @@ export const Editor = ({
           <div
             style={fixBottom ? { position: 'fixed', bottom: 0, right: 0 } : {}}
           >
-            <ButtonSet vertical={!fixBottom} style={{ margin: '5px' }}>
-              <IconButton
-                icon={faMoon}
-                onClick={toggle}
-                style={{ boxShadow }}
-              />
-              <InputGroup vertical={!fixBottom} style={{ boxShadow }}>
-                <CopyToClipboard
-                  text={window.location.href}
-                  onCopy={() => patchState({ copied: 'link' })}
-                >
-                  <IconButton ref={linkRef} icon={faLink} />
-                </CopyToClipboard>
+            {showPoints ? (
+              <Grid
+                templateColumns="1fr [jobkey] 40px 1fr [jobremain] 30px [jobslash] 5px [jobtotal] 30px 1fr [hbykey] 40px 1fr [hbyremain] 30px [hbyslash] 5px [hbytotal] 30px 1fr"
+                style={{
+                  boxSizing: 'border-box',
+                  width: columnWidth,
+                  padding: '10px 0px',
+                  backgroundColor: palette.step50,
+                  color: palette.text,
+                  fontVariantNumeric: 'tabular-nums',
+                }}
+              >
+                <Grid.Item column="jobkey">
+                  {translator.t('jobpts-abbrev', lang)}
+                </Grid.Item>
+                <Grid.Item column="jobremain" style={{ textAlign: 'right' }}>
+                  {jobRemain}
+                </Grid.Item>
+                <Grid.Item column="jobslash" style={{ textAlign: 'center' }}>
+                  /
+                </Grid.Item>
+                <Grid.Item column="jobtotal" style={{ textAlign: 'right' }}>
+                  {jobpts}
+                </Grid.Item>
+
+                <Grid.Item column="hbykey">
+                  {translator.t('hbypts-abbrev', lang)}
+                </Grid.Item>
+                <Grid.Item column="hbyremain" style={{ textAlign: 'right' }}>
+                  {hbyRemain}
+                </Grid.Item>
+                <Grid.Item column="hbyslash" style={{ textAlign: 'center' }}>
+                  /
+                </Grid.Item>
+                <Grid.Item column="hbytotal" style={{ textAlign: 'right' }}>
+                  {hbypts}
+                </Grid.Item>
+              </Grid>
+            ) : (
+              <ButtonSet vertical={!fixBottom} style={{ margin: '5px' }}>
                 <IconButton
-                  ref={paletteRef}
-                  icon={faPalette}
-                  onClick={() => patchState({ modal: 'palette' })}
+                  icon={faMoon}
+                  onClick={toggle}
+                  style={{ boxShadow }}
                 />
-              </InputGroup>
-              <IconButton
-                icon={locked ? faLock : unlocked ? faLockOpen : faGlobe}
-                style={{ boxShadow }}
-                onClick={() => patchState({ modal: 'password' })}
-              />
-              <IconButton
-                icon={showall ? faEyeSlash : faEye}
-                style={{ boxShadow }}
-                onClick={() => setShowall((flag) => !flag)}
-              />
-            </ButtonSet>
+                <InputGroup vertical={!fixBottom} style={{ boxShadow }}>
+                  <CopyToClipboard
+                    text={window.location.href}
+                    onCopy={() => patchState({ copied: 'link' })}
+                  >
+                    <IconButton ref={linkRef} icon={faLink} />
+                  </CopyToClipboard>
+                  <IconButton
+                    ref={paletteRef}
+                    icon={faPalette}
+                    onClick={() => patchState({ modal: 'palette' })}
+                  />
+                </InputGroup>
+                <IconButton
+                  icon={locked ? faLock : unlocked ? faLockOpen : faGlobe}
+                  style={{ boxShadow }}
+                  onClick={() => patchState({ modal: 'password' })}
+                />
+                <IconButton
+                  icon={showall ? faEyeSlash : faEye}
+                  style={{ boxShadow }}
+                  onClick={() => setShowall((flag) => !flag)}
+                />
+              </ButtonSet>
+            )}
           </div>
 
           <ReactModal

@@ -1,4 +1,4 @@
-import { CSSProperties, Fragment, useContext } from 'react'
+import { CSSProperties, FocusEvent, Fragment, useContext } from 'react'
 
 import { AppContext } from '@/context/AppContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
@@ -37,6 +37,8 @@ export type SkillsetSectionProps = {
   locked: boolean
   width: CSSProperties['width']
   onUpdate: (category: string, key: string, diff: Merger<Skill>) => void
+  onFocus: (event: FocusEvent<HTMLInputElement>) => void
+  onBlur: (evnet: FocusEvent<HTMLInputElement>) => void
 }
 
 export const SkillsetSection = Object.assign(
@@ -47,6 +49,8 @@ export const SkillsetSection = Object.assign(
     locked,
     width,
     onUpdate,
+    onFocus,
+    onBlur,
   }: SkillsetSectionProps) => {
     const { lang } = useContext(AppContext)
     const translator = useTranslator()
@@ -71,6 +75,8 @@ export const SkillsetSection = Object.assign(
             locked={locked}
             width={width}
             onUpdate={onUpdate}
+            onFocus={onFocus}
+            onBlur={onBlur}
           />
         ))}
       </Fragment>

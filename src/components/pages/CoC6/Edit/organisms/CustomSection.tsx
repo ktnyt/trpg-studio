@@ -1,4 +1,4 @@
-import { CSSProperties, Fragment, useContext, useRef } from 'react'
+import { CSSProperties, FocusEvent, Fragment, useContext, useRef } from 'react'
 
 import { Grid } from '@/components/atoms/Grid'
 import { Input } from '@/components/atoms/Input'
@@ -49,6 +49,8 @@ export type CustomSectionProps = {
   onCreate: (name: string) => void
   onUpdate: (index: number, diff: Merger<Custom>) => void
   onDelete: (index: number) => void
+  onFocus: (event: FocusEvent<HTMLInputElement>) => void
+  onBlur: (evnet: FocusEvent<HTMLInputElement>) => void
 }
 
 export const CustomSection = Object.assign(
@@ -59,6 +61,8 @@ export const CustomSection = Object.assign(
     onCreate,
     onUpdate,
     onDelete,
+    onFocus,
+    onBlur,
   }: CustomSectionProps) => {
     const { lang } = useContext(AppContext)
     const translator = useTranslator()
@@ -85,6 +89,8 @@ export const CustomSection = Object.assign(
             lang={lang}
             onUpdate={onUpdate}
             onDelete={onDelete}
+            onFocus={onFocus}
+            onBlur={onBlur}
           />
         ))}
 

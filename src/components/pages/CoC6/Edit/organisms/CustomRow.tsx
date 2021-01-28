@@ -1,4 +1,4 @@
-import { CSSProperties, memo, useRef, useState } from 'react'
+import { CSSProperties, FocusEvent, memo, useRef, useState } from 'react'
 
 import deepEqual from 'deep-equal'
 
@@ -68,6 +68,8 @@ export type CustomRowProps = {
   lang: Language
   onUpdate: (index: number, diff: Merger<Custom>) => void
   onDelete: (index: number) => void
+  onFocus: (event: FocusEvent<HTMLInputElement>) => void
+  onBlur: (evnet: FocusEvent<HTMLInputElement>) => void
 }
 
 const customsEqual = (prev: Custom, next: Custom) =>
@@ -95,6 +97,8 @@ export const CustomRow = Object.assign(
       theme,
       onUpdate,
       onDelete,
+      onFocus,
+      onBlur,
     }: CustomRowProps) => {
       const translator = useTranslator()
       useRule(translator)
@@ -162,7 +166,8 @@ export const CustomRow = Object.assign(
               onChange={({ target: { value: job } }) =>
                 onUpdate(index, { job: asNumber(job) })
               }
-              onBlur={() => onDelete(index)}
+              onFocus={onFocus}
+              onBlur={onBlur}
             />
           </Grid.Item>
           <Grid.Item column="hobby" row={name} className={styles.cell}>
@@ -173,6 +178,8 @@ export const CustomRow = Object.assign(
               onChange={({ target: { value: hobby } }) =>
                 onUpdate(index, { hobby: asNumber(hobby) })
               }
+              onFocus={onFocus}
+              onBlur={onBlur}
             />
           </Grid.Item>
           <Grid.Item column="growth" row={name} className={styles.cell}>

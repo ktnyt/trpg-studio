@@ -1,4 +1,4 @@
-import { CSSProperties, memo } from 'react'
+import { CSSProperties, FocusEvent, memo } from 'react'
 
 import deepEqual from 'deep-equal'
 
@@ -82,6 +82,8 @@ export type SkillRowProps = {
   theme: Theme
   lang: Language
   onUpdate: (category: string, key: string, diff: Merger<Skill>) => void
+  onFocus: (event: FocusEvent<HTMLInputElement>) => void
+  onBlur: (event: FocusEvent<HTMLInputElement>) => void
 }
 
 const skillsEqual = (prev: Skill, next: Skill) =>
@@ -114,6 +116,8 @@ export const SkillRow = Object.assign(
       theme,
       lang,
       onUpdate,
+      onFocus,
+      onBlur,
     }: SkillRowProps) => {
       const translator = useTranslator()
       const rule = useRule(translator)
@@ -182,6 +186,8 @@ export const SkillRow = Object.assign(
               onChange={({ target: { value: job } }) =>
                 onUpdate(category, name, { job: asNumber(job) })
               }
+              onFocus={onFocus}
+              onBlur={onBlur}
             />
           </Grid.Item>
           <Grid.Item column="hobby" row={name} className={styles.cell}>
@@ -192,6 +198,8 @@ export const SkillRow = Object.assign(
               onChange={({ target: { value: hobby } }) =>
                 onUpdate(category, name, { hobby: asNumber(hobby) })
               }
+              onFocus={onFocus}
+              onBlur={onBlur}
             />
           </Grid.Item>
           <Grid.Item column="growth" row={name} className={styles.cell}>

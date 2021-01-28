@@ -1,4 +1,4 @@
-import { CSSProperties, Fragment, useContext } from 'react'
+import { CSSProperties, FocusEvent, Fragment, useContext } from 'react'
 
 import { Flex } from '@/components/atoms/Flex'
 import { AppContext } from '@/context/AppContext'
@@ -31,6 +31,8 @@ export type CategoryTableProps = {
   locked: boolean
   width: CSSProperties['width']
   onUpdate: (category: string, key: string, diff: Merger<Skill>) => void
+  onFocus: (event: FocusEvent<HTMLInputElement>) => void
+  onBlur: (evnet: FocusEvent<HTMLInputElement>) => void
 }
 
 export const CategoryTable = ({
@@ -41,6 +43,8 @@ export const CategoryTable = ({
   locked,
   width,
   onUpdate,
+  onFocus,
+  onBlur,
 }: CategoryTableProps) => {
   const { lang } = useContext(AppContext)
   const translator = useTranslator()
@@ -88,6 +92,8 @@ export const CategoryTable = ({
               theme={theme}
               lang={lang}
               onUpdate={onUpdate}
+              onFocus={onFocus}
+              onBlur={onBlur}
             />
           )
         })}
