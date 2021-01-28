@@ -463,7 +463,6 @@ export const Editor = ({
               variables={variables}
               modifiers={variableModifiers}
               totals={totals}
-              width={columnWidth}
               locked={locked}
               onUpdate={updateVariable}
             />

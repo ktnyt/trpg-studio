@@ -1,4 +1,4 @@
-import { CSSProperties, Fragment, useContext } from 'react'
+import { Fragment, useContext } from 'react'
 
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 
@@ -15,7 +15,6 @@ import { Merger } from '@/utils/merge'
 import { useRule } from '../../rule'
 
 export type VariableProps = {
-  width: CSSProperties['width']
   variables: Variables
   modifiers?: { [k in keyof Variables]: number }
   totals: Dict<string, number>
@@ -59,7 +58,6 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
 }))
 
 export const VariableSection = ({
-  width,
   variables,
   modifiers = {},
   totals,
