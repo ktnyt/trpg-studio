@@ -29,6 +29,10 @@ export const ThemeProvider = ({
 
   useEffect(() => {
     const handler = (e: MediaQueryListEvent) => setDark(e.matches)
+    if (matchMedia.addEventListener === undefined) {
+      matchMedia.addListener(handler)
+      return () => matchMedia.removeListener(handler)
+    }
     matchMedia.addEventListener('change', handler)
     return () => matchMedia.removeEventListener('change', handler)
   })
