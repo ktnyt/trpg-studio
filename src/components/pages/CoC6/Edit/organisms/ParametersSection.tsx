@@ -54,7 +54,7 @@ export type ParametersSectionProps = {
 }
 
 const asDefault = (n: number) => (n > 0 ? `${n}` : '')
-const asNumber = (s: string) => (/^\d+$/.test(s) ? parseInt(s, 10) : 0)
+const asNumber = (s: string) => (/^-?\d+$/.test(s) ? parseInt(s, 10) : 0)
 
 export const ParametersSection = Object.assign(
   ({

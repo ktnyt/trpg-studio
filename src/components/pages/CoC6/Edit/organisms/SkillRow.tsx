@@ -69,7 +69,7 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   }),
 }))
 
-const asNumber = (s: string) => (/^\d+$/.test(s) ? parseInt(s, 10) : 0)
+const asNumber = (s: string) => (/^-?\d+$/.test(s) ? parseInt(s, 10) : 0)
 
 export type SkillRowProps = {
   category: string
