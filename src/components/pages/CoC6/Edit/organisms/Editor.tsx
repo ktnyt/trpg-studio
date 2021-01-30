@@ -384,7 +384,18 @@ export const Editor = ({
     customRows
   )
 
-  const minPanelRowCount = profileRows + parameterRows + variableRows
+  const visibleRows = Math.floor(height / 22)
+  const getMinRowCount = () => {
+    if (profileRows + parameterRows + variableRows < visibleRows) {
+      return profileRows + parameterRows + variableRows
+    }
+    if (profileRows + parameterRows < visibleRows) {
+      return profileRows + parameterRows
+    }
+    return Math.max(profileRows, visibleRows)
+  }
+
+  const minRowCount = getMinRowCount()
 
   const computeDims = () => {
     if (width < 640) {
@@ -395,8 +406,8 @@ export const Editor = ({
       return { columnWidth, panelWidth, panelHeight, fixToolbar }
     }
     if (width < 960) {
-      const avgPanelRowCount = Math.ceil(totalRowCount / 2)
-      const rowCount = Math.max(minPanelRowCount, avgPanelRowCount)
+      const avgRowCount = Math.ceil(totalRowCount / 2)
+      const rowCount = Math.max(minRowCount, avgRowCount)
       const emptyRowCount = rowCount - (totalRowCount % rowCount)
       const paddingHeight = (emptyRowCount % 3) * 22
       const panelHeight = rowCount * 22 + paddingHeight
@@ -406,9 +417,9 @@ export const Editor = ({
       return { columnWidth, panelWidth, panelHeight, fixToolbar }
     }
     if (width < 1006) {
-      const columnCount = (totalRowCount + 3) / 2 < minPanelRowCount ? 2 : 3
-      const avgPanelRowCount = Math.ceil(totalRowCount / columnCount)
-      const rowCount = Math.max(minPanelRowCount, avgPanelRowCount)
+      const columnCount = (totalRowCount + 3) / 2 < minRowCount ? 2 : 3
+      const avgRowCount = Math.ceil(totalRowCount / columnCount)
+      const rowCount = Math.max(minRowCount, avgRowCount)
       const emptyRowCount = rowCount - (totalRowCount % rowCount)
       const paddingHeight = (emptyRowCount % 3) * 22
       const panelHeight = rowCount * 22 + paddingHeight
@@ -417,11 +428,11 @@ export const Editor = ({
       const fixToolbar = true
       return { columnWidth, panelWidth, panelHeight, fixToolbar }
     }
-    const singleColumn = totalRowCount * 22 <= height
-    const doubleColumn = totalRowCount / 2 < minPanelRowCount
-    const columnCount = singleColumn ? 1 : doubleColumn ? 2 : 3
-    const avgPanelRowCount = Math.ceil(totalRowCount / columnCount)
-    const rowCount = Math.max(minPanelRowCount, avgPanelRowCount)
+    const maxColumnCount = Math.max(Math.floor((width - 46) / 320), 1)
+    const naiveColumnCount = Math.ceil(totalRowCount / minRowCount)
+    const columnCount = Math.min(maxColumnCount, naiveColumnCount)
+    const avgRowCount = Math.ceil(totalRowCount / columnCount)
+    const rowCount = Math.max(minRowCount, avgRowCount)
     const panelHeight = rowCount * 22
     const panelWidth = 320 * columnCount
     const columnWidth = 320
