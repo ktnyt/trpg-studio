@@ -395,10 +395,10 @@ export const Editor = ({
       return { columnWidth, panelWidth, panelHeight, fixToolbar }
     }
     if (width < 960) {
-      const avgPanelRowCount = totalRowCount / 2
+      const avgPanelRowCount = Math.ceil(totalRowCount / 2)
       const rowCount = Math.max(minPanelRowCount, avgPanelRowCount)
       const emptyRowCount = rowCount - (totalRowCount % rowCount)
-      const paddingHeight = emptyRowCount < 3 ? 46 : 0
+      const paddingHeight = (emptyRowCount % 3) * 22
       const panelHeight = rowCount * 22 + paddingHeight
       const panelWidth = width
       const columnWidth = width / 2
@@ -407,10 +407,10 @@ export const Editor = ({
     }
     if (width < 1006) {
       const columnCount = (totalRowCount + 3) / 2 < minPanelRowCount ? 2 : 3
-      const avgPanelRowCount = totalRowCount / columnCount
+      const avgPanelRowCount = Math.ceil(totalRowCount / columnCount)
       const rowCount = Math.max(minPanelRowCount, avgPanelRowCount)
       const emptyRowCount = rowCount - (totalRowCount % rowCount)
-      const paddingHeight = emptyRowCount < 3 ? 46 : 0
+      const paddingHeight = (emptyRowCount % 3) * 22
       const panelHeight = rowCount * 22 + paddingHeight
       const panelWidth = width / columnCount
       const columnWidth = width
@@ -420,7 +420,7 @@ export const Editor = ({
     const singleColumn = totalRowCount * 22 <= height
     const doubleColumn = totalRowCount / 2 < minPanelRowCount
     const columnCount = singleColumn ? 1 : doubleColumn ? 2 : 3
-    const avgPanelRowCount = totalRowCount / columnCount
+    const avgPanelRowCount = Math.ceil(totalRowCount / columnCount)
     const rowCount = Math.max(minPanelRowCount, avgPanelRowCount)
     const panelHeight = rowCount * 22
     const panelWidth = 320 * columnCount
