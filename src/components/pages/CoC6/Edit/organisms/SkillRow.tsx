@@ -181,7 +181,7 @@ export const SkillRow = Object.assign(
           <Grid.Item column="job" row={name} className={styles.cell}>
             <NumberInput
               placeholder="職業"
-              defaultValue={job > 0 ? job : ''}
+              defaultValue={job !== 0 ? job : ''}
               disabled={locked}
               onChange={({ target: { value: job } }) =>
                 onUpdate(category, name, { job: asNumber(job) })
@@ -193,7 +193,7 @@ export const SkillRow = Object.assign(
           <Grid.Item column="hobby" row={name} className={styles.cell}>
             <NumberInput
               placeholder="趣味"
-              defaultValue={hobby > 0 ? hobby : ''}
+              defaultValue={hobby !== 0 ? hobby : ''}
               disabled={locked}
               onChange={({ target: { value: hobby } }) =>
                 onUpdate(category, name, { hobby: asNumber(hobby) })
@@ -205,7 +205,7 @@ export const SkillRow = Object.assign(
           <Grid.Item column="growth" row={name} className={styles.cell}>
             <NumberInput
               placeholder="成長"
-              defaultValue={growth > 0 ? growth : ''}
+              defaultValue={growth !== 0 ? growth : ''}
               disabled={locked}
               onChange={({ target: { value: growth } }) =>
                 onUpdate(category, name, { growth: asNumber(growth) })
@@ -215,7 +215,7 @@ export const SkillRow = Object.assign(
           <Grid.Item column="other" row={name} className={styles.cell}>
             <NumberInput
               placeholder="他"
-              defaultValue={other > 0 ? other : ''}
+              defaultValue={other !== 0 ? other : ''}
               disabled={locked}
               onChange={({ target: { value: other } }) =>
                 onUpdate(category, name, { other: asNumber(other) })
