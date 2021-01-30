@@ -10,7 +10,7 @@ import {
   faCopy,
   faEye,
   faEyeSlash,
-  faGlobe,
+  faKey,
   faLink,
   faLock,
   faLockOpen,
@@ -586,7 +586,7 @@ export const Editor = ({
                   />
                 </InputGroup>
                 <IconButton
-                  icon={locked ? faLock : unlocked ? faLockOpen : faGlobe}
+                  icon={locked ? faLock : unlocked ? faLockOpen : faKey}
                   style={{ boxShadow }}
                   onClick={() => patchState({ modal: 'password' })}
                 />
