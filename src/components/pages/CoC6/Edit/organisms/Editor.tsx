@@ -140,6 +140,11 @@ export const Editor = ({
     }
   })
 
+  useEffect(() => {
+    const name = profile.name === '' ? '名状し難い探索者' : profile.name
+    document.title = `${name} | CoC 6 | TRPG Studio`
+  }, [profile])
+
   const [parameters, setParameters] = useState(init.parameters)
   const updateParameter = (key: string, diff: Merger<Parameter>) =>
     setParameters(({ [key]: parameter, ...parameters }) => ({

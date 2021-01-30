@@ -96,7 +96,7 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
 
 export const Create = () => {
   useEffect(() => {
-    document.title = 'TRPG Studio | CoC 6'
+    document.title = '新規作成 | CoC 6 | TRPG Studio'
   }, [])
 
   const { url } = useRouteMatch()
