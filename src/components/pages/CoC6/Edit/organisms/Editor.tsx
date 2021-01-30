@@ -412,8 +412,8 @@ export const Editor = ({
       const emptyRowCount = rowCount - (totalRowCount % rowCount)
       const paddingHeight = (emptyRowCount % 3) * 22
       const panelHeight = rowCount * 22 + paddingHeight
-      const panelWidth = width / columnCount
-      const columnWidth = width
+      const panelWidth = width
+      const columnWidth = width / columnCount
       const fixToolbar = true
       return { columnWidth, panelWidth, panelHeight, fixToolbar }
     }
