@@ -82,7 +82,7 @@ export const NumberInput = ({
         <Input
           type="number"
           pattern="[0-9]*"
-          inputMode="numeric"
+          inputMode="decimal"
           value={propValue}
           defaultValue={defaultValue}
           onChange={(event) => {
