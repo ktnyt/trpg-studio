@@ -81,8 +81,7 @@ export const NumberInput = ({
       <Grid.Item area="root" className={input}>
         <Input
           type="number"
-          pattern="[0-9]*"
-          inputMode="decimal"
+          pattern="[0-9-]*"
           value={propValue}
           defaultValue={defaultValue}
           onChange={(event) => {
