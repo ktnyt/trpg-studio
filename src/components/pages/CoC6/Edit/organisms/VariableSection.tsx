@@ -1,7 +1,8 @@
-import { Fragment, useContext } from 'react'
+import { CSSProperties, Fragment, useContext } from 'react'
 
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 
+import { Flex } from '@/components/atoms/Flex'
 import { Grid } from '@/components/atoms/Grid'
 import { IconButton } from '@/components/atoms/IconButton'
 import { InputGroup } from '@/components/atoms/InputGroup'
@@ -13,14 +14,6 @@ import { Dict } from '@/utils/dict'
 import { Merger } from '@/utils/merge'
 
 import { useRule } from '../../rule'
-
-export type VariableProps = {
-  variables: Variables
-  modifiers?: { [k in keyof Variables]: number }
-  totals: Dict<string, number>
-  locked: boolean
-  onUpdate: (diff: Merger<Variables>) => void
-}
 
 const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   divider: {
@@ -57,10 +50,20 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   },
 }))
 
+export type VariableProps = {
+  variables: Variables
+  modifiers?: { [k in keyof Variables]: number }
+  totals: Dict<string, number>
+  width: CSSProperties['width']
+  locked: boolean
+  onUpdate: (diff: Merger<Variables>) => void
+}
+
 export const VariableSection = ({
   variables,
   modifiers = {},
   totals,
+  width,
   locked,
   onUpdate,
 }: VariableProps) => {
@@ -77,7 +80,7 @@ export const VariableSection = ({
   const styles = useStyles(theme)
 
   return (
-    <Fragment>
+    <Flex direction="column" style={{ width }}>
       <div className={styles.divider}>ステータス</div>
       <Grid
         templateColumns="[key] 1fr [value] 111px [end]"
@@ -130,6 +133,6 @@ export const VariableSection = ({
           })
           .values()}
       </Grid>
-    </Fragment>
+    </Flex>
   )
 }

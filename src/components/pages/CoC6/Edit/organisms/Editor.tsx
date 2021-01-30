@@ -371,31 +371,21 @@ export const Editor = ({
   const parameterRows = Math.max(rule.parameters.size, attributeRows) + 1
   const variableRows = rule.variables.size + 1
   const categoryRows = categoryVisibility.filter((v) => v).size + 1
-  const skillsetRows = math.sum(
+  const skillRows = math.sum(
     skillVisibility.values().map((d) => d.filter((v) => v).size)
   )
   const customRows = custom.length + 2
-  const totalRowCount = math.sum(
-    profileRows,
-    parameterRows,
-    variableRows,
-    categoryRows,
-    skillsetRows,
-    customRows
-  )
+  const skillsetRows = categoryRows + skillRows + customRows
 
-  const visibleRows = Math.floor(height / 22)
-  const getMinRowCount = () => {
-    if (profileRows + parameterRows + variableRows < visibleRows) {
-      return profileRows + parameterRows + variableRows
-    }
-    if (profileRows + parameterRows < visibleRows) {
-      return profileRows + parameterRows
-    }
-    return Math.max(profileRows, visibleRows)
-  }
-
-  const minRowCount = getMinRowCount()
+  const minRowCount = Math.floor(height / 22)
+  const totalRowCount =
+    profileRows + parameterRows + variableRows < minRowCount
+      ? minRowCount + skillsetRows
+      : profileRows + parameterRows < minRowCount
+      ? minRowCount + variableRows + skillsetRows
+      : profileRows < minRowCount
+      ? minRowCount + parameterRows + variableRows + skillsetRows
+      : profileRows + parameterRows + variableRows + skillsetRows
 
   const computeDims = () => {
     if (width < 640) {
@@ -437,6 +427,7 @@ export const Editor = ({
     const panelWidth = 320 * columnCount
     const columnWidth = 320
     const fixToolbar = false
+    console.log(totalRowCount, rowCount, columnCount)
     return { columnWidth, panelWidth, panelHeight, fixToolbar }
   }
 
@@ -504,6 +495,7 @@ export const Editor = ({
               variables={variables}
               modifiers={variableModifiers}
               totals={totals}
+              width={columnWidth}
               locked={locked}
               onUpdate={updateVariable}
             />
