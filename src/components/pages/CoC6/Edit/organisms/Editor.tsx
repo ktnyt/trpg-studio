@@ -360,7 +360,7 @@ export const Editor = ({
   const boxShadow = `0px 0px 5px 0px ${palette.step1000}44`
 
   const { height: profileHeight } = useElementSize(profileRef)
-  const paddingHeight = 22 - (profileHeight % 22)
+  const notesPadding = 22 - (profileHeight % 22)
   const profileRows = Math.ceil(profileHeight / 22)
   const attributeRows = rule.attributes.size + rule.properties.size
   const parameterRows = Math.max(rule.parameters.size, attributeRows) + 1
@@ -370,7 +370,7 @@ export const Editor = ({
     skillVisibility.values().map((d) => d.filter((v) => v).size)
   )
   const customRows = custom.length + 2
-  const rowCount = math.sum(
+  const totalRowCount = math.sum(
     profileRows,
     parameterRows,
     variableRows,
@@ -379,29 +379,54 @@ export const Editor = ({
     customRows
   )
 
-  const fitsVertically = rowCount * 22 <= height
-
   const minPanelRowCount = profileRows + parameterRows + variableRows
 
-  const tmpColumnCount = fitsVertically || width < 640 ? 1 : width < 960 ? 2 : 3
+  const computeDims = () => {
+    if (width < 640) {
+      const panelHeight = totalRowCount * 22 + 46
+      const panelWidth = width
+      const columnWidth = width
+      const fixToolbar = true
+      return { columnWidth, panelWidth, panelHeight, fixToolbar }
+    }
+    if (width < 960) {
+      const avgPanelRowCount = totalRowCount / 2
+      const rowCount = Math.max(minPanelRowCount, avgPanelRowCount)
+      const emptyRowCount = rowCount - (totalRowCount % rowCount)
+      const paddingHeight = emptyRowCount < 3 ? 46 : 0
+      const panelHeight = rowCount * 22 + paddingHeight
+      const panelWidth = width
+      const columnWidth = width / 2
+      const fixToolbar = true
+      return { columnWidth, panelWidth, panelHeight, fixToolbar }
+    }
+    if (width < 1006) {
+      const columnCount = (totalRowCount + 3) / 2 < minPanelRowCount ? 2 : 3
+      const avgPanelRowCount = totalRowCount / columnCount
+      const rowCount = Math.max(minPanelRowCount, avgPanelRowCount)
+      const emptyRowCount = rowCount - (totalRowCount % rowCount)
+      const paddingHeight = emptyRowCount < 3 ? 46 : 0
+      const panelHeight = rowCount * 22 + paddingHeight
+      const panelWidth = width / columnCount
+      const columnWidth = width
+      const fixToolbar = true
+      return { columnWidth, panelWidth, panelHeight, fixToolbar }
+    }
+    const singleColumn = totalRowCount * 22 <= height
+    const doubleColumn = totalRowCount / 2 < minPanelRowCount
+    const columnCount = singleColumn ? 1 : doubleColumn ? 2 : 3
+    const avgPanelRowCount = totalRowCount / columnCount
+    const rowCount = Math.max(minPanelRowCount, avgPanelRowCount)
+    const panelHeight = rowCount * 22
+    const panelWidth = 320 * columnCount
+    const columnWidth = 320
+    const fixToolbar = false
+    return { columnWidth, panelWidth, panelHeight, fixToolbar }
+  }
 
-  const tmpPanelRowCount = Math.ceil(rowCount / tmpColumnCount)
-  const maxColumnCount = minPanelRowCount <= tmpPanelRowCount ? 3 : 2
-  const columnCount = Math.min(tmpColumnCount, maxColumnCount)
-  const columnWidth =
-    fitsVertically || columnCount === maxColumnCount ? 320 : width / columnCount
-  const panelRowCount = Math.max(minPanelRowCount, tmpPanelRowCount)
+  const { columnWidth, panelWidth, panelHeight, fixToolbar } = computeDims()
 
-  const fixBottom = width < 1006 && !fitsVertically
-  const lastColumnRowCount = rowCount - panelRowCount * (columnCount - 1)
-  const emptyRowCount = panelRowCount - lastColumnRowCount
-  const addToolbarPadding = fixBottom && emptyRowCount < 3
-  const toolbarPaddingHeight = columnCount === 1 ? 46 : 22
-
-  const panelWidth = fitsVertically ? 320 : columnWidth * columnCount
-  const panelHeight =
-    panelRowCount * 22 + (!addToolbarPadding ? 0 : toolbarPaddingHeight)
-  const showPoints = fixBottom && focus
+  const showPoints = fixToolbar && focus
 
   return (
     <Flex
@@ -444,7 +469,7 @@ export const Editor = ({
             <div
               style={{
                 width: columnWidth,
-                height: paddingHeight,
+                height: notesPadding,
                 backgroundColor: palette.step50,
                 cursor: 'text',
               }}
@@ -495,7 +520,7 @@ export const Editor = ({
           </Snackbar>
 
           <div
-            style={fixBottom ? { position: 'fixed', bottom: 0, right: 0 } : {}}
+            style={fixToolbar ? { position: 'fixed', bottom: 0, right: 0 } : {}}
           >
             {showPoints ? (
               <Grid
@@ -536,13 +561,13 @@ export const Editor = ({
                 </Grid.Item>
               </Grid>
             ) : (
-              <ButtonSet vertical={!fixBottom} style={{ margin: '5px' }}>
+              <ButtonSet vertical={!fixToolbar} style={{ margin: '5px' }}>
                 <IconButton
                   icon={faMoon}
                   onClick={toggle}
                   style={{ boxShadow }}
                 />
-                <InputGroup vertical={!fixBottom} style={{ boxShadow }}>
+                <InputGroup vertical={!fixToolbar} style={{ boxShadow }}>
                   <CopyToClipboard
                     text={window.location.href}
                     onCopy={() => patchState({ copied: 'link' })}
