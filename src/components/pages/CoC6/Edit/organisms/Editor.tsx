@@ -349,11 +349,18 @@ export const Editor = ({
     })
     .join('\n\n')
 
+  const customPalette = custom.map((skill) => {
+    const { name, job, hobby, growth, other } = skill
+    const total = job + hobby + growth + other + 1
+    return `CCB<=${total} 【${name}】`
+  })
+
   const chatPalette = [
     parameterPalette,
     attributePalette,
     propertyPalette,
     skillPalette,
+    customPalette,
   ].join('\n\n')
 
   const { width, height } = useWindowSize()
