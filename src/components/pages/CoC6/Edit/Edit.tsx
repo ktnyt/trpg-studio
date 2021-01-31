@@ -3,8 +3,9 @@ import { Link, useParams, useRouteMatch } from 'react-router-dom'
 
 import { Loading } from '@/components/pages/generic/Loading'
 import { NotFound } from '@/components/pages/generic/NotFound'
+import { useFirebase } from '@/context/FirebaseContext'
 import { useTheme } from '@/context/ThemeContext'
-import { useFirebase } from '@/hooks/useFirebase'
+import { useInvoke } from '@/hooks/useInvoke'
 import { Character } from '@/models/CoC6/Character'
 
 import { Editor } from './organisms/Editor'
@@ -20,21 +21,20 @@ export const Edit = () => {
 
   const { url } = useRouteMatch()
   const { id } = useParams<{ id: string }>()
-  const { functions } = useFirebase()
+  const firebase = useFirebase()
+  const invoke = useInvoke(firebase.app().functions('asia-northeast2'))
 
   useEffect(() => {
     if (status === 'loading') {
-      functions
-        .invoke('hasPassword', { system, id })
+      invoke('hasPassword', { system, id })
         .then((secured) => setSecured(secured))
         .catch(() => setStatus('notfound'))
 
-      functions
-        .invoke('getCharacter', { system, id })
+      invoke('getCharacter', { system, id })
         .then(setStatus)
         .catch(() => setStatus('notfound'))
     }
-  }, [status, functions, id])
+  }, [status, invoke, id])
 
   const { palette } = useTheme()
 

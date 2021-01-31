@@ -19,8 +19,9 @@ import { Grid } from '@/components/atoms/Grid'
 import { IconButton } from '@/components/atoms/IconButton'
 import { InputGroup } from '@/components/atoms/InputGroup'
 import { AppContext } from '@/context/AppContext'
+import { useFirebase } from '@/context/FirebaseContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
-import { useFirebase } from '@/hooks/useFirebase'
+import { useInvoke } from '@/hooks/useInvoke'
 import { useTranslator } from '@/hooks/useTranslator'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import { Custom } from '@/models/CoC6/Character'
@@ -130,7 +131,8 @@ export const Create = () => {
   const parameterCount = rule.parameters.size
   const attributeCount = rule.attributes.size + rule.properties.size
 
-  const { functions } = useFirebase()
+  const firebase = useFirebase()
+  const invoke = useInvoke(firebase.app().functions('asia-northeast2'))
   const [creating, setCreating] = useState(false)
 
   const handleCreate = () => {
@@ -190,9 +192,9 @@ export const Create = () => {
 
     const path = url.replace(/\/$/, '')
 
-    functions
-      .invoke('addCharacter', { system, character })
-      .then((id) => history.push(`${path}/${id}`))
+    invoke('addCharacter', { system, character }).then((id) =>
+      history.push(`${path}/${id}`)
+    )
 
     setCreating(true)
   }

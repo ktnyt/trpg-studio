@@ -27,11 +27,12 @@ import { InputGroup } from '@/components/atoms/InputGroup'
 import { Prompt } from '@/components/atoms/Prompt'
 import { Snackbar } from '@/components/atoms/Snackbar'
 import { AppContext } from '@/context/AppContext'
+import { useFirebase } from '@/context/FirebaseContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useDifferent } from '@/hooks/useDifferent'
 import { useElementSize } from '@/hooks/useElementSize'
-import { useFirebase } from '@/hooks/useFirebase'
+import { useInvoke } from '@/hooks/useInvoke'
 import { useReferrer } from '@/hooks/useReferrer'
 import { useTranslator } from '@/hooks/useTranslator'
 import { useWindowSize } from '@/hooks/useWindowSize'
@@ -122,7 +123,8 @@ export const Editor = ({
   const [showall, setShowall] = useState(true)
   const [focus, setFocus] = useState(false)
 
-  const { functions } = useFirebase()
+  const firebase = useFirebase()
+  const invoke = useInvoke(firebase.app().functions('asia-northeast2'))
   const { id } = useParams<{ id: string }>()
   const referrer = useReferrer()
 
@@ -136,7 +138,7 @@ export const Editor = ({
   useEffect(() => {
     if (differentProfile) {
       const patch = { profile: debouncedProfile }
-      functions.invoke('updateCharacter', data(patch))
+      invoke('updateCharacter', data(patch))
     }
   })
 
@@ -157,7 +159,7 @@ export const Editor = ({
   useEffect(() => {
     if (differentParameters) {
       const patch = { parameters: debouncedParameters }
-      functions.invoke('updateCharacter', data(patch))
+      invoke('updateCharacter', data(patch))
     }
   })
 
@@ -174,7 +176,7 @@ export const Editor = ({
   useEffect(() => {
     if (differentVariables) {
       const patch = { variables: debouncedVariables }
-      functions.invoke('updateCharacter', data(patch))
+      invoke('updateCharacter', data(patch))
     }
   })
 
@@ -193,7 +195,7 @@ export const Editor = ({
   useEffect(() => {
     if (differentSkillset) {
       const patch = { skillset: debouncedSkillset }
-      functions.invoke('updateCharacter', data(patch))
+      invoke('updateCharacter', data(patch))
     }
   })
 
@@ -220,7 +222,7 @@ export const Editor = ({
   useEffect(() => {
     if (differentCustom) {
       const patch = { custom: debouncedCustom }
-      functions.invoke('updateCharacter', data(patch))
+      invoke('updateCharacter', data(patch))
     }
   })
 
@@ -262,14 +264,12 @@ export const Editor = ({
   const variableModifiers = { san: -cthulhu }
 
   const unlock = async (password: string) =>
-    functions
-      .invoke('verifyPassword', { system, id, referrer, password })
+    invoke('verifyPassword', { system, id, referrer, password })
       .then((token) => patchState({ access: 'unlocked', modal: 'none', token }))
       .catch(() => window.alert('パスワードが間違っています。'))
 
   const secure = (password: string) =>
-    functions
-      .invoke('setPassword', { system, id, referrer, token, password })
+    invoke('setPassword', { system, id, referrer, token, password })
       .then((token) =>
         patchState(({ access }) => ({
           access: access === 'public' ? 'unlocked' : 'locked',

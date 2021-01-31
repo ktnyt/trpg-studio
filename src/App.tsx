@@ -6,11 +6,14 @@ import { nord } from '@/palette/nord'
 
 import { CoC6 } from './components/pages/CoC6'
 import { NotFound } from './components/pages/generic/NotFound'
+import { FirebaseProvider } from './context/FirebaseContext'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
 
 const Provider = ({ children }: { children?: ReactNode }) => (
   <AppContext.Provider value={{ lang: 'ja' }}>
-    <ThemeProvider palette={nord}>{children}</ThemeProvider>
+    <FirebaseProvider>
+      <ThemeProvider palette={nord}>{children}</ThemeProvider>
+    </FirebaseProvider>
   </AppContext.Provider>
 )
 
