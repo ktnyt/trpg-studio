@@ -575,12 +575,14 @@ export const Editor = ({
               templateColumns="1fr [jobkey] 40px 1fr [jobremain] 30px [jobslash] 5px [jobtotal] 30px 1fr [hbykey] 40px 1fr [hbyremain] 30px [hbyslash] 5px [hbytotal] 30px 1fr"
               style={{
                 position: 'fixed',
-                top: 0,
+                bottom: 50,
                 left: 0,
                 boxSizing: 'border-box',
                 width: columnWidth,
                 padding: '10px 0px',
+                borderRadius: '6px',
                 backgroundColor: palette.step50,
+                boxShadow,
                 color: palette.text,
                 fontVariantNumeric: 'tabular-nums',
               }}
