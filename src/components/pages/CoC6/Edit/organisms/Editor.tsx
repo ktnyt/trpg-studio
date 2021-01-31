@@ -538,82 +538,77 @@ export const Editor = ({
           <div
             style={fixToolbar ? { position: 'fixed', bottom: 0, right: 0 } : {}}
           >
-            <ButtonSet vertical={!fixToolbar} style={{ margin: '5px' }}>
-              <IconButton
-                icon={faMoon}
-                onClick={toggle}
-                style={{ boxShadow }}
-              />
-              <InputGroup vertical={!fixToolbar} style={{ boxShadow }}>
-                <CopyToClipboard
-                  text={window.location.href}
-                  onCopy={() => patchState({ copied: 'link' })}
-                >
-                  <IconButton ref={linkRef} icon={faLink} />
-                </CopyToClipboard>
+            {showPoints ? (
+              <Grid
+                templateColumns="1fr [jobkey] 40px 1fr [jobremain] 30px [jobslash] 5px [jobtotal] 30px 1fr [hbykey] 40px 1fr [hbyremain] 30px [hbyslash] 5px [hbytotal] 30px 1fr"
+                style={{
+                  boxSizing: 'border-box',
+                  width: columnWidth,
+                  padding: '10px 0px',
+                  backgroundColor: palette.step50,
+                  color: palette.text,
+                  fontVariantNumeric: 'tabular-nums',
+                }}
+              >
+                <Grid.Item column="jobkey">
+                  {translator.t('jobpts-abbrev', lang)}
+                </Grid.Item>
+                <Grid.Item column="jobremain" style={{ textAlign: 'right' }}>
+                  {jobRemain}
+                </Grid.Item>
+                <Grid.Item column="jobslash" style={{ textAlign: 'center' }}>
+                  /
+                </Grid.Item>
+                <Grid.Item column="jobtotal" style={{ textAlign: 'right' }}>
+                  {jobpts}
+                </Grid.Item>
+
+                <Grid.Item column="hbykey">
+                  {translator.t('hbypts-abbrev', lang)}
+                </Grid.Item>
+                <Grid.Item column="hbyremain" style={{ textAlign: 'right' }}>
+                  {hbyRemain}
+                </Grid.Item>
+                <Grid.Item column="hbyslash" style={{ textAlign: 'center' }}>
+                  /
+                </Grid.Item>
+                <Grid.Item column="hbytotal" style={{ textAlign: 'right' }}>
+                  {hbypts}
+                </Grid.Item>
+              </Grid>
+            ) : (
+              <ButtonSet vertical={!fixToolbar} style={{ margin: '5px' }}>
                 <IconButton
-                  ref={paletteRef}
-                  icon={faPalette}
-                  onClick={() => patchState({ modal: 'palette' })}
+                  icon={faMoon}
+                  onClick={toggle}
+                  style={{ boxShadow }}
                 />
-              </InputGroup>
-              <IconButton
-                icon={locked ? faLock : unlocked ? faLockOpen : faKey}
-                style={{ boxShadow }}
-                onClick={() => patchState({ modal: 'password' })}
-              />
-              <IconButton
-                icon={showall ? faEyeSlash : faEye}
-                style={{ boxShadow }}
-                onClick={() => setShowall((flag) => !flag)}
-              />
-            </ButtonSet>
+                <InputGroup vertical={!fixToolbar} style={{ boxShadow }}>
+                  <CopyToClipboard
+                    text={window.location.href}
+                    onCopy={() => patchState({ copied: 'link' })}
+                  >
+                    <IconButton ref={linkRef} icon={faLink} />
+                  </CopyToClipboard>
+                  <IconButton
+                    ref={paletteRef}
+                    icon={faPalette}
+                    onClick={() => patchState({ modal: 'palette' })}
+                  />
+                </InputGroup>
+                <IconButton
+                  icon={locked ? faLock : unlocked ? faLockOpen : faKey}
+                  style={{ boxShadow }}
+                  onClick={() => patchState({ modal: 'password' })}
+                />
+                <IconButton
+                  icon={showall ? faEyeSlash : faEye}
+                  style={{ boxShadow }}
+                  onClick={() => setShowall((flag) => !flag)}
+                />
+              </ButtonSet>
+            )}
           </div>
-
-          {showPoints && (
-            <Grid
-              templateColumns="1fr [jobkey] 40px 1fr [jobremain] 30px [jobslash] 5px [jobtotal] 30px 1fr [hbykey] 40px 1fr [hbyremain] 30px [hbyslash] 5px [hbytotal] 30px 1fr"
-              style={{
-                position: 'fixed',
-                bottom: 50,
-                left: 0,
-                boxSizing: 'border-box',
-                width: columnWidth,
-                padding: '10px 0px',
-                borderRadius: '6px',
-                backgroundColor: palette.step50,
-                boxShadow,
-                color: palette.text,
-                fontVariantNumeric: 'tabular-nums',
-              }}
-            >
-              <Grid.Item column="jobkey">
-                {translator.t('jobpts-abbrev', lang)}
-              </Grid.Item>
-              <Grid.Item column="jobremain" style={{ textAlign: 'right' }}>
-                {jobRemain}
-              </Grid.Item>
-              <Grid.Item column="jobslash" style={{ textAlign: 'center' }}>
-                /
-              </Grid.Item>
-              <Grid.Item column="jobtotal" style={{ textAlign: 'right' }}>
-                {jobpts}
-              </Grid.Item>
-
-              <Grid.Item column="hbykey">
-                {translator.t('hbypts-abbrev', lang)}
-              </Grid.Item>
-              <Grid.Item column="hbyremain" style={{ textAlign: 'right' }}>
-                {hbyRemain}
-              </Grid.Item>
-              <Grid.Item column="hbyslash" style={{ textAlign: 'center' }}>
-                /
-              </Grid.Item>
-              <Grid.Item column="hbytotal" style={{ textAlign: 'right' }}>
-                {hbypts}
-              </Grid.Item>
-            </Grid>
-          )}
 
           <ReactModal
             isOpen={modal !== 'none'}
