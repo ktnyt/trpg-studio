@@ -349,11 +349,13 @@ export const Editor = ({
     })
     .join('\n\n')
 
-  const customPalette = custom.map((skill) => {
-    const { name, job, hobby, growth, other } = skill
-    const total = job + hobby + growth + other + 1
-    return `CCB<=${total} 【${name}】`
-  })
+  const customPalette = `【${translator.t('custom', lang)}】\n${custom
+    .map((skill) => {
+      const { name, job, hobby, growth, other } = skill
+      const total = job + hobby + growth + other + 1
+      return `CCB<=${total} 【${name}】`
+    })
+    .join('\n')}`
 
   const chatPalette = [
     parameterPalette,
