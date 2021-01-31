@@ -436,7 +436,6 @@ export const Editor = ({
     const panelWidth = 320 * columnCount
     const columnWidth = 320
     const fixToolbar = false
-    console.log(totalRowCount, rowCount, columnCount)
     return { columnWidth, panelWidth, panelHeight, fixToolbar }
   }
 
