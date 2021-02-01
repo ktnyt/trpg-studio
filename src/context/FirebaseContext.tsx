@@ -31,12 +31,14 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
   const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
-    fetch('/__/firebase/init.json')
-      .then((response) => response.json())
-      .then((data) => data as FirebaseConfig)
-      .then(firebase.initializeApp)
-      .then(() => setInitialized(true))
-  }, [])
+    if (!initialized) {
+      fetch('/__/firebase/init.json')
+        .then((response) => response.json())
+        .then((data) => data as FirebaseConfig)
+        .then(firebase.initializeApp)
+        .then(() => setInitialized(true))
+    }
+  }, [initialized])
 
   if (!initialized) {
     return null
