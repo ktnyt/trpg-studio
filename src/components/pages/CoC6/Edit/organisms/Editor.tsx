@@ -34,6 +34,7 @@ import { useDifferent } from '@/hooks/useDifferent'
 import { useElementSize } from '@/hooks/useElementSize'
 import { useInvoke } from '@/hooks/useInvoke'
 import { useReferrer } from '@/hooks/useReferrer'
+import { useScroll } from '@/hooks/useScroll'
 import { useTranslator } from '@/hooks/useTranslator'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
@@ -441,6 +442,7 @@ export const Editor = ({
 
   const { columnWidth, panelWidth, panelHeight, fixToolbar } = computeDims()
 
+  const { y } = useScroll()
   const showPoints = fixToolbar && focus
 
   return (
@@ -535,48 +537,56 @@ export const Editor = ({
             {translator.t('copied', lang)}
           </Snackbar>
 
-          <div
-            style={fixToolbar ? { position: 'fixed', bottom: 0, right: 0 } : {}}
-          >
-            {showPoints ? (
-              <Grid
-                templateColumns="1fr [jobkey] 40px 1fr [jobremain] 30px [jobslash] 5px [jobtotal] 30px 1fr [hbykey] 40px 1fr [hbyremain] 30px [hbyslash] 5px [hbytotal] 30px 1fr"
-                style={{
-                  boxSizing: 'border-box',
-                  width: columnWidth,
-                  padding: '10px 0px',
-                  backgroundColor: palette.step50,
-                  color: palette.text,
-                  fontVariantNumeric: 'tabular-nums',
-                }}
-              >
-                <Grid.Item column="jobkey">
-                  {translator.t('jobpts-abbrev', lang)}
-                </Grid.Item>
-                <Grid.Item column="jobremain" style={{ textAlign: 'right' }}>
-                  {jobRemain}
-                </Grid.Item>
-                <Grid.Item column="jobslash" style={{ textAlign: 'center' }}>
-                  /
-                </Grid.Item>
-                <Grid.Item column="jobtotal" style={{ textAlign: 'right' }}>
-                  {jobpts}
-                </Grid.Item>
+          {showPoints ? (
+            <Grid
+              templateColumns="1fr [jobkey] 40px 1fr [jobremain] 30px [jobslash] 5px [jobtotal] 30px 1fr [hbykey] 40px 1fr [hbyremain] 30px [hbyslash] 5px [hbytotal] 30px 1fr"
+              style={{
+                position: 'absolute',
+                top: '0px',
+                left: '0px',
+                boxSizing: 'border-box',
+                width: columnWidth,
+                padding: '10px 0px',
+                borderRadius: '6px',
+                backgroundColor: palette.step50,
+                boxShadow,
+                color: palette.text,
+                fontVariantNumeric: 'tabular-nums',
+                transform: `translateY(${y}px)`,
+              }}
+            >
+              <Grid.Item column="jobkey">
+                {translator.t('jobpts-abbrev', lang)}
+              </Grid.Item>
+              <Grid.Item column="jobremain" style={{ textAlign: 'right' }}>
+                {jobRemain}
+              </Grid.Item>
+              <Grid.Item column="jobslash" style={{ textAlign: 'center' }}>
+                /
+              </Grid.Item>
+              <Grid.Item column="jobtotal" style={{ textAlign: 'right' }}>
+                {jobpts}
+              </Grid.Item>
 
-                <Grid.Item column="hbykey">
-                  {translator.t('hbypts-abbrev', lang)}
-                </Grid.Item>
-                <Grid.Item column="hbyremain" style={{ textAlign: 'right' }}>
-                  {hbyRemain}
-                </Grid.Item>
-                <Grid.Item column="hbyslash" style={{ textAlign: 'center' }}>
-                  /
-                </Grid.Item>
-                <Grid.Item column="hbytotal" style={{ textAlign: 'right' }}>
-                  {hbypts}
-                </Grid.Item>
-              </Grid>
-            ) : (
+              <Grid.Item column="hbykey">
+                {translator.t('hbypts-abbrev', lang)}
+              </Grid.Item>
+              <Grid.Item column="hbyremain" style={{ textAlign: 'right' }}>
+                {hbyRemain}
+              </Grid.Item>
+              <Grid.Item column="hbyslash" style={{ textAlign: 'center' }}>
+                /
+              </Grid.Item>
+              <Grid.Item column="hbytotal" style={{ textAlign: 'right' }}>
+                {hbypts}
+              </Grid.Item>
+            </Grid>
+          ) : (
+            <div
+              style={
+                fixToolbar ? { position: 'fixed', bottom: 0, right: 0 } : {}
+              }
+            >
               <ButtonSet vertical={!fixToolbar} style={{ margin: '5px' }}>
                 <IconButton
                   icon={faMoon}
@@ -607,8 +617,8 @@ export const Editor = ({
                   onClick={() => setShowall((flag) => !flag)}
                 />
               </ButtonSet>
-            )}
-          </div>
+            </div>
+          )}
 
           <ReactModal
             isOpen={modal !== 'none'}
