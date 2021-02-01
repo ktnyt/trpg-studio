@@ -1,5 +1,5 @@
+import { useRef } from 'react'
+
 import { nanoid } from 'nanoid'
 
-const referrer = nanoid()
-
-export const useReferrer = () => referrer
+export const useReferrer = () => useRef(nanoid()).current
