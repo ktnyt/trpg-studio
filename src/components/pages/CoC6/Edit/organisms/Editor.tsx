@@ -443,7 +443,7 @@ export const Editor = ({
   const { columnWidth, panelWidth, panelHeight, fixToolbar } = computeDims()
 
   const scroll = useScroll()
-  const { y: scrollTop } = useDebounce(scroll, 100)
+  const { y: scrollTop } = useDebounce(scroll, 250)
   const showPoints = fixToolbar && focus
 
   return (
