@@ -442,7 +442,7 @@ export const Editor = ({
 
   const { columnWidth, panelWidth, panelHeight, fixToolbar } = computeDims()
 
-  const { y } = useScroll()
+  const { y: scrollTop } = useScroll()
   const showPoints = fixToolbar && focus
 
   return (
@@ -552,7 +552,8 @@ export const Editor = ({
                 boxShadow,
                 color: palette.text,
                 fontVariantNumeric: 'tabular-nums',
-                transform: `translateY(${y}px)`,
+                transform: `translateY(${scrollTop}px)`,
+                transition: 'transform 10ms',
               }}
             >
               <Grid.Item column="jobkey">
