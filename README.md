@@ -1,3 +1,3 @@
 # TRPG Studio
 
-TRPG 支援ツール
+An online TRPG character creation assistant application.
