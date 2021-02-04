@@ -2,8 +2,8 @@ import { CSSProperties, FocusEvent, memo } from 'react'
 
 import deepEqual from 'deep-equal'
 
-import { Grid } from '@/components/atoms/Grid'
-import { Input } from '@/components/atoms/Input'
+import { Grid } from '@/atoms/Grid'
+import { Input } from '@/atoms/Input'
 import { createThemeUseStyles, Theme } from '@/context/ThemeContext'
 import { useTranslator } from '@/hooks/useTranslator'
 import { Skill } from '@/models/CoC6/Character'

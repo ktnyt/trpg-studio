@@ -12,12 +12,12 @@ import {
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { ButtonSet } from '@/components/atoms/ButtonSet'
-import { Die } from '@/components/atoms/Die'
-import { Flex } from '@/components/atoms/Flex'
-import { Grid } from '@/components/atoms/Grid'
-import { IconButton } from '@/components/atoms/IconButton'
-import { InputGroup } from '@/components/atoms/InputGroup'
+import { ButtonSet } from '@/atoms/ButtonSet'
+import { Die } from '@/atoms/Die'
+import { Flex } from '@/atoms/Flex'
+import { Grid } from '@/atoms/Grid'
+import { IconButton } from '@/atoms/IconButton'
+import { InputGroup } from '@/atoms/InputGroup'
 import { AppContext } from '@/context/AppContext'
 import { useFirebase } from '@/context/FirebaseContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'

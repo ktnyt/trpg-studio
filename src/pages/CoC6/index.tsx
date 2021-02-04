@@ -19,3 +19,5 @@ export const CoC6 = Object.assign(
   },
   { displayName: 'CoC6', path: 'coc6' }
 )
+
+export default CoC6

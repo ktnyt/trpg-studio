@@ -1,6 +1,6 @@
 import { CSSProperties, FocusEvent, Fragment, useContext } from 'react'
 
-import { Flex } from '@/components/atoms/Flex'
+import { Flex } from '@/atoms/Flex'
 import { AppContext } from '@/context/AppContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { useTranslator } from '@/hooks/useTranslator'

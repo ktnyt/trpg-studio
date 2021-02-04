@@ -46,7 +46,10 @@ export const useRule = (translator: Translator) => {
 
   const profile = new Dict([
     ['occupation', { deps: [], convert: () => '' }],
-    ['age', { deps: ['edu'], convert: (arg: number[]) => `${sum.then(add(6))(arg)}` }],
+    [
+      'age',
+      { deps: ['edu'], convert: (arg: number[]) => `${sum.then(add(6))(arg)}` },
+    ],
     ['sex', { deps: [], convert: () => '' }],
     ['height', { deps: [], convert: () => '' }],
     ['weight', { deps: [], convert: () => '' }],
@@ -67,15 +70,54 @@ export const useRule = (translator: Translator) => {
   translator.extend('skin', { en: 'Skin Color', ja: '肌の色' })
 
   const parameters = new Dict([
-    ['str', { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true }],
-    ['con', { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true }],
-    ['pow', { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true }],
-    ['dex', { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true }],
-    ['app', { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true }],
-    ['siz', { dice: [6, 6], apply: sum.then(partition, true).then(add(6)), palette: true }],
-    ['int', { dice: [6, 6], apply: sum.then(partition, true).then(add(6)), palette: true }],
-    ['edu', { dice: [6, 6, 6], apply: sum.then(partition, true).then(add(3)), palette: true }],
-    ['wlt', { dice: [6, 6, 6], apply: sum.then(partition, true), palette: false }],
+    [
+      'str',
+      { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true },
+    ],
+    [
+      'con',
+      { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true },
+    ],
+    [
+      'pow',
+      { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true },
+    ],
+    [
+      'dex',
+      { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true },
+    ],
+    [
+      'app',
+      { dice: [6, 6, 6], apply: sum.then(partition, true), palette: true },
+    ],
+    [
+      'siz',
+      {
+        dice: [6, 6],
+        apply: sum.then(partition, true).then(add(6)),
+        palette: true,
+      },
+    ],
+    [
+      'int',
+      {
+        dice: [6, 6],
+        apply: sum.then(partition, true).then(add(6)),
+        palette: true,
+      },
+    ],
+    [
+      'edu',
+      {
+        dice: [6, 6, 6],
+        apply: sum.then(partition, true).then(add(3)),
+        palette: true,
+      },
+    ],
+    [
+      'wlt',
+      { dice: [6, 6, 6], apply: sum.then(partition, true), palette: false },
+    ],
   ])
 
   translator.extend('str', { en: 'STR' })
@@ -89,18 +131,83 @@ export const useRule = (translator: Translator) => {
   translator.extend('wlt', { en: 'WLT' })
 
   const attributes = new Dict([
-    ['san', { deps: ['pow'], apply: sum.then(partition, true).then(mul(5)), palette: 'SAN' }],
-    ['indef', { deps: ['pow'], apply: sum.then(partition, true).then(mul(4)), palette: false }],
-    ['luk', { deps: ['pow'], apply: sum.then(partition, true).then(mul(5)), palette: true }],
-    ['ida', { deps: ['int'], apply: sum.then(partition, true).then(mul(5)), palette: true }],
-    ['knw', { deps: ['edu'], apply: sum.then(partition, true).then(mul(5)), palette: true }],
-    ['hp', { deps: ['con', 'siz'], apply: sum.then(partition, true).then(div(2)).then(floor), palette: false }],
-    ['mp', { deps: ['pow'], apply: sum.then(partition, true).then(mul(1)), palette: false }],
-    ['jobpts', { deps: ['edu'], apply: sum.then(partition, true).then(mul(20)), palette: false }],
-    ['hbypts', { deps: ['int'], apply: sum.then(partition, true).then(mul(10)), palette: false }],
+    [
+      'san',
+      {
+        deps: ['pow'],
+        apply: sum.then(partition, true).then(mul(5)),
+        palette: 'SAN',
+      },
+    ],
+    [
+      'indef',
+      {
+        deps: ['pow'],
+        apply: sum.then(partition, true).then(mul(4)),
+        palette: false,
+      },
+    ],
+    [
+      'luk',
+      {
+        deps: ['pow'],
+        apply: sum.then(partition, true).then(mul(5)),
+        palette: true,
+      },
+    ],
+    [
+      'ida',
+      {
+        deps: ['int'],
+        apply: sum.then(partition, true).then(mul(5)),
+        palette: true,
+      },
+    ],
+    [
+      'knw',
+      {
+        deps: ['edu'],
+        apply: sum.then(partition, true).then(mul(5)),
+        palette: true,
+      },
+    ],
+    [
+      'hp',
+      {
+        deps: ['con', 'siz'],
+        apply: sum.then(partition, true).then(div(2)).then(floor),
+        palette: false,
+      },
+    ],
+    [
+      'mp',
+      {
+        deps: ['pow'],
+        apply: sum.then(partition, true).then(mul(1)),
+        palette: false,
+      },
+    ],
+    [
+      'jobpts',
+      {
+        deps: ['edu'],
+        apply: sum.then(partition, true).then(mul(20)),
+        palette: false,
+      },
+    ],
+    [
+      'hbypts',
+      {
+        deps: ['int'],
+        apply: sum.then(partition, true).then(mul(10)),
+        palette: false,
+      },
+    ],
   ])
 
-  const properties = new Dict([['db', { deps: ['str', 'siz'], convert: db, palette: true }]])
+  const properties = new Dict([
+    ['db', { deps: ['str', 'siz'], convert: db, palette: true }],
+  ])
 
   translator.extend('san', { en: 'Sanity', ja: '正気度' })
   translator.extend('indef', { en: 'Indef. Line', ja: '不定領域' })
@@ -134,17 +241,55 @@ export const useRule = (translator: Translator) => {
     [
       'combat',
       new Dict([
-        ['dodge', { deps: ['dex'], apply: sum.then(mul(2)), fixed: true, custom: false }],
-        ['fist', { deps: [], apply: constant(50), fixed: false, custom: false }],
-        ['grapple', { deps: [], apply: constant(25), fixed: false, custom: false }],
-        ['head', { deps: [], apply: constant(10), fixed: false, custom: false }],
-        ['kick', { deps: [], apply: constant(25), fixed: false, custom: false }],
-        ['martial', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['throw', { deps: [], apply: constant(25), fixed: false, custom: false }],
-        ['handgun', { deps: [], apply: constant(20), fixed: false, custom: false }],
-        ['machinegun', { deps: [], apply: constant(15), fixed: false, custom: false }],
-        ['rifle', { deps: [], apply: constant(25), fixed: false, custom: false }],
-        ['shotgun', { deps: [], apply: constant(30), fixed: false, custom: false }],
+        [
+          'dodge',
+          {
+            deps: ['dex'],
+            apply: sum.then(mul(2)),
+            fixed: true,
+            custom: false,
+          },
+        ],
+        [
+          'fist',
+          { deps: [], apply: constant(50), fixed: false, custom: false },
+        ],
+        [
+          'grapple',
+          { deps: [], apply: constant(25), fixed: false, custom: false },
+        ],
+        [
+          'head',
+          { deps: [], apply: constant(10), fixed: false, custom: false },
+        ],
+        [
+          'kick',
+          { deps: [], apply: constant(25), fixed: false, custom: false },
+        ],
+        [
+          'martial',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'throw',
+          { deps: [], apply: constant(25), fixed: false, custom: false },
+        ],
+        [
+          'handgun',
+          { deps: [], apply: constant(20), fixed: false, custom: false },
+        ],
+        [
+          'machinegun',
+          { deps: [], apply: constant(15), fixed: false, custom: false },
+        ],
+        [
+          'rifle',
+          { deps: [], apply: constant(25), fixed: false, custom: false },
+        ],
+        [
+          'shotgun',
+          { deps: [], apply: constant(30), fixed: false, custom: false },
+        ],
         ['smg', { deps: [], apply: constant(15), fixed: false, custom: false }],
       ]),
     ],
@@ -152,68 +297,199 @@ export const useRule = (translator: Translator) => {
       'search',
       new Dict([
         ['spot', { deps: [], apply: constant(25), fixed: true, custom: false }],
-        ['listen', { deps: [], apply: constant(25), fixed: true, custom: false }],
-        ['library', { deps: [], apply: constant(25), fixed: true, custom: false }],
-        ['firstaid', { deps: [], apply: constant(30), fixed: true, custom: false }],
-        ['hide', { deps: [], apply: constant(15), fixed: false, custom: false }],
-        ['conceal', { deps: [], apply: constant(10), fixed: false, custom: false }],
-        ['disguise', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['sneak', { deps: [], apply: constant(10), fixed: false, custom: false }],
-        ['track', { deps: [], apply: constant(10), fixed: false, custom: false }],
-        ['navigate', { deps: [], apply: constant(10), fixed: false, custom: false }],
-        ['photography', { deps: [], apply: constant(10), fixed: false, custom: false }],
-        ['lockpick', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['psychoanalysis', { deps: [], apply: constant(1), fixed: false, custom: false }],
+        [
+          'listen',
+          { deps: [], apply: constant(25), fixed: true, custom: false },
+        ],
+        [
+          'library',
+          { deps: [], apply: constant(25), fixed: true, custom: false },
+        ],
+        [
+          'firstaid',
+          { deps: [], apply: constant(30), fixed: true, custom: false },
+        ],
+        [
+          'hide',
+          { deps: [], apply: constant(15), fixed: false, custom: false },
+        ],
+        [
+          'conceal',
+          { deps: [], apply: constant(10), fixed: false, custom: false },
+        ],
+        [
+          'disguise',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'sneak',
+          { deps: [], apply: constant(10), fixed: false, custom: false },
+        ],
+        [
+          'track',
+          { deps: [], apply: constant(10), fixed: false, custom: false },
+        ],
+        [
+          'navigate',
+          { deps: [], apply: constant(10), fixed: false, custom: false },
+        ],
+        [
+          'photography',
+          { deps: [], apply: constant(10), fixed: false, custom: false },
+        ],
+        [
+          'lockpick',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'psychoanalysis',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
       ]),
     ],
     [
       'action',
       new Dict([
-        ['climb', { deps: [], apply: constant(40), fixed: false, custom: false }],
-        ['jump', { deps: [], apply: constant(25), fixed: false, custom: false }],
-        ['drive', { deps: [], apply: constant(20), fixed: false, custom: true }],
+        [
+          'climb',
+          { deps: [], apply: constant(40), fixed: false, custom: false },
+        ],
+        [
+          'jump',
+          { deps: [], apply: constant(25), fixed: false, custom: false },
+        ],
+        [
+          'drive',
+          { deps: [], apply: constant(20), fixed: false, custom: true },
+        ],
         ['pilot', { deps: [], apply: constant(1), fixed: false, custom: true }],
-        ['oprhvymch', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['repairmch', { deps: [], apply: constant(20), fixed: false, custom: false }],
-        ['repairelectr', { deps: [], apply: constant(10), fixed: false, custom: false }],
+        [
+          'oprhvymch',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'repairmch',
+          { deps: [], apply: constant(20), fixed: false, custom: false },
+        ],
+        [
+          'repairelectr',
+          { deps: [], apply: constant(10), fixed: false, custom: false },
+        ],
         ['craft', { deps: [], apply: constant(5), fixed: false, custom: true }],
         ['art', { deps: [], apply: constant(5), fixed: false, custom: true }],
         ['ride', { deps: [], apply: constant(5), fixed: false, custom: false }],
-        ['swim', { deps: [], apply: constant(25), fixed: false, custom: false }],
+        [
+          'swim',
+          { deps: [], apply: constant(25), fixed: false, custom: false },
+        ],
       ]),
     ],
     [
       'negotiation',
       new Dict([
-        ['fasttalk', { deps: [], apply: constant(5), fixed: false, custom: false }],
-        ['trust', { deps: [], apply: constant(15), fixed: false, custom: false }],
-        ['persuade', { deps: [], apply: constant(15), fixed: false, custom: false }],
-        ['bargain', { deps: [], apply: constant(5), fixed: false, custom: false }],
-        ['nativelang', { deps: ['edu'], apply: sum.then(mul(5)), fixed: true, custom: false }],
-        ['foreignlang', { deps: [], apply: constant(1), fixed: false, custom: true }],
+        [
+          'fasttalk',
+          { deps: [], apply: constant(5), fixed: false, custom: false },
+        ],
+        [
+          'trust',
+          { deps: [], apply: constant(15), fixed: false, custom: false },
+        ],
+        [
+          'persuade',
+          { deps: [], apply: constant(15), fixed: false, custom: false },
+        ],
+        [
+          'bargain',
+          { deps: [], apply: constant(5), fixed: false, custom: false },
+        ],
+        [
+          'nativelang',
+          {
+            deps: ['edu'],
+            apply: sum.then(mul(5)),
+            fixed: true,
+            custom: false,
+          },
+        ],
+        [
+          'foreignlang',
+          { deps: [], apply: constant(1), fixed: false, custom: true },
+        ],
       ]),
     ],
     [
       'knowledge',
       new Dict([
-        ['cthulhu', { deps: [], apply: constant(0), fixed: false, custom: false }],
-        ['psychology', { deps: [], apply: constant(5), fixed: false, custom: false }],
-        ['occult', { deps: [], apply: constant(5), fixed: false, custom: false }],
-        ['history', { deps: [], apply: constant(20), fixed: false, custom: false }],
+        [
+          'cthulhu',
+          { deps: [], apply: constant(0), fixed: false, custom: false },
+        ],
+        [
+          'psychology',
+          { deps: [], apply: constant(5), fixed: false, custom: false },
+        ],
+        [
+          'occult',
+          { deps: [], apply: constant(5), fixed: false, custom: false },
+        ],
+        [
+          'history',
+          { deps: [], apply: constant(20), fixed: false, custom: false },
+        ],
         ['law', { deps: [], apply: constant(5), fixed: false, custom: false }],
-        ['accouting', { deps: [], apply: constant(10), fixed: false, custom: false }],
-        ['anthropology', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['archaeology', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['natural', { deps: [], apply: constant(10), fixed: false, custom: false }],
-        ['medicine', { deps: [], apply: constant(5), fixed: false, custom: false }],
-        ['pharmacy', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['chemistry', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['biology', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['computer', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['electronics', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['physics', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['astronomy', { deps: [], apply: constant(1), fixed: false, custom: false }],
-        ['geology', { deps: [], apply: constant(1), fixed: false, custom: false }],
+        [
+          'accouting',
+          { deps: [], apply: constant(10), fixed: false, custom: false },
+        ],
+        [
+          'anthropology',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'archaeology',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'natural',
+          { deps: [], apply: constant(10), fixed: false, custom: false },
+        ],
+        [
+          'medicine',
+          { deps: [], apply: constant(5), fixed: false, custom: false },
+        ],
+        [
+          'pharmacy',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'chemistry',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'biology',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'computer',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'electronics',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'physics',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'astronomy',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
+        [
+          'geology',
+          { deps: [], apply: constant(1), fixed: false, custom: false },
+        ],
       ]),
     ],
   ])

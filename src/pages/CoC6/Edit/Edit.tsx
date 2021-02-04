@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams, useRouteMatch } from 'react-router-dom'
 
-import { Loading } from '@/components/pages/generic/Loading'
-import { NotFound } from '@/components/pages/generic/NotFound'
 import { useFirebase } from '@/context/FirebaseContext'
 import { useTheme } from '@/context/ThemeContext'
 import { useInvoke } from '@/hooks/useInvoke'
 import { Character } from '@/models/CoC6/Character'
+import { Loading } from '@/pages/generic/Loading'
+import { NotFound } from '@/pages/generic/NotFound'
 
 import { Editor } from './organisms/Editor'
 import './styles.css'

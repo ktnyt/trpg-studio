@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import { Grid } from '@/components/atoms/Grid'
-import { Input, InputProps } from '@/components/atoms/Input'
+import { Grid } from '@/atoms/Grid'
+import { Input, InputProps } from '@/atoms/Input'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
 const useInputStyles = createThemeUseStyles(({ palette, isDark }) => ({

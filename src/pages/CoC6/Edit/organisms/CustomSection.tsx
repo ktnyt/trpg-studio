@@ -1,7 +1,7 @@
 import { CSSProperties, FocusEvent, Fragment, useContext, useRef } from 'react'
 
-import { Grid } from '@/components/atoms/Grid'
-import { Input } from '@/components/atoms/Input'
+import { Grid } from '@/atoms/Grid'
+import { Input } from '@/atoms/Input'
 import { AppContext } from '@/context/AppContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { useTranslator } from '@/hooks/useTranslator'

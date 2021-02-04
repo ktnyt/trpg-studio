@@ -1,13 +1,13 @@
-import { ReactNode } from 'react'
+import { Fragment, lazy, ReactNode, Suspense } from 'react'
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 
 import { AppContext } from '@/context/AppContext'
 import { nord } from '@/palette/nord'
 
-import { CoC6 } from './components/pages/CoC6'
-import { NotFound } from './components/pages/generic/NotFound'
 import { FirebaseProvider } from './context/FirebaseContext'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
+import { Loading } from './pages/generic/Loading'
+import { NotFound } from './pages/generic/NotFound'
 
 const Provider = ({ children }: { children?: ReactNode }) => (
   <AppContext.Provider value={{ lang: 'ja' }}>
@@ -17,18 +17,32 @@ const Provider = ({ children }: { children?: ReactNode }) => (
   </AppContext.Provider>
 )
 
+const systems = [
+  {
+    path: 'coc6',
+    name: 'クトゥルフ神話TRPG 第6版',
+    component: lazy(() => import('./pages/CoC6')),
+  },
+]
+
 const Root = () => {
   const { palette } = useTheme()
   return (
-    <>
+    <Fragment>
       <Router>
         <Switch>
           <Route exact path="/">
-            <Link to={CoC6.path}>クトゥルフ神話TRPG 第6版</Link>
+            {systems.map(({ path, name }) => (
+              <Link key={path} to={path}>
+                {name}
+              </Link>
+            ))}
           </Route>
-          <Route path={`/${CoC6.path}`}>
-            <CoC6 />
-          </Route>
+          <Suspense fallback={<Loading />}>
+            {systems.map(({ path, component }) => (
+              <Route key={path} path={`/${path}`} component={component} />
+            ))}
+          </Suspense>
           <Route path="*">
             <NotFound />
           </Route>
@@ -45,7 +59,7 @@ const Root = () => {
           backgroundColor: palette.step50,
         }}
       ></div>
-    </>
+    </Fragment>
   )
 }
 

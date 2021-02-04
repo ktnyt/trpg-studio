@@ -2,8 +2,8 @@ import { CSSProperties, Fragment, useContext } from 'react'
 
 import clsx from 'clsx'
 
-import { Flex } from '@/components/atoms/Flex'
-import { Grid } from '@/components/atoms/Grid'
+import { Flex } from '@/atoms/Flex'
+import { Grid } from '@/atoms/Grid'
 import { AppContext } from '@/context/AppContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { useTranslator } from '@/hooks/useTranslator'
