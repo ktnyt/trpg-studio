@@ -6,7 +6,7 @@ export type HomeProps = {
 
 export const Home = ({ systems }: HomeProps) => (
   <div>
-    <h1>TRPG Studioへようこそ。</h1>
+    <h1>TRPG Studio（β）へようこそ。</h1>
     <h3>
       ダイスロールからチャットパレット生成まで、TRPGのキャラクター作成を徹底支援。
     </h3>
