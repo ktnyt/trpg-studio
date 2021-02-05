@@ -5,9 +5,9 @@ import { AppContext } from '@/context/AppContext'
 import { nord } from '@/palette/nord'
 
 import { FirebaseProvider } from './context/FirebaseContext'
-import { ThemeProvider, useTheme } from './context/ThemeContext'
+import { ThemeProvider } from './context/ThemeContext'
 import { Home } from './pages/Home'
-import { Loading } from './pages/generic/Loading'
+import { Blank } from './pages/generic/Blank'
 import { NotFound } from './pages/generic/NotFound'
 
 const Provider = ({ children }: { children?: ReactNode }) => (
@@ -26,42 +26,29 @@ const systems = [
   },
 ]
 
-const Root = () => {
-  const { palette } = useTheme()
-  return (
-    <Fragment>
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <Home systems={systems} />
-          </Route>
-          <Suspense fallback={<Loading />}>
-            {systems.map(({ path, component }) => (
-              <Route key={path} path={`/${path}`} component={component} />
-            ))}
-          </Suspense>
-          <Route path="*">
-            <NotFound />
-          </Route>
-        </Switch>
-      </Router>
-      <div
-        style={{
-          position: 'fixed',
-          top: '0px',
-          left: '0px',
-          zIndex: -1,
-          minWidth: '100%',
-          minHeight: '100%',
-          backgroundColor: palette.step50,
-        }}
-      ></div>
-    </Fragment>
-  )
-}
+const Routes = () => (
+  <Fragment>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Home systems={systems} />
+        </Route>
+        <Suspense fallback={<Blank />}>
+          {systems.map(({ path, component }) => (
+            <Route key={path} path={`/${path}`} component={component} />
+          ))}
+        </Suspense>
+        <Route path="*">
+          <NotFound />
+        </Route>
+      </Switch>
+    </Router>
+    <Blank />
+  </Fragment>
+)
 
 export const App = () => (
   <Provider>
-    <Root />
+    <Routes />
   </Provider>
 )
