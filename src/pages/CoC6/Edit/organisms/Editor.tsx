@@ -19,13 +19,13 @@ import {
   faWindowClose,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { ButtonSet } from '@/atoms/ButtonSet'
 import { Flex } from '@/atoms/Flex'
 import { Grid } from '@/atoms/Grid'
-import { IconButton } from '@/atoms/IconButton'
-import { InputGroup } from '@/atoms/InputGroup'
-import { Prompt } from '@/atoms/Prompt'
-import { Snackbar } from '@/atoms/Snackbar'
+import { ButtonSet } from '@/atoms/ui/ButtonSet'
+import { IconButton } from '@/atoms/ui/IconButton'
+import { InputGroup } from '@/atoms/ui/InputGroup'
+import { Prompt } from '@/atoms/ui/Prompt'
+import { Snackbar } from '@/atoms/ui/Snackbar'
 import { AppContext } from '@/context/AppContext'
 import { useFirebase } from '@/context/FirebaseContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
@@ -370,7 +370,7 @@ export const Editor = ({
 
   const theme = useTheme()
   const { palette, toggle } = theme
-  const styles = useStyles({ theme })
+  const classes = useStyles({ theme })
 
   const boxShadow = `0px 0px 5px 0px ${palette.step1000}44`
 
@@ -625,8 +625,8 @@ export const Editor = ({
           <ReactModal
             isOpen={modal !== 'none'}
             onRequestClose={() => patchState({ modal: 'none' })}
-            className={clsx(styles.modal, 'center')}
-            overlayClassName={styles.overlay}
+            className={clsx(classes.modal, 'center')}
+            overlayClassName={classes.overlay}
           >
             {modal === 'password' && (
               <Prompt
@@ -671,7 +671,7 @@ export const Editor = ({
                     event.target.setSelectionRange(0, event.target.value.length)
                   }
                   readOnly
-                  className={styles.palette}
+                  className={classes.palette}
                   style={{ height: '244px' }}
                 />
                 <Flex

@@ -1,13 +1,13 @@
 import { ComponentPropsWithRef, forwardRef } from 'react'
 
-import clsx from 'clsx'
-
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
 import { Icon, IconProps } from './Icon'
 
+export type IconSize = 'sm' | 'md'
+
 const useStyles = createThemeUseStyles(({ palette }) => ({
-  button: {
+  button: ({ size }: { size: IconSize }) => ({
     border: 'none',
     backgroundColor: palette.step50,
     color: palette.step800,
@@ -32,23 +32,14 @@ const useStyles = createThemeUseStyles(({ palette }) => ({
       backgroundColor: palette.step50,
       color: palette.step200,
     },
-  },
-  md: {
-    padding: '10px 8px',
-    borderRadius: '6px',
-    width: '36px',
-    height: '36px',
-    fontSize: '16px',
-    lineHeight: '16px',
-  },
-  sm: {
-    padding: '5px 4px',
-    borderRadius: '3px',
-    width: '18px',
-    height: '18px',
-    fontSize: '8px',
-    lineHeight: '8px',
-  },
+
+    padding: size === 'md' ? '10px 8px' : '5px 4px',
+    borderRadius: size === 'md' ? '6px' : '3px',
+    width: size === 'md' ? '36px' : '18px',
+    height: size === 'md' ? '36px' : '18px',
+    fontSize: size === 'md' ? '16px' : '8px',
+    lineHeight: size === 'md' ? '16px' : '8px',
+  }),
 }))
 
 export type IconButtonProps = {
@@ -62,12 +53,9 @@ export const IconButton = Object.assign(
   forwardRef<HTMLButtonElement, IconButtonProps>(
     ({ icon, spin, pulse, size = 'md', ...props }, ref) => {
       const theme = useTheme()
-      const { button, sm, md } = useStyles(theme)
-
-      const className = clsx(button, size === 'sm' && sm, size === 'md' && md)
-
+      const classes = useStyles({ theme, size })
       return (
-        <button ref={ref} className={className} {...props}>
+        <button ref={ref} className={classes.button} {...props}>
           <Icon icon={icon} spin={spin} pulse={pulse} fixedWidth />
         </button>
       )

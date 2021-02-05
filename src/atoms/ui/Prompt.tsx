@@ -2,9 +2,10 @@ import { forwardRef, useState } from 'react'
 
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
-import { Grid } from './Grid'
 import { LabeledInput, LabeledInputProps } from './LabeledInput'
 import { TextButton } from './TextButton'
+
+import { Grid } from '../Grid'
 
 const useStyles = createThemeUseStyles(({ palette }) => ({
   root: {
@@ -27,7 +28,6 @@ const useStyles = createThemeUseStyles(({ palette }) => ({
   grid: {
     margin: '10px 0px',
   },
-  button: {},
 }))
 
 type PromptProps = {
@@ -49,7 +49,7 @@ export const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       cancel,
       disableConfirm = false,
       onConfirm,
-      onCancel,
+      onCancel = () => {},
       defaultValue,
       value: valueProp,
       onChange,
@@ -58,7 +58,7 @@ export const Prompt = forwardRef<HTMLInputElement, PromptProps>(
     ref
   ) => {
     const theme = useTheme()
-    const styles = useStyles(theme)
+    const classes = useStyles(theme)
 
     const initValue =
       defaultValue !== undefined
@@ -78,8 +78,8 @@ export const Prompt = forwardRef<HTMLInputElement, PromptProps>(
     })
 
     return (
-      <div className={styles.root}>
-        {message && <p className={styles.message}>{message}</p>}
+      <div className={classes.root}>
+        {message && <p className={classes.message}>{message}</p>}
         <form
           onSubmit={(event) => {
             event.preventDefault()
@@ -102,24 +102,14 @@ export const Prompt = forwardRef<HTMLInputElement, PromptProps>(
                   : disableConfirm(value)
               setState({ value, disabled })
             }}
-            className={styles.input}
+            className={classes.input}
             {...props}
           />
-          <Grid templateColumns="1fr 1fr" className={styles.grid}>
-            <TextButton
-              color="danger"
-              type="button"
-              className={styles.button}
-              onClick={() => onCancel !== undefined && onCancel()}
-            >
+          <Grid templateColumns="1fr 1fr" className={classes.grid}>
+            <TextButton color="danger" type="button" onClick={onCancel}>
               {cancel}
             </TextButton>
-            <TextButton
-              color="primary"
-              type="submit"
-              className={styles.button}
-              disabled={disabled}
-            >
+            <TextButton color="primary" type="submit" disabled={disabled}>
               {confirm}
             </TextButton>
           </Grid>

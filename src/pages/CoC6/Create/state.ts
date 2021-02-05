@@ -1,6 +1,6 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
-import { randomFace } from '@/atoms/Die'
+import { randomFace } from '@/atoms/ui/Die'
 import { Dict } from '@/utils/dict'
 
 export const createState = (

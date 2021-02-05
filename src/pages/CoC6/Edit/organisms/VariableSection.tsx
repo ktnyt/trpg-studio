@@ -4,8 +4,8 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { Flex } from '@/atoms/Flex'
 import { Grid } from '@/atoms/Grid'
-import { IconButton } from '@/atoms/IconButton'
-import { InputGroup } from '@/atoms/InputGroup'
+import { IconButton } from '@/atoms/ui/IconButton'
+import { InputGroup } from '@/atoms/ui/InputGroup'
 import { AppContext } from '@/context/AppContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { useTranslator } from '@/hooks/useTranslator'
@@ -77,15 +77,15 @@ export const VariableSection = ({
     .join(' ')
 
   const theme = useTheme()
-  const styles = useStyles(theme)
+  const classes = useStyles(theme)
 
   return (
     <Flex direction="column" style={{ width }}>
-      <div className={styles.divider}>ステータス</div>
+      <div className={classes.divider}>ステータス</div>
       <Grid
         templateColumns="[key] 1fr [value] 111px [end]"
         templateRows={templateRows}
-        className={styles.variables}
+        className={classes.variables}
       >
         {rule.variables
           .map((capped, key) => {
@@ -98,10 +98,10 @@ export const VariableSection = ({
             const value = variables[key]
             return (
               <Fragment key={key}>
-                <Grid.Item column="key" row={key} className={styles.cell}>
+                <Grid.Item column="key" row={key} className={classes.cell}>
                   {translator.t(key, lang)}
                 </Grid.Item>
-                <Grid.Item column="value" row={key} className={styles.value}>
+                <Grid.Item column="value" row={key} className={classes.value}>
                   <InputGroup size="sm">
                     <IconButton
                       icon={faMinus}
@@ -113,9 +113,9 @@ export const VariableSection = ({
                         }))
                       }
                     />
-                    <span className={styles.number}>{value}</span>
-                    <span className={styles.slash}>/</span>
-                    <span className={styles.number}>{max}</span>
+                    <span className={classes.number}>{value}</span>
+                    <span className={classes.slash}>/</span>
+                    <span className={classes.number}>{max}</span>
                     <IconButton
                       icon={faPlus}
                       size="sm"

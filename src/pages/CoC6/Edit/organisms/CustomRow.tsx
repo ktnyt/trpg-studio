@@ -117,7 +117,7 @@ export const CustomRow = Object.assign(
           ? palette.warning.tone(!isDark)
           : palette.danger.tone(!isDark)
 
-      const styles = useStyles({ color })
+      const classes = useStyles({ color })
 
       return (
         <Grid
@@ -139,7 +139,7 @@ export const CustomRow = Object.assign(
               defaultValue={name}
               placeholder="技能を削除"
               disabled={locked}
-              className={styles.name}
+              className={classes.name}
               onKeyDown={({ key }) => {
                 if (key === 'Enter' && value === '') {
                   ref.current.blur()
@@ -155,10 +155,10 @@ export const CustomRow = Object.assign(
               }}
             />
           </Grid.Item>
-          <Grid.Item column="init" row={name} className={styles.init}>
+          <Grid.Item column="init" row={name} className={classes.init}>
             1
           </Grid.Item>
-          <Grid.Item column="job" row={name} className={styles.cell}>
+          <Grid.Item column="job" row={name} className={classes.cell}>
             <NumberInput
               placeholder="職業"
               defaultValue={job !== 0 ? job : ''}
@@ -170,7 +170,7 @@ export const CustomRow = Object.assign(
               onBlur={onBlur}
             />
           </Grid.Item>
-          <Grid.Item column="hobby" row={name} className={styles.cell}>
+          <Grid.Item column="hobby" row={name} className={classes.cell}>
             <NumberInput
               placeholder="趣味"
               defaultValue={hobby !== 0 ? hobby : ''}
@@ -182,7 +182,7 @@ export const CustomRow = Object.assign(
               onBlur={onBlur}
             />
           </Grid.Item>
-          <Grid.Item column="growth" row={name} className={styles.cell}>
+          <Grid.Item column="growth" row={name} className={classes.cell}>
             <NumberInput
               placeholder="成長"
               defaultValue={growth !== 0 ? growth : ''}
@@ -192,7 +192,7 @@ export const CustomRow = Object.assign(
               }
             />
           </Grid.Item>
-          <Grid.Item column="other" row={name} className={styles.cell}>
+          <Grid.Item column="other" row={name} className={classes.cell}>
             <NumberInput
               placeholder="他"
               defaultValue={other !== 0 ? other : ''}
@@ -202,7 +202,7 @@ export const CustomRow = Object.assign(
               }
             />
           </Grid.Item>
-          <Grid.Item column="total" row={name} className={styles.total}>
+          <Grid.Item column="total" row={name} className={classes.total}>
             {total}
           </Grid.Item>
         </Grid>

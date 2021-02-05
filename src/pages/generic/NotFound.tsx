@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { faSadTear } from '@fortawesome/free-regular-svg-icons'
 
-import { Icon } from '@/atoms/Icon'
+import { Icon } from '@/atoms/ui/Icon'
 import { useTheme } from '@/context/ThemeContext'
 import { useWindowSize } from '@/hooks/useWindowSize'
 

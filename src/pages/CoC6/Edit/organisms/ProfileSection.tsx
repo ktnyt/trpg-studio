@@ -3,8 +3,8 @@ import { CSSProperties, forwardRef, MutableRefObject, useContext } from 'react'
 import { Flex } from '@/atoms/Flex'
 import { Grid } from '@/atoms/Grid'
 import { Input } from '@/atoms/Input'
-import { LabeledInput } from '@/atoms/LabeledInput'
 import { TextArea } from '@/atoms/TextArea'
+import { LabeledInput } from '@/atoms/ui/LabeledInput'
 import { AppContext } from '@/context/AppContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { useTranslator } from '@/hooks/useTranslator'
@@ -72,7 +72,7 @@ export const ProfileSection = Object.assign(
       const { name, items, notes } = profile
 
       const theme = useTheme()
-      const styles = useStyles(theme)
+      const classes = useStyles(theme)
 
       return (
         <Flex ref={ref} direction="column" style={{ width }}>
@@ -80,13 +80,13 @@ export const ProfileSection = Object.assign(
             placeholder={translator.t('addname', lang)}
             defaultValue={name}
             autoComplete="off"
-            className={styles.name}
+            className={classes.name}
             disabled={locked}
             debounce={1000}
             onChange={({ target: { value: name } }) => onUpdate({ name })}
           />
 
-          <div className={styles.divider}>{translator.t('profile', lang)}</div>
+          <div className={classes.divider}>{translator.t('profile', lang)}</div>
 
           <Grid templateColumns={'1fr 1fr 1fr'} justifyItems="center">
             {rule.profile.keys().map((key) => (
@@ -117,7 +117,7 @@ export const ProfileSection = Object.assign(
             defaultValue={notes}
             placeholder={`${translator.t('notes', lang)}...`}
             style={{ width }}
-            className={styles.notes}
+            className={classes.notes}
             disabled={locked}
             debounce={1000}
             onChange={({ target: { value: notes } }) => onUpdate({ notes })}

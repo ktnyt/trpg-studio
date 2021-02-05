@@ -81,12 +81,14 @@ export const ParametersSection = Object.assign(
       .join(' ')
 
     const theme = useTheme()
-    const styles = useStyles(theme)
+    const classes = useStyles(theme)
 
     return (
       <Flex direction="column" style={{ width }}>
-        <div className={styles.divider}>{translator.t('parameters', lang)}</div>
-        <Grid templateColumns="2fr 1fr" className={styles.parameters}>
+        <div className={classes.divider}>
+          {translator.t('parameters', lang)}
+        </div>
+        <Grid templateColumns="2fr 1fr" className={classes.parameters}>
           <Grid
             templateColumns="[key] 50px 1fr [value] 30px 1fr [tmp] 30px 1fr [other] 30px 1fr [total] 30px 1fr"
             templateRows={`repeat(${rule.parameters.size}, 22px)`}
@@ -97,7 +99,7 @@ export const ParametersSection = Object.assign(
               return (
                 <Fragment key={key}>
                   <Grid.Item column="key">{translator.t(key, lang)}</Grid.Item>
-                  <Grid.Item column="value" className={styles.value}>
+                  <Grid.Item column="value" className={classes.value}>
                     <NumberInput
                       placeholder="初期"
                       defaultValue={asDefault(value)}
@@ -109,7 +111,7 @@ export const ParametersSection = Object.assign(
                       }
                     />
                   </Grid.Item>
-                  <Grid.Item column="tmp" className={styles.cell}>
+                  <Grid.Item column="tmp" className={classes.cell}>
                     <NumberInput
                       placeholder="一時"
                       defaultValue={asDefault(tmp)}
@@ -119,7 +121,7 @@ export const ParametersSection = Object.assign(
                       }
                     />
                   </Grid.Item>
-                  <Grid.Item column="other" className={styles.cell}>
+                  <Grid.Item column="other" className={classes.cell}>
                     <NumberInput
                       placeholder="増減"
                       defaultValue={asDefault(other)}
@@ -129,7 +131,7 @@ export const ParametersSection = Object.assign(
                       }
                     />
                   </Grid.Item>
-                  <Grid.Item column="total" className={styles.total}>
+                  <Grid.Item column="total" className={classes.total}>
                     {totals.get(key)}
                   </Grid.Item>
                 </Fragment>
@@ -147,7 +149,7 @@ export const ParametersSection = Object.assign(
                 const value =
                   apply(deps.map((dep) => totals.get(dep))) +
                   (key in modifiers ? modifiers[key] : 0)
-                const className = clsx(value < 0 && styles.danger)
+                const className = clsx(value < 0 && classes.danger)
                 return (
                   <Fragment key={key}>
                     <Grid.Item column="key" row={key} className={className}>

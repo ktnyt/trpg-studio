@@ -70,11 +70,11 @@ export const CustomSection = Object.assign(
     const ref = useRef<HTMLInputElement>(null!)
 
     const theme = useTheme()
-    const styles = useStyles(theme)
+    const classes = useStyles(theme)
 
     return (
       <Fragment>
-        <div className={styles.divider} style={{ width }}>
+        <div className={classes.divider} style={{ width }}>
           {translator.t('custom', lang)}
         </div>
 
@@ -104,7 +104,7 @@ export const CustomSection = Object.assign(
             <Input
               ref={ref}
               placeholder="新規技能"
-              className={styles.create}
+              className={classes.create}
               onKeyDown={({ key }) => {
                 if (key === 'Enter') {
                   ref.current.blur()

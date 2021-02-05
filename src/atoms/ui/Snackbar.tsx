@@ -1,28 +1,23 @@
 import { ReactNode } from 'react'
 
-import clsx from 'clsx'
-
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
 const useStyles = createThemeUseStyles(({ palette }) => ({
-  root: {
+  container: ({ visible }) => ({
     display: 'inline-block',
     position: 'fixed',
     bottom: '10px',
     left: '10px',
-    visibility: 'visible',
+    visibility: visible ? 'visible' : 'hidden',
     padding: '5px',
     borderRadius: '2px',
-    opacity: 1,
+    opacity: visible ? 1 : 0,
     backgroundColor: palette.text,
     color: palette.background,
-    transition: 'opacity 200ms, visibility 0ms',
-  },
-  hidden: {
-    visibility: 'hidden',
-    opacity: 0,
-    transition: 'opacity 200ms, visibility 200ms',
-  },
+    transition: visible
+      ? 'opacity 200ms, visibility 0ms'
+      : 'opacity 200ms, visibility 200ms',
+  }),
 }))
 
 export type SnackbarProps = {
@@ -32,6 +27,6 @@ export type SnackbarProps = {
 
 export const Snackbar = ({ visible = false, children }: SnackbarProps) => {
   const theme = useTheme()
-  const { root, hidden } = useStyles(theme)
-  return <div className={clsx(root, !visible && hidden)}>{children}</div>
+  const classes = useStyles({ theme, visible })
+  return <div className={classes.container}>{children}</div>
 }

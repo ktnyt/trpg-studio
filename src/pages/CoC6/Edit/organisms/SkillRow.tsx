@@ -139,7 +139,7 @@ export const SkillRow = Object.assign(
         : palette.danger.tone(!isDark)
       const visibility = visible ? 'visible' : 'hidden'
 
-      const styles = useStyles({ visibility, backgroundColor, color })
+      const classes = useStyles({ visibility, backgroundColor, color })
       const toggleFixed = () =>
         onUpdate(category, name, ({ fixed }) => ({ fixed: !fixed }))
 
@@ -158,7 +158,7 @@ export const SkillRow = Object.assign(
             />
           </Grid.Item>
           <Grid.Item column="key" row={name} style={{ visibility }}>
-            <span className={styles.toggle} onClick={toggleFixed}>
+            <span className={classes.toggle} onClick={toggleFixed}>
               {translator.t(name, lang)}
             </span>
             {custom && (
@@ -167,7 +167,7 @@ export const SkillRow = Object.assign(
                   defaultValue={detail}
                   placeholder="詳細"
                   disabled={locked}
-                  className={styles.detail}
+                  className={classes.detail}
                   onChange={({ target: { value: detail } }) =>
                     onUpdate(category, name, { detail })
                   }
@@ -175,10 +175,10 @@ export const SkillRow = Object.assign(
               </span>
             )}
           </Grid.Item>
-          <Grid.Item column="init" row={name} className={styles.init}>
+          <Grid.Item column="init" row={name} className={classes.init}>
             {init}
           </Grid.Item>
-          <Grid.Item column="job" row={name} className={styles.cell}>
+          <Grid.Item column="job" row={name} className={classes.cell}>
             <NumberInput
               placeholder="職業"
               defaultValue={job !== 0 ? job : ''}
@@ -190,7 +190,7 @@ export const SkillRow = Object.assign(
               onBlur={onBlur}
             />
           </Grid.Item>
-          <Grid.Item column="hobby" row={name} className={styles.cell}>
+          <Grid.Item column="hobby" row={name} className={classes.cell}>
             <NumberInput
               placeholder="趣味"
               defaultValue={hobby !== 0 ? hobby : ''}
@@ -202,7 +202,7 @@ export const SkillRow = Object.assign(
               onBlur={onBlur}
             />
           </Grid.Item>
-          <Grid.Item column="growth" row={name} className={styles.cell}>
+          <Grid.Item column="growth" row={name} className={classes.cell}>
             <NumberInput
               placeholder="成長"
               defaultValue={growth !== 0 ? growth : ''}
@@ -212,7 +212,7 @@ export const SkillRow = Object.assign(
               }
             />
           </Grid.Item>
-          <Grid.Item column="other" row={name} className={styles.cell}>
+          <Grid.Item column="other" row={name} className={classes.cell}>
             <NumberInput
               placeholder="他"
               defaultValue={other !== 0 ? other : ''}
@@ -222,7 +222,7 @@ export const SkillRow = Object.assign(
               }
             />
           </Grid.Item>
-          <Grid.Item column="total" row={name} className={styles.total}>
+          <Grid.Item column="total" row={name} className={classes.total}>
             {total}
           </Grid.Item>
         </Grid>

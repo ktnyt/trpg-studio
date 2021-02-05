@@ -4,57 +4,49 @@ import clsx from 'clsx'
 
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
-import { Input, InputProps } from './Input'
+import { Input, InputProps } from '../Input'
 
 const useStyles = createThemeUseStyles(({ palette }) => ({
-  root: {
+  container: ({ focus }: { focus: boolean }) => ({
     position: 'relative',
-  },
-  label: {
-    position: 'absolute',
-    width: '100%',
-    top: '0px',
-    left: '0px',
-    overflow: 'hidden',
-    color: palette.step400,
-    fontSize: '14px',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    transform: 'translate(0px, 0px) scale(0.75)',
-    transformOrigin: 'top left',
-    transition: 'color 200ms, transform 200ms',
-    '&:hover': {
-      cursor: 'text',
-    },
-  },
-  input: {
-    width: '174px',
-    marginTop: '16px',
-    padding: '0px',
-    border: 'none',
-    borderBottom: `1px solid ${palette.step400}`,
-    borderRadius: '0px',
-    backgroundColor: 'transparent',
-    color: palette.step1000,
-    fontSize: '14px',
-    '&:hover': {
-      borderBottom: `1px solid ${palette.step800}`,
-    },
-    '&:focus': {
-      outline: 'none',
-      borderBottom: `1px solid ${palette.secondary.base}`,
-    },
-  },
-  blurred: {
     '& label': {
-      transform: 'translate(0px, 14px) scale(1)',
+      position: 'absolute',
+      width: '100%',
+      top: '0px',
+      left: '0px',
+      overflow: 'hidden',
+      color: focus ? palette.step800 : palette.step400,
+      fontSize: '14px',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      transform: focus
+        ? 'translate(0px, 0px) scale(0.75)'
+        : 'translate(0px, 14px) scale(1)',
+      transformOrigin: 'top left',
+      transition: 'color 200ms, transform 200ms',
+      '&:hover': {
+        cursor: 'text',
+      },
     },
-  },
-  focused: {
-    '& label': {
-      color: palette.step800,
+    '& input': {
+      width: '174px',
+      marginTop: '16px',
+      padding: '0px',
+      border: 'none',
+      borderBottom: `1px solid ${palette.step400}`,
+      borderRadius: '0px',
+      backgroundColor: 'transparent',
+      color: palette.step1000,
+      fontSize: '14px',
+      '&:hover': {
+        borderBottom: `1px solid ${palette.step800}`,
+      },
+      '&:focus': {
+        outline: 'none',
+        borderBottom: `1px solid ${palette.secondary.base}`,
+      },
     },
-  },
+  }),
 }))
 
 export type LabeledInputProps = InputProps & {
@@ -73,26 +65,22 @@ export const LabeledInput = Object.assign(
         value,
         onFocus,
         onBlur,
-        className: classNameProp,
+        className,
         inputClassName,
         ...props
       },
       ref
     ) => {
-      const styles = useStyles(useTheme())
       const [focus, setFocus] = useState(
         (defaultValue !== undefined && defaultValue !== '') ||
           (value !== undefined && value !== '')
       )
       const localRef = useRef<HTMLInputElement>(null!)
-      const className = clsx(
-        styles.root,
-        focus ? styles.focused : styles.blurred,
-        classNameProp
-      )
+      const theme = useTheme()
+      const classes = useStyles({ theme, focus })
       return (
-        <div className={className}>
-          <label htmlFor={id} className={styles.label}>
+        <div className={clsx(classes.container, className)}>
+          <label htmlFor={id}>
             {!focus && placeholder ? placeholder : label}
           </label>
           <Input
@@ -111,7 +99,7 @@ export const LabeledInput = Object.assign(
             defaultValue={defaultValue}
             value={value}
             id={id}
-            className={clsx(styles.input, inputClassName)}
+            className={inputClassName}
             onFocus={(event) => {
               if (onFocus !== undefined) onFocus(event)
               setFocus(true)

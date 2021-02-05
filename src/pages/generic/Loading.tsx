@@ -1,6 +1,6 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { Icon } from '@/atoms/Icon'
+import { Icon } from '@/atoms/ui/Icon'
 import { useTheme } from '@/context/ThemeContext'
 import { useWindowSize } from '@/hooks/useWindowSize'
 

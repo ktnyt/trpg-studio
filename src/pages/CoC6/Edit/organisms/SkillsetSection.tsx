@@ -57,11 +57,11 @@ export const SkillsetSection = Object.assign(
     const rule = useRule(translator)
 
     const theme = useTheme()
-    const styles = useStyles(theme)
+    const classes = useStyles(theme)
 
     return (
       <Fragment>
-        <div className={styles.divider} style={{ width }}>
+        <div className={classes.divider} style={{ width }}>
           {translator.t('skills', lang)}
         </div>
 

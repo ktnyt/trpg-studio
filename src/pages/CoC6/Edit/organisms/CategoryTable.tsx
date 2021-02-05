@@ -51,7 +51,7 @@ export const CategoryTable = ({
   const rule = useRule(translator)
 
   const theme = useTheme()
-  const styles = useStyles(theme)
+  const classes = useStyles(theme)
 
   const skillVisibility = rule.skillset.get(category).map((_, key) => {
     const { job, hobby, growth, other, fixed } = skills[key]
@@ -68,7 +68,7 @@ export const CategoryTable = ({
 
   return visible ? (
     <Fragment>
-      <Flex.Item className={styles.divider} style={{ width, visibility }}>
+      <Flex.Item className={classes.divider} style={{ width, visibility }}>
         {translator.t(category, lang)}
       </Flex.Item>
 

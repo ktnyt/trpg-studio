@@ -2,8 +2,8 @@ import { CSSProperties, ReactNode } from 'react'
 
 import { useTheme } from '@/context/ThemeContext'
 
-import { Grid } from './Grid'
-import { Swap } from './Swap'
+import { Grid } from '../Grid'
+import { Swap } from '../Swap'
 
 export const randomFace = (sides = 6, exclude = 0): number =>
   ((face) => (face === exclude ? randomFace(sides, exclude) : face))(

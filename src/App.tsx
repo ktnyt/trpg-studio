@@ -1,11 +1,12 @@
 import { Fragment, lazy, ReactNode, Suspense } from 'react'
-import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import { AppContext } from '@/context/AppContext'
 import { nord } from '@/palette/nord'
 
 import { FirebaseProvider } from './context/FirebaseContext'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
+import { Home } from './pages/Home'
 import { Loading } from './pages/generic/Loading'
 import { NotFound } from './pages/generic/NotFound'
 
@@ -32,11 +33,7 @@ const Root = () => {
       <Router>
         <Switch>
           <Route exact path="/">
-            {systems.map(({ path, name }) => (
-              <Link key={path} to={path}>
-                {name}
-              </Link>
-            ))}
+            <Home systems={systems} />
           </Route>
           <Suspense fallback={<Loading />}>
             {systems.map(({ path, component }) => (

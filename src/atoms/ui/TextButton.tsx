@@ -6,7 +6,7 @@ import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { sanitize } from '@/utils/sanitize'
 
 const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
-  root: {
+  container: {
     border: 'none',
     borderRadius: '4px',
     backgroundColor: palette.background,
@@ -93,10 +93,10 @@ export const TextButton = Object.assign(
   forwardRef<HTMLButtonElement, TextButtonProps>(
     ({ color, style, className: classNameProp, ...props }, ref) => {
       const theme = useTheme()
-      const { root, ...styles } = useStyles(theme)
+      const classes = useStyles(theme)
       const className = clsx(
-        root,
-        styles.hasOwnProperty(color) && styles[color],
+        classes.container,
+        classes.hasOwnProperty(color) && classes[color],
         classNameProp
       )
       return (
