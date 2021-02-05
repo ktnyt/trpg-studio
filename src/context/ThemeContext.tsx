@@ -23,8 +23,7 @@ export const ThemeProvider = ({
 }) => {
   const preference = window.localStorage.getItem('palette.scheme')
   const matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
-  const init =
-    preference !== undefined ? preference === 'dark' : matchMedia.matches
+  const init = preference !== null ? preference === 'dark' : matchMedia.matches
   const [isDark, setDark] = useState(init)
 
   useEffect(() => {
