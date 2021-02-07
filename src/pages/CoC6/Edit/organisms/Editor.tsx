@@ -151,10 +151,6 @@ export const Editor = ({
   })
 
   const name = profile.name === '' ? '名状し難い探索者' : profile.name
-  useEffect(() => {
-    const name = profile.name === '' ? '名状し難い探索者' : profile.name
-    document.title = `${name} | CoC 6 | TRPG Studio (β)`
-  }, [profile])
 
   const [parameters, setParameters] = useState(init.parameters)
   const updateParameter = (key: string, diff: Merger<Parameter>) =>
@@ -468,6 +464,8 @@ export const Editor = ({
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
+
+        <meta name="twitter:card" content="summary" />
       </Helmet>
       <Flex
         justifyContent="center"
