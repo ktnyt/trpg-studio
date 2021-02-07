@@ -1,4 +1,5 @@
 import { Fragment, useContext, useEffect, useReducer, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 
 import clsx from 'clsx'
@@ -96,10 +97,6 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
 }))
 
 export const Create = () => {
-  useEffect(() => {
-    document.title = '新規作成 | CoC 6 | TRPG Studio'
-  }, [])
-
   const { url } = useRouteMatch()
   const history = useHistory()
 
@@ -221,229 +218,240 @@ export const Create = () => {
   const boxShadow = `0px 0px 5px 0px ${palette.step1000}44`
 
   return (
-    <Flex
-      justifyContent="center"
-      alignItems="center"
-      style={{ minWidth: width, minHeight: height }}
-    >
-      <Flex style={{ width: willFit ? 686 : width }}>
-        <Flex wrap="wrap" className={container}>
-          <div className={heading}>クトゥルフ神話TRPG：第6版</div>
+    <Fragment>
+      <Helmet>
+        <title>新規作成 | CoC 6 | TRPG Studio (β)</title>
+      </Helmet>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        style={{ minWidth: width, minHeight: height }}
+      >
+        <Flex style={{ width: willFit ? 686 : width }}>
+          <Flex wrap="wrap" className={container}>
+            <div className={heading}>クトゥルフ神話TRPG：第6版</div>
 
-          <Grid
-            templateColumns="[key] 54px 1fr [dice] 100px 1fr [lhs] 60px [rhs] 20px [eq] 10px [value] 20px [eqend] 1fr [reroll] 46px [end]"
-            templateRows={`[header] 22px repeat(${parameterCount}, [row] 46px)`}
-            className={clsx(gridRoot, parametersGrid)}
-            style={{ width: Math.ceil(columnWidth) }}
-          >
-            <Grid.Item area="header/key/header/end" className={headerRow} />
+            <Grid
+              templateColumns="[key] 54px 1fr [dice] 100px 1fr [lhs] 60px [rhs] 20px [eq] 10px [value] 20px [eqend] 1fr [reroll] 46px [end]"
+              templateRows={`[header] 22px repeat(${parameterCount}, [row] 46px)`}
+              className={clsx(gridRoot, parametersGrid)}
+              style={{ width: Math.ceil(columnWidth) }}
+            >
+              <Grid.Item area="header/key/header/end" className={headerRow} />
 
-            <Grid.Item row="header" column="key" className={headerCell}>
-              {translator.t('item', lang)}
-            </Grid.Item>
-            <Grid.Item row="header" column="dice" className={headerCell}>
-              {translator.t('dice', lang)}
-            </Grid.Item>
-            <Grid.Item row="header" column="lhs/eqend" className={headerCell}>
-              {translator.t('value', lang)}
-            </Grid.Item>
-            <Grid.Item row="header" column="reroll" className={headerCell} />
+              <Grid.Item row="header" column="key" className={headerCell}>
+                {translator.t('item', lang)}
+              </Grid.Item>
+              <Grid.Item row="header" column="dice" className={headerCell}>
+                {translator.t('dice', lang)}
+              </Grid.Item>
+              <Grid.Item row="header" column="lhs/eqend" className={headerCell}>
+                {translator.t('value', lang)}
+              </Grid.Item>
+              <Grid.Item row="header" column="reroll" className={headerCell} />
 
-            {rule.parameters
-              .map(({ apply }, key, index) => {
-                const dice = current.get(key)
-                const faces = dice.map(({ face }) => face)
-                const texts = faces.map((face) =>
-                  initialized ? `${face}` : '?'
-                )
+              {rule.parameters
+                .map(({ apply }, key, index) => {
+                  const dice = current.get(key)
+                  const faces = dice.map(({ face }) => face)
+                  const texts = faces.map((face) =>
+                    initialized ? `${face}` : '?'
+                  )
 
-                const value = initialized ? apply(faces) : '?'
-                const equation = apply(texts)
+                  const value = initialized ? apply(faces) : '?'
+                  const equation = apply(texts)
 
-                const [lhs, rhs] = shift(equation, '\u{200B}')
+                  const [lhs, rhs] = shift(equation, '\u{200B}')
 
-                const row = `row ${index + 1}`
+                  const row = `row ${index + 1}`
 
-                return (
-                  <Fragment key={key}>
-                    <Grid.Item row={row} column="key">
-                      {translator.t(key, lang)}
-                    </Grid.Item>
+                  return (
+                    <Fragment key={key}>
+                      <Grid.Item row={row} column="key">
+                        {translator.t(key, lang)}
+                      </Grid.Item>
 
-                    <Grid.Item row={row} column="dice">
-                      <Flex
-                        justifyContent="space-between"
-                        style={{ width: dice.length * 34 - 2, height: 32 }}
-                      >
-                        {dice.map(({ face, sides }, index) => (
-                          <Die
-                            key={index}
-                            face={face}
-                            sides={sides}
-                            size={32}
-                          />
-                        ))}
-                      </Flex>
-                    </Grid.Item>
+                      <Grid.Item row={row} column="dice">
+                        <Flex
+                          justifyContent="space-between"
+                          style={{ width: dice.length * 34 - 2, height: 32 }}
+                        >
+                          {dice.map(({ face, sides }, index) => (
+                            <Die
+                              key={index}
+                              face={face}
+                              sides={sides}
+                              size={32}
+                            />
+                          ))}
+                        </Flex>
+                      </Grid.Item>
 
-                    <Grid.Item row={row} column="lhs" justifySelf="right">
-                      {lhs}
-                    </Grid.Item>
-                    <Grid.Item row={row} column="rhs" justifySelf="left">
-                      {rhs}
-                    </Grid.Item>
-                    <Grid.Item row={row} column="eq" justifySelf="center">
-                      =
-                    </Grid.Item>
-                    <Grid.Item row={row} column="value" justifySelf="right">
-                      {value}
-                    </Grid.Item>
+                      <Grid.Item row={row} column="lhs" justifySelf="right">
+                        {lhs}
+                      </Grid.Item>
+                      <Grid.Item row={row} column="rhs" justifySelf="left">
+                        {rhs}
+                      </Grid.Item>
+                      <Grid.Item row={row} column="eq" justifySelf="center">
+                        =
+                      </Grid.Item>
+                      <Grid.Item row={row} column="value" justifySelf="right">
+                        {value}
+                      </Grid.Item>
 
-                    <Grid.Item row={row} column="reroll">
-                      <IconButton
-                        icon={rolling(key) || creating ? faSpinner : faSyncAlt}
-                        pulse={rolling(key) || creating}
-                        disabled={rolling() || creating || !initialized}
-                        onClick={() => dispatch(actions.reroll(key))}
-                      />
-                    </Grid.Item>
+                      <Grid.Item row={row} column="reroll">
+                        <IconButton
+                          icon={
+                            rolling(key) || creating ? faSpinner : faSyncAlt
+                          }
+                          pulse={rolling(key) || creating}
+                          disabled={rolling() || creating || !initialized}
+                          onClick={() => dispatch(actions.reroll(key))}
+                        />
+                      </Grid.Item>
 
-                    {index + 1 < parameterCount && (
-                      <Grid.Item area={`${row}/key/${row}/end`} />
-                    )}
-                  </Fragment>
-                )
-              })
-              .values()}
-          </Grid>
-
-          <Grid
-            templateColumns="[key] 160px 1fr [lhs] 90px [eq] 10px [value] 40px 10px [end]"
-            templateRows={`[header] 22px repeat(${attributeCount},[row] 46px)`}
-            className={clsx(gridRoot, attributesGrid)}
-            style={{ width: Math.floor(columnWidth) }}
-          >
-            <Grid.Item area="header/key/header/end" className={headerRow} />
-
-            <Grid.Item row="header" column="key" className={headerCell}>
-              {translator.t('item', lang)}
-            </Grid.Item>
-            <Grid.Item row="header" column="lhs/value" className={headerCell}>
-              {translator.t('value', lang)}
-            </Grid.Item>
-
-            {rule.attributes
-              .map(({ deps, apply }, key, index) => {
-                const values = deps.map((dep) => {
-                  const apply = rule.parameters.get(dep).apply
-                  const faces = current.get(dep).map(({ face }) => face)
-                  return apply(faces)
+                      {index + 1 < parameterCount && (
+                        <Grid.Item area={`${row}/key/${row}/end`} />
+                      )}
+                    </Fragment>
+                  )
                 })
-                const texts = deps.map((dep) => translator.t(dep, lang))
+                .values()}
+            </Grid>
 
-                const value = initialized ? apply(values) : '?'
-                const text = apply(texts)
+            <Grid
+              templateColumns="[key] 160px 1fr [lhs] 90px [eq] 10px [value] 40px 10px [end]"
+              templateRows={`[header] 22px repeat(${attributeCount},[row] 46px)`}
+              className={clsx(gridRoot, attributesGrid)}
+              style={{ width: Math.floor(columnWidth) }}
+            >
+              <Grid.Item area="header/key/header/end" className={headerRow} />
 
-                const row = `row ${index + 1}`
+              <Grid.Item row="header" column="key" className={headerCell}>
+                {translator.t('item', lang)}
+              </Grid.Item>
+              <Grid.Item row="header" column="lhs/value" className={headerCell}>
+                {translator.t('value', lang)}
+              </Grid.Item>
 
-                return (
-                  <Fragment key={key}>
-                    <Grid.Item row={row} column="key">
-                      {translator.t(key, lang)}
-                    </Grid.Item>
+              {rule.attributes
+                .map(({ deps, apply }, key, index) => {
+                  const values = deps.map((dep) => {
+                    const apply = rule.parameters.get(dep).apply
+                    const faces = current.get(dep).map(({ face }) => face)
+                    return apply(faces)
+                  })
+                  const texts = deps.map((dep) => translator.t(dep, lang))
 
-                    <Grid.Item row={row} column="lhs" justifySelf="right">
-                      {text}
-                    </Grid.Item>
-                    <Grid.Item row={row} column="eq" justifySelf="center">
-                      =
-                    </Grid.Item>
-                    <Grid.Item row={row} column="value" justifySelf="right">
-                      {value}
-                    </Grid.Item>
+                  const value = initialized ? apply(values) : '?'
+                  const text = apply(texts)
 
-                    {index < rule.attributes.size && (
-                      <Grid.Item area={`${row}/key/${row}/end`} />
-                    )}
-                  </Fragment>
-                )
-              })
-              .values()}
+                  const row = `row ${index + 1}`
 
-            {rule.properties
-              .map(({ deps, convert }, key, index) => {
-                const values = deps.map((dep) => {
-                  const apply = rule.parameters.get(dep).apply
-                  const faces = current.get(dep).map(({ face }) => face)
-                  return apply(faces)
+                  return (
+                    <Fragment key={key}>
+                      <Grid.Item row={row} column="key">
+                        {translator.t(key, lang)}
+                      </Grid.Item>
+
+                      <Grid.Item row={row} column="lhs" justifySelf="right">
+                        {text}
+                      </Grid.Item>
+                      <Grid.Item row={row} column="eq" justifySelf="center">
+                        =
+                      </Grid.Item>
+                      <Grid.Item row={row} column="value" justifySelf="right">
+                        {value}
+                      </Grid.Item>
+
+                      {index < rule.attributes.size && (
+                        <Grid.Item area={`${row}/key/${row}/end`} />
+                      )}
+                    </Fragment>
+                  )
                 })
-                const texts = deps.map((dep) => translator.t(dep, lang))
+                .values()}
 
-                const text = texts.join(' | ')
-                const value = initialized ? convert(values) : '?'
+              {rule.properties
+                .map(({ deps, convert }, key, index) => {
+                  const values = deps.map((dep) => {
+                    const apply = rule.parameters.get(dep).apply
+                    const faces = current.get(dep).map(({ face }) => face)
+                    return apply(faces)
+                  })
+                  const texts = deps.map((dep) => translator.t(dep, lang))
 
-                const row = `row ${rule.attributes.size + index + 1}`
+                  const text = texts.join(' | ')
+                  const value = initialized ? convert(values) : '?'
 
-                return (
-                  <Fragment key={key}>
-                    <Grid.Item row={row} column="key">
-                      {translator.t(key, lang)}
-                    </Grid.Item>
+                  const row = `row ${rule.attributes.size + index + 1}`
 
-                    <Grid.Item row={row} column="lhs" justifySelf="right">
-                      {text}
-                    </Grid.Item>
-                    <Grid.Item row={row} column="eq" justifySelf="center">
-                      =
-                    </Grid.Item>
-                    <Grid.Item row={row} column="value" justifySelf="right">
-                      {value}
-                    </Grid.Item>
+                  return (
+                    <Fragment key={key}>
+                      <Grid.Item row={row} column="key">
+                        {translator.t(key, lang)}
+                      </Grid.Item>
 
-                    {index < rule.properties.size && (
-                      <Grid.Item area={`${row}/key/${row}/end`} />
-                    )}
-                  </Fragment>
-                )
-              })
-              .values()}
-          </Grid>
+                      <Grid.Item row={row} column="lhs" justifySelf="right">
+                        {text}
+                      </Grid.Item>
+                      <Grid.Item row={row} column="eq" justifySelf="center">
+                        =
+                      </Grid.Item>
+                      <Grid.Item row={row} column="value" justifySelf="right">
+                        {value}
+                      </Grid.Item>
 
-          {willFit || <div style={{ width, height: '46px' }}></div>}
+                      {index < rule.properties.size && (
+                        <Grid.Item area={`${row}/key/${row}/end`} />
+                      )}
+                    </Fragment>
+                  )
+                })
+                .values()}
+            </Grid>
+
+            {willFit || <div style={{ width, height: '46px' }}></div>}
+          </Flex>
+          <Flex.Item className={clsx(willFit || fixToolbar)}>
+            <ButtonSet vertical={willFit} className={toolbar}>
+              <IconButton
+                icon={faMoon}
+                onClick={toggle}
+                style={{ boxShadow }}
+              />
+
+              <InputGroup style={{ boxShadow }} vertical={willFit}>
+                <IconButton
+                  icon={faAngleLeft}
+                  disabled={rolling() || creating || oldest}
+                  onClick={() => dispatch(actions.older())}
+                />
+                <IconButton
+                  icon={faAngleRight}
+                  disabled={rolling() || creating || newest}
+                  onClick={() => dispatch(actions.newer())}
+                />
+              </InputGroup>
+
+              <IconButton
+                icon={faUserPlus}
+                disabled={rolling() || creating}
+                onClick={() => handleCreate()}
+                style={{ boxShadow }}
+              />
+              <IconButton
+                icon={rolling() ? faSpinner : faSyncAlt}
+                pulse={rolling()}
+                disabled={rolling() || creating}
+                onClick={() => dispatch(actions.reroll())}
+                style={{ boxShadow }}
+              />
+            </ButtonSet>
+          </Flex.Item>
         </Flex>
-        <Flex.Item className={clsx(willFit || fixToolbar)}>
-          <ButtonSet vertical={willFit} className={toolbar}>
-            <IconButton icon={faMoon} onClick={toggle} style={{ boxShadow }} />
-
-            <InputGroup style={{ boxShadow }} vertical={willFit}>
-              <IconButton
-                icon={faAngleLeft}
-                disabled={rolling() || creating || oldest}
-                onClick={() => dispatch(actions.older())}
-              />
-              <IconButton
-                icon={faAngleRight}
-                disabled={rolling() || creating || newest}
-                onClick={() => dispatch(actions.newer())}
-              />
-            </InputGroup>
-
-            <IconButton
-              icon={faUserPlus}
-              disabled={rolling() || creating}
-              onClick={() => handleCreate()}
-              style={{ boxShadow }}
-            />
-            <IconButton
-              icon={rolling() ? faSpinner : faSyncAlt}
-              pulse={rolling()}
-              disabled={rolling() || creating}
-              onClick={() => dispatch(actions.reroll())}
-              style={{ boxShadow }}
-            />
-          </ButtonSet>
-        </Flex.Item>
       </Flex>
-    </Flex>
+    </Fragment>
   )
 }
