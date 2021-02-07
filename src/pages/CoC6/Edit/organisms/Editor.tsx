@@ -1,5 +1,6 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { Fragment, useContext, useEffect, useRef, useState } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { Helmet } from 'react-helmet'
 import ReactModal from 'react-modal'
 import { useParams } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
@@ -142,11 +143,6 @@ export const Editor = ({
       invoke('updateCharacter', data(patch))
     }
   })
-
-  useEffect(() => {
-    const name = profile.name === '' ? '名状し難い探索者' : profile.name
-    document.title = `${name} | CoC 6 | TRPG Studio`
-  }, [profile])
 
   const [parameters, setParameters] = useState(init.parameters)
   const updateParameter = (key: string, diff: Merger<Parameter>) =>
@@ -447,269 +443,281 @@ export const Editor = ({
   const showPoints = fixToolbar && focus
 
   return (
-    <Flex
-      justifyContent="center"
-      alignItems="center"
-      style={{
-        minWidth: width,
-        minHeight: height,
-      }}
-    >
-      <CSSTransition
-        nodeRef={nodeRef}
-        in={true}
-        timeout={200}
-        classNames="body"
-        unmountOnExit
-        appear
+    <Fragment>
+      <Helmet>
+        <title>
+          {`${
+            profile.name === '' ? '名状し難い探索者' : profile.name
+          } | CoC 6 | TRPG Studio (β)`}
+        </title>
+      </Helmet>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        style={{
+          minWidth: width,
+          minHeight: height,
+        }}
       >
-        <Flex direction="row" ref={nodeRef}>
-          <Flex
-            direction="column"
-            wrap="wrap"
-            style={{
-              width: panelWidth,
-              height: panelHeight,
-              backgroundColor: palette.background,
-              color: palette.text,
-              boxShadow: `0px 0px 10px 0px ${palette.step1000}44`,
-            }}
-          >
-            <ProfileSection
-              ref={profileRef}
-              profile={profile}
-              width={columnWidth}
-              notesRef={notesRef}
-              locked={locked}
-              onUpdate={updateProfile}
-            />
-
-            <div
+        <CSSTransition
+          nodeRef={nodeRef}
+          in={true}
+          timeout={200}
+          classNames="body"
+          unmountOnExit
+          appear
+        >
+          <Flex direction="row" ref={nodeRef}>
+            <Flex
+              direction="column"
+              wrap="wrap"
               style={{
-                width: columnWidth,
-                height: notesPadding,
-                backgroundColor: palette.step50,
-                cursor: 'text',
-              }}
-              onClick={() => notesRef.current.focus()}
-            />
-
-            <ParametersSection
-              parameters={parameters}
-              modifiers={parameterModifiers}
-              width={columnWidth}
-              locked={locked}
-              onUpdate={updateParameter}
-            />
-
-            <VariableSection
-              variables={variables}
-              modifiers={variableModifiers}
-              totals={totals}
-              width={columnWidth}
-              locked={locked}
-              onUpdate={updateVariable}
-            />
-
-            <SkillsetSection
-              skillset={skillset}
-              totals={totals}
-              showall={showall}
-              width={columnWidth}
-              locked={locked}
-              onUpdate={updateSkill}
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
-            />
-
-            <CustomSection
-              custom={custom}
-              width={columnWidth}
-              locked={locked}
-              onCreate={createCustom}
-              onUpdate={updateCustom}
-              onDelete={deleteCustom}
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
-            />
-          </Flex>
-
-          <Snackbar visible={copied !== 'none'}>
-            {translator.t('copied', lang)}
-          </Snackbar>
-
-          {showPoints ? (
-            <Grid
-              templateColumns="1fr [jobkey] 40px 1fr [jobremain] 30px [jobslash] 5px [jobtotal] 30px 1fr [hbykey] 40px 1fr [hbyremain] 30px [hbyslash] 5px [hbytotal] 30px 1fr"
-              style={{
-                position: 'absolute',
-                top: '0px',
-                left: '0px',
-                boxSizing: 'border-box',
-                width: columnWidth,
-                padding: '10px 0px',
-                borderRadius: '6px',
-                backgroundColor: palette.step50,
-                boxShadow,
+                width: panelWidth,
+                height: panelHeight,
+                backgroundColor: palette.background,
                 color: palette.text,
-                fontVariantNumeric: 'tabular-nums',
-                transform: `translateY(${scrollTop}px)`,
-                transition: 'transform 10ms',
+                boxShadow: `0px 0px 10px 0px ${palette.step1000}44`,
               }}
             >
-              <Grid.Item column="jobkey">
-                {translator.t('jobpts-abbrev', lang)}
-              </Grid.Item>
-              <Grid.Item column="jobremain" style={{ textAlign: 'right' }}>
-                {jobRemain}
-              </Grid.Item>
-              <Grid.Item column="jobslash" style={{ textAlign: 'center' }}>
-                /
-              </Grid.Item>
-              <Grid.Item column="jobtotal" style={{ textAlign: 'right' }}>
-                {jobpts}
-              </Grid.Item>
-
-              <Grid.Item column="hbykey">
-                {translator.t('hbypts-abbrev', lang)}
-              </Grid.Item>
-              <Grid.Item column="hbyremain" style={{ textAlign: 'right' }}>
-                {hbyRemain}
-              </Grid.Item>
-              <Grid.Item column="hbyslash" style={{ textAlign: 'center' }}>
-                /
-              </Grid.Item>
-              <Grid.Item column="hbytotal" style={{ textAlign: 'right' }}>
-                {hbypts}
-              </Grid.Item>
-            </Grid>
-          ) : (
-            <div
-              style={
-                fixToolbar ? { position: 'fixed', bottom: 0, right: 0 } : {}
-              }
-            >
-              <ButtonSet vertical={!fixToolbar} style={{ margin: '5px' }}>
-                <IconButton
-                  icon={faMoon}
-                  onClick={toggle}
-                  style={{ boxShadow }}
-                />
-                <InputGroup vertical={!fixToolbar} style={{ boxShadow }}>
-                  <CopyToClipboard
-                    text={window.location.href}
-                    onCopy={() => patchState({ copied: 'link' })}
-                  >
-                    <IconButton ref={linkRef} icon={faLink} />
-                  </CopyToClipboard>
-                  <IconButton
-                    ref={paletteRef}
-                    icon={faPalette}
-                    onClick={() => patchState({ modal: 'palette' })}
-                  />
-                </InputGroup>
-                <IconButton
-                  icon={locked ? faLock : unlocked ? faLockOpen : faKey}
-                  style={{ boxShadow }}
-                  onClick={() => patchState({ modal: 'password' })}
-                />
-                <IconButton
-                  icon={showall ? faEyeSlash : faEye}
-                  style={{ boxShadow }}
-                  onClick={() => setShowall((flag) => !flag)}
-                />
-              </ButtonSet>
-            </div>
-          )}
-
-          <ReactModal
-            isOpen={modal !== 'none'}
-            onRequestClose={() => patchState({ modal: 'none' })}
-            className={clsx(classes.modal, 'center')}
-            overlayClassName={classes.overlay}
-          >
-            {modal === 'password' && (
-              <Prompt
-                label={translator.t('password', lang)}
-                message={
-                  locked
-                    ? 'このキャラクターはパスワードによって保護されています。'
-                    : unlocked
-                    ? 'パスワードを変更'
-                    : 'パスワードを設定することで第三者による編集から保護することができます。'
-                }
-                id="password"
-                type="password"
-                autoComplete="off"
-                autoCapitalize="off"
-                autoCorrect="off"
-                autoFocus
-                confirm={translator.t(locked ? 'unlock' : 'confirm', lang)}
-                cancel={translator.t('cancel', lang)}
-                disableConfirm={(value) => `${value}`.length === 0}
-                onConfirm={(value) =>
-                  locked ? unlock(`${value}`) : secure(`${value}`)
-                }
-                onCancel={() => patchState({ modal: 'none' })}
+              <ProfileSection
+                ref={profileRef}
+                profile={profile}
+                width={columnWidth}
+                notesRef={notesRef}
+                locked={locked}
+                onUpdate={updateProfile}
               />
-            )}
-            {modal === 'palette' && (
+
               <div
                 style={{
-                  overflow: 'hidden',
-                  width: Math.min(320, width - 20),
-                  height: '300px',
+                  width: columnWidth,
+                  height: notesPadding,
+                  backgroundColor: palette.step50,
+                  cursor: 'text',
+                }}
+                onClick={() => notesRef.current.focus()}
+              />
+
+              <ParametersSection
+                parameters={parameters}
+                modifiers={parameterModifiers}
+                width={columnWidth}
+                locked={locked}
+                onUpdate={updateParameter}
+              />
+
+              <VariableSection
+                variables={variables}
+                modifiers={variableModifiers}
+                totals={totals}
+                width={columnWidth}
+                locked={locked}
+                onUpdate={updateVariable}
+              />
+
+              <SkillsetSection
+                skillset={skillset}
+                totals={totals}
+                showall={showall}
+                width={columnWidth}
+                locked={locked}
+                onUpdate={updateSkill}
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
+              />
+
+              <CustomSection
+                custom={custom}
+                width={columnWidth}
+                locked={locked}
+                onCreate={createCustom}
+                onUpdate={updateCustom}
+                onDelete={deleteCustom}
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
+              />
+            </Flex>
+
+            <Snackbar visible={copied !== 'none'}>
+              {translator.t('copied', lang)}
+            </Snackbar>
+
+            {showPoints ? (
+              <Grid
+                templateColumns="1fr [jobkey] 40px 1fr [jobremain] 30px [jobslash] 5px [jobtotal] 30px 1fr [hbykey] 40px 1fr [hbyremain] 30px [hbyslash] 5px [hbytotal] 30px 1fr"
+                style={{
+                  position: 'absolute',
+                  top: '0px',
+                  left: '0px',
                   boxSizing: 'border-box',
-                  border: `1px solid ${palette.step100}`,
-                  borderRadius: '8px',
-                  backgroundColor: palette.background,
+                  width: columnWidth,
+                  padding: '10px 0px',
+                  borderRadius: '6px',
+                  backgroundColor: palette.step50,
+                  boxShadow,
+                  color: palette.text,
+                  fontVariantNumeric: 'tabular-nums',
+                  transform: `translateY(${scrollTop}px)`,
+                  transition: 'transform 10ms',
                 }}
               >
-                <textarea
-                  value={chatPalette}
-                  onFocus={(event) =>
-                    event.target.setSelectionRange(0, event.target.value.length)
-                  }
-                  readOnly
-                  className={classes.palette}
-                  style={{ height: '244px' }}
-                />
-                <Flex
-                  justifyContent="space-between"
-                  style={{
-                    position: 'absolute',
-                    bottom: '0px',
-                    boxSizing: 'border-box',
-                    width: '100%',
-                    padding: '10px',
-                  }}
-                >
+                <Grid.Item column="jobkey">
+                  {translator.t('jobpts-abbrev', lang)}
+                </Grid.Item>
+                <Grid.Item column="jobremain" style={{ textAlign: 'right' }}>
+                  {jobRemain}
+                </Grid.Item>
+                <Grid.Item column="jobslash" style={{ textAlign: 'center' }}>
+                  /
+                </Grid.Item>
+                <Grid.Item column="jobtotal" style={{ textAlign: 'right' }}>
+                  {jobpts}
+                </Grid.Item>
+
+                <Grid.Item column="hbykey">
+                  {translator.t('hbypts-abbrev', lang)}
+                </Grid.Item>
+                <Grid.Item column="hbyremain" style={{ textAlign: 'right' }}>
+                  {hbyRemain}
+                </Grid.Item>
+                <Grid.Item column="hbyslash" style={{ textAlign: 'center' }}>
+                  /
+                </Grid.Item>
+                <Grid.Item column="hbytotal" style={{ textAlign: 'right' }}>
+                  {hbypts}
+                </Grid.Item>
+              </Grid>
+            ) : (
+              <div
+                style={
+                  fixToolbar ? { position: 'fixed', bottom: 0, right: 0 } : {}
+                }
+              >
+                <ButtonSet vertical={!fixToolbar} style={{ margin: '5px' }}>
                   <IconButton
-                    icon={faWindowClose}
+                    icon={faMoon}
+                    onClick={toggle}
                     style={{ boxShadow }}
-                    onClick={() => patchState({ modal: 'none' })}
                   />
-                  <ButtonSet>
+                  <InputGroup vertical={!fixToolbar} style={{ boxShadow }}>
                     <CopyToClipboard
-                      text={chatPalette}
-                      onCopy={() =>
-                        patchState({ modal: 'none', copied: 'palette' })
-                      }
+                      text={window.location.href}
+                      onCopy={() => patchState({ copied: 'link' })}
                     >
-                      <IconButton icon={faCopy} style={{ boxShadow }} />
+                      <IconButton ref={linkRef} icon={faLink} />
                     </CopyToClipboard>
                     <IconButton
-                      icon={showall ? faEyeSlash : faEye}
-                      style={{ boxShadow }}
-                      onClick={() => setShowall((flag) => !flag)}
+                      ref={paletteRef}
+                      icon={faPalette}
+                      onClick={() => patchState({ modal: 'palette' })}
                     />
-                  </ButtonSet>
-                </Flex>
+                  </InputGroup>
+                  <IconButton
+                    icon={locked ? faLock : unlocked ? faLockOpen : faKey}
+                    style={{ boxShadow }}
+                    onClick={() => patchState({ modal: 'password' })}
+                  />
+                  <IconButton
+                    icon={showall ? faEyeSlash : faEye}
+                    style={{ boxShadow }}
+                    onClick={() => setShowall((flag) => !flag)}
+                  />
+                </ButtonSet>
               </div>
             )}
-          </ReactModal>
-        </Flex>
-      </CSSTransition>
-    </Flex>
+
+            <ReactModal
+              isOpen={modal !== 'none'}
+              onRequestClose={() => patchState({ modal: 'none' })}
+              className={clsx(classes.modal, 'center')}
+              overlayClassName={classes.overlay}
+            >
+              {modal === 'password' && (
+                <Prompt
+                  label={translator.t('password', lang)}
+                  message={
+                    locked
+                      ? 'このキャラクターはパスワードによって保護されています。'
+                      : unlocked
+                      ? 'パスワードを変更'
+                      : 'パスワードを設定することで第三者による編集から保護することができます。'
+                  }
+                  id="password"
+                  type="password"
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  autoFocus
+                  confirm={translator.t(locked ? 'unlock' : 'confirm', lang)}
+                  cancel={translator.t('cancel', lang)}
+                  disableConfirm={(value) => `${value}`.length === 0}
+                  onConfirm={(value) =>
+                    locked ? unlock(`${value}`) : secure(`${value}`)
+                  }
+                  onCancel={() => patchState({ modal: 'none' })}
+                />
+              )}
+              {modal === 'palette' && (
+                <div
+                  style={{
+                    overflow: 'hidden',
+                    width: Math.min(320, width - 20),
+                    height: '300px',
+                    boxSizing: 'border-box',
+                    border: `1px solid ${palette.step100}`,
+                    borderRadius: '8px',
+                    backgroundColor: palette.background,
+                  }}
+                >
+                  <textarea
+                    value={chatPalette}
+                    onFocus={(event) =>
+                      event.target.setSelectionRange(
+                        0,
+                        event.target.value.length
+                      )
+                    }
+                    readOnly
+                    className={classes.palette}
+                    style={{ height: '244px' }}
+                  />
+                  <Flex
+                    justifyContent="space-between"
+                    style={{
+                      position: 'absolute',
+                      bottom: '0px',
+                      boxSizing: 'border-box',
+                      width: '100%',
+                      padding: '10px',
+                    }}
+                  >
+                    <IconButton
+                      icon={faWindowClose}
+                      style={{ boxShadow }}
+                      onClick={() => patchState({ modal: 'none' })}
+                    />
+                    <ButtonSet>
+                      <CopyToClipboard
+                        text={chatPalette}
+                        onCopy={() =>
+                          patchState({ modal: 'none', copied: 'palette' })
+                        }
+                      >
+                        <IconButton icon={faCopy} style={{ boxShadow }} />
+                      </CopyToClipboard>
+                      <IconButton
+                        icon={showall ? faEyeSlash : faEye}
+                        style={{ boxShadow }}
+                        onClick={() => setShowall((flag) => !flag)}
+                      />
+                    </ButtonSet>
+                  </Flex>
+                </div>
+              )}
+            </ReactModal>
+          </Flex>
+        </CSSTransition>
+      </Flex>
+    </Fragment>
   )
 }
