@@ -99,6 +99,7 @@ const compare = (prev: SkillRowProps, next: SkillRowProps) =>
   skillsEqual(prev.skill, next.skill) &&
   prev.init === next.init &&
   prev.visible === next.visible &&
+  prev.locked === next.locked &&
   prev.width === next.width &&
   deepEqual(prev.theme, next.theme) &&
   prev.lang === next.lang
