@@ -38,7 +38,7 @@ export type InputGroupProps = {
 }
 
 export const InputGroup = ({
-  vertical,
+  vertical = false,
   style,
   size = 'md',
   children,

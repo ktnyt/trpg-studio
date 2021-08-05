@@ -5,17 +5,21 @@ import clsx from 'clsx'
 
 import { Flex, FlexProps } from '../Flex'
 
-const useStyles = createUseStyles({
-  container: ({ vertical }) => ({
-    '& div:nth-child(n+2)': {
-      [vertical ? 'marginTop' : 'marginLeft']: '5px',
-    },
-  }),
-})
-
 type ButtonSetProps = {
   vertical?: boolean
 } & FlexProps
+
+type ButtonSetClassNames = 'container'
+
+const useStyles = createUseStyles<ButtonSetClassNames, Partial<ButtonSetProps>>(
+  {
+    container: ({ vertical }) => ({
+      '& div:nth-child(n+2)': {
+        [vertical ? 'marginTop' : 'marginLeft']: '5px',
+      },
+    }),
+  }
+)
 
 export const ButtonSet = ({
   vertical = false,

@@ -1,6 +1,17 @@
 import { mix, Color, asColor } from '@/utils/color'
 import { Dict } from '@/utils/dict'
 
+export type ColorKeys =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'dark'
+  | 'medium'
+  | 'light'
+
 const computeShade = (color: Color) => mix('#000000', color, 12)
 const computeTint = (color: Color) => mix('#ffffff', color, 10)
 const computeVariations = (color: Color) => [

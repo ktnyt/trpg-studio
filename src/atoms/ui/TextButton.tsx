@@ -3,6 +3,7 @@ import { ComponentPropsWithRef, forwardRef } from 'react'
 import clsx from 'clsx'
 
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
+import { ColorKeys } from '@/palette/palette'
 import { sanitize } from '@/utils/sanitize'
 
 const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
@@ -87,13 +88,13 @@ const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
   },
 }))
 
-type TextButtonProps = ComponentPropsWithRef<'button'> & { color: string }
+type TextButtonProps = ComponentPropsWithRef<'button'> & { color: ColorKeys }
 
 export const TextButton = Object.assign(
   forwardRef<HTMLButtonElement, TextButtonProps>(
     ({ color, style, className: classNameProp, ...props }, ref) => {
       const theme = useTheme()
-      const classes = useStyles(theme)
+      const classes = useStyles({ theme })
       const className = clsx(
         classes.container,
         classes.hasOwnProperty(color) && classes[color],

@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect, useReducer, useState } from 'react'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 
 import clsx from 'clsx'
@@ -213,7 +213,7 @@ export const Create = () => {
     attributesGrid,
     toolbar,
     fixToolbar,
-  } = useStyles(theme)
+  } = useStyles({ theme })
 
   const boxShadow = `0px 0px 5px 0px ${palette.step1000}44`
 

@@ -2,7 +2,17 @@ import { ReactNode } from 'react'
 
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 
-const useStyles = createThemeUseStyles(({ palette }) => ({
+export type SnackbarProps = {
+  visible?: boolean
+  children?: ReactNode
+}
+
+type SnackbarClassNames = 'container'
+
+const useStyles = createThemeUseStyles<
+  SnackbarClassNames,
+  Partial<SnackbarProps>
+>(({ palette }) => ({
   container: ({ visible }) => ({
     display: 'inline-block',
     position: 'fixed',
@@ -19,11 +29,6 @@ const useStyles = createThemeUseStyles(({ palette }) => ({
       : 'opacity 200ms, visibility 200ms',
   }),
 }))
-
-export type SnackbarProps = {
-  visible?: boolean
-  children?: ReactNode
-}
 
 export const Snackbar = ({ visible = false, children }: SnackbarProps) => {
   const theme = useTheme()

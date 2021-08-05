@@ -70,7 +70,7 @@ export const CustomSection = Object.assign(
     const ref = useRef<HTMLInputElement>(null!)
 
     const theme = useTheme()
-    const classes = useStyles(theme)
+    const classes = useStyles({ theme })
 
     return (
       <Fragment>

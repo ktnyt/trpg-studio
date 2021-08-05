@@ -14,7 +14,13 @@ import { NumberInput } from './NumberInput'
 
 import { useRule } from '../../rule'
 
-const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
+type CustomRowClassNames = 'cell' | 'name' | 'init' | 'total'
+type CustomRowStyleProps = { color: string }
+
+const useStyles = createThemeUseStyles<
+  CustomRowClassNames,
+  CustomRowStyleProps
+>(({ palette, isDark }) => ({
   cell: ({ color }) => ({
     color,
     fontVariantNumeric: 'tabular-nums',

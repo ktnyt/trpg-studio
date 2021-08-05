@@ -6,8 +6,20 @@ import { Icon, IconProps } from './Icon'
 
 export type IconSize = 'sm' | 'md'
 
-const useStyles = createThemeUseStyles(({ palette }) => ({
-  button: ({ size }: { size: IconSize }) => ({
+export type IconButtonProps = {
+  icon: IconProps['icon']
+  spin?: IconProps['spin']
+  pulse?: IconProps['pulse']
+  size?: 'sm' | 'md'
+} & ComponentPropsWithRef<'button'>
+
+type IconButtonClassNames = 'button'
+
+const useStyles = createThemeUseStyles<
+  IconButtonClassNames,
+  Partial<IconButtonProps>
+>(({ palette }) => ({
+  button: ({ size }) => ({
     border: 'none',
     backgroundColor: palette.step50,
     color: palette.step800,
@@ -41,13 +53,6 @@ const useStyles = createThemeUseStyles(({ palette }) => ({
     lineHeight: size === 'md' ? '16px' : '8px',
   }),
 }))
-
-export type IconButtonProps = {
-  icon: IconProps['icon']
-  spin?: IconProps['spin']
-  pulse?: IconProps['pulse']
-  size?: 'sm' | 'md'
-} & ComponentPropsWithRef<'button'>
 
 export const IconButton = Object.assign(
   forwardRef<HTMLButtonElement, IconButtonProps>(

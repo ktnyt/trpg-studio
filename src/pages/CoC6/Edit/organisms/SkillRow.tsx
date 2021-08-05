@@ -14,60 +14,69 @@ import { NumberInput } from './NumberInput'
 
 import { useRule } from '../../rule'
 
-const useStyles = createThemeUseStyles(({ palette, isDark }) => ({
-  cell: ({ color }) => ({
-    color,
-    fontVariantNumeric: 'tabular-nums',
-    textAlign: 'right',
-  }),
-  toggle: ({ backgroundColor, color }) => ({
-    padding: '1px 2px',
-    borderRadius: '2px',
-    backgroundColor,
-    color,
-    fontSize: '13px',
-    lineHeight: '13px',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    cursor: 'pointer',
-  }),
-  detail: {
-    boxSizing: 'border-box',
-    width: '40px',
-    margin: '0px 5px',
-    padding: '0px',
-    border: 'none',
-    borderBottom: `1px solid transparent`,
-    backgroundColor: 'transparent',
-    color: palette.text,
-    fontSize: '12px',
-    fontVariantNumeric: 'tabular-nums',
-    lineHeight: '12px',
-    textAlign: 'left',
-    transition: 'border 200ms',
-    '&::placeholder': {
-      color: palette.step300,
+type SkillRowClassNames = 'cell' | 'toggle' | 'detail' | 'init' | 'total'
+type SkillRowStyleProps = {
+  visibility: string
+  backgroundColor: string
+  color: string
+}
+
+const useStyles = createThemeUseStyles<SkillRowClassNames, SkillRowStyleProps>(
+  ({ palette, isDark }) => ({
+    cell: ({ color }) => ({
+      color,
+      fontVariantNumeric: 'tabular-nums',
+      textAlign: 'right',
+    }),
+    toggle: ({ backgroundColor, color }) => ({
+      padding: '1px 2px',
+      borderRadius: '2px',
+      backgroundColor,
+      color,
+      fontSize: '13px',
+      lineHeight: '13px',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      cursor: 'pointer',
+    }),
+    detail: {
+      boxSizing: 'border-box',
+      width: '40px',
+      margin: '0px 5px',
+      padding: '0px',
+      border: 'none',
+      borderBottom: `1px solid transparent`,
+      backgroundColor: 'transparent',
+      color: palette.text,
+      fontSize: '12px',
+      fontVariantNumeric: 'tabular-nums',
+      lineHeight: '12px',
+      textAlign: 'left',
+      transition: 'border 200ms',
+      '&::placeholder': {
+        color: palette.step300,
+      },
+      '&:hover': { borderBottom: `1px solid ${palette.step800}` },
+      '&:focus': {
+        borderBottom: `1px solid ${palette.secondary.tone(isDark)}`,
+        outline: 'none',
+      },
     },
-    '&:hover': { borderBottom: `1px solid ${palette.step800}` },
-    '&:focus': {
-      borderBottom: `1px solid ${palette.secondary.tone(isDark)}`,
-      outline: 'none',
-    },
-  },
-  init: ({ color }) => ({
-    margin: '0px 5px',
-    color,
-    fontVariantNumeric: 'tabular-nums',
-    textAlign: 'right',
-  }),
-  total: ({ color }) => ({
-    marginRight: '10px',
-    color,
-    textAlign: 'right',
-    fontWeight: 'bold',
-    fontVariantNumeric: 'tabluar-nums',
-  }),
-}))
+    init: ({ color }) => ({
+      margin: '0px 5px',
+      color,
+      fontVariantNumeric: 'tabular-nums',
+      textAlign: 'right',
+    }),
+    total: ({ color }) => ({
+      marginRight: '10px',
+      color,
+      textAlign: 'right',
+      fontWeight: 'bold',
+      fontVariantNumeric: 'tabluar-nums',
+    }),
+  })
+)
 
 const asNumber = (s: string) => (/^-?\d+$/.test(s) ? parseInt(s, 10) : 0)
 

@@ -67,7 +67,7 @@ export const NumberInput = ({
   ...props
 }: NumberInputProps) => {
   const theme = useTheme()
-  const { root, input, focused, blurred } = useInputStyles(theme)
+  const { root, focused, blurred } = useInputStyles({ theme })
   const [value, setValue] = useState(withValue(propValue, defaultValue))
   const [focus, setFocus] = useState(false)
   return (
@@ -78,7 +78,7 @@ export const NumberInput = ({
       >
         {placeholder !== undefined && value === '' && !focus ? placeholder : ''}
       </Grid.Item>
-      <Grid.Item area="root" className={input}>
+      <Grid.Item area="root">
         <Input
           type="number"
           pattern="[0-9-]*"

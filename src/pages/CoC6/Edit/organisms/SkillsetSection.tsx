@@ -57,7 +57,7 @@ export const SkillsetSection = Object.assign(
     const rule = useRule(translator)
 
     const theme = useTheme()
-    const classes = useStyles(theme)
+    const classes = useStyles({ theme })
 
     return (
       <Fragment>

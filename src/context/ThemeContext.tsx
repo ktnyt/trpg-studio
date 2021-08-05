@@ -10,9 +10,12 @@ const theming = createTheming(ThemeContext)
 
 export const { ThemeProvider: Provider, useTheme } = theming
 
-export const createThemeUseStyles = (
-  styles: Styles | ((theme: Theme) => Styles)
-) => createUseStyles<Theme>(styles, { theming })
+export const createThemeUseStyles = <
+  C extends string = string,
+  Props = unknown
+>(
+  styles: Styles<C, Props, Theme> | ((theme: Theme) => Styles<C, Props>)
+) => createUseStyles<C, Props, Theme>(styles, { theming })
 
 export const ThemeProvider = ({
   palette: initPallete,

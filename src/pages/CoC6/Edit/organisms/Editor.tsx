@@ -1,6 +1,6 @@
 import { Fragment, useContext, useEffect, useRef, useState } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import ReactModal from 'react-modal'
 import { useParams } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
@@ -385,7 +385,9 @@ export const Editor = ({
 
   const minRowCount = Math.floor(height / 22)
   const totalRowCount =
-    profileRows + parameterRows + variableRows < minRowCount
+    profileRows + parameterRows + variableRows + skillsetRows < minRowCount
+      ? profileRows + parameterRows + variableRows + skillsetRows
+      : profileRows + parameterRows + variableRows < minRowCount
       ? minRowCount + skillsetRows
       : profileRows + parameterRows < minRowCount
       ? minRowCount + variableRows + skillsetRows

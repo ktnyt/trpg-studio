@@ -77,7 +77,7 @@ export const VariableSection = ({
     .join(' ')
 
   const theme = useTheme()
-  const classes = useStyles(theme)
+  const classes = useStyles({ theme })
 
   return (
     <Flex direction="column" style={{ width }}>

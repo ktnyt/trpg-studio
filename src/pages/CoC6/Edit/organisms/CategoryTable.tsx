@@ -51,7 +51,7 @@ export const CategoryTable = ({
   const rule = useRule(translator)
 
   const theme = useTheme()
-  const classes = useStyles(theme)
+  const classes = useStyles({ theme })
 
   const skillVisibility = rule.skillset.get(category).map((_, key) => {
     const { job, hobby, growth, other, fixed } = skills[key]

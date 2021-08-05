@@ -1,4 +1,5 @@
 import { Fragment, lazy, ReactNode, Suspense } from 'react'
+import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import { AppContext } from '@/context/AppContext'
@@ -11,11 +12,13 @@ import { Blank } from './pages/generic/Blank'
 import { NotFound } from './pages/generic/NotFound'
 
 const Provider = ({ children }: { children?: ReactNode }) => (
-  <AppContext.Provider value={{ lang: 'ja' }}>
-    <FirebaseProvider>
-      <ThemeProvider palette={nord}>{children}</ThemeProvider>
-    </FirebaseProvider>
-  </AppContext.Provider>
+  <HelmetProvider>
+    <AppContext.Provider value={{ lang: 'ja' }}>
+      <FirebaseProvider>
+        <ThemeProvider palette={nord}>{children}</ThemeProvider>
+      </FirebaseProvider>
+    </AppContext.Provider>
+  </HelmetProvider>
 )
 
 const systems = [

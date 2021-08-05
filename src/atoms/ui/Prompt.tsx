@@ -58,7 +58,7 @@ export const Prompt = forwardRef<HTMLInputElement, PromptProps>(
     ref
   ) => {
     const theme = useTheme()
-    const classes = useStyles(theme)
+    const classes = useStyles({ theme })
 
     const initValue =
       defaultValue !== undefined

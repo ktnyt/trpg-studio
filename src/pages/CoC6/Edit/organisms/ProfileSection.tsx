@@ -72,7 +72,7 @@ export const ProfileSection = Object.assign(
       const { name, items, notes } = profile
 
       const theme = useTheme()
-      const classes = useStyles(theme)
+      const classes = useStyles({ theme })
 
       return (
         <Flex ref={ref} direction="column" style={{ width }}>
