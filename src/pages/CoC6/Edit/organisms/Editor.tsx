@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
 
 import clsx from 'clsx'
+import useResizeObserver from 'use-resize-observer'
 
 import {
   faCopy,
@@ -32,7 +33,6 @@ import { useFirebase } from '@/context/FirebaseContext'
 import { createThemeUseStyles, useTheme } from '@/context/ThemeContext'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useDifferent } from '@/hooks/useDifferent'
-import { useElementSize } from '@/hooks/useElementSize'
 import { useInvoke } from '@/hooks/useInvoke'
 import { useReferrer } from '@/hooks/useReferrer'
 import { useScroll } from '@/hooks/useScroll'
@@ -370,7 +370,7 @@ export const Editor = ({
 
   const boxShadow = `0px 0px 5px 0px ${palette.step1000}44`
 
-  const { height: profileHeight } = useElementSize(profileRef)
+  const { height: profileHeight = 0 } = useResizeObserver({ ref: profileRef })
   const notesPadding = 22 - (profileHeight % 22)
   const profileRows = Math.ceil(profileHeight / 22)
   const attributeRows = rule.attributes.size + rule.properties.size

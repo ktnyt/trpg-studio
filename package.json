@@ -7,6 +7,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
+    "@juggle/resize-observer": "^3.3.1",
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
@@ -37,8 +38,8 @@
     "react-textarea-autosize": "^8.3.3",
     "react-transition-group": "^4.4.2",
     "redux": "^4.1.1",
-    "resize-observer-polyfill": "^1.5.1",
     "typescript": "^4.3.5",
+    "use-resize-observer": "^7.0.1",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
